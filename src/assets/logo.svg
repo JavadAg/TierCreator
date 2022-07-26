@@ -1,0 +1,22 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>Layer 1</title>
+  <rect stroke="#000" stroke-width="0" rx="5" id="svg_1" height="20" width="23" y="76" x="75" fill="#191919"/>
+  <rect stroke-width="0" rx="5" id="svg_2" height="20" width="23" y="76" x="2" stroke="#000" fill="#ddff56"/>
+  <rect stroke-width="0" rx="5" id="svg_4" height="20" width="23" y="76" x="27" stroke="#000" fill="#ddff56"/>
+  <rect stroke-width="0" rx="5" id="svg_5" height="20" width="23" y="76" x="51" stroke="#000" fill="#191919"/>
+  <rect stroke="#000" stroke-width="0" rx="5" id="svg_6" height="20" width="23" y="4" x="75" fill="#191919"/>
+  <rect stroke-width="0" rx="5" id="svg_7" height="20" width="23" y="4" x="2" stroke="#000" fill="#fc3c3c"/>
+  <rect stroke-width="0" rx="5" id="svg_8" height="20" width="23" y="4" x="27" stroke="#000" fill="#fc3c3c"/>
+  <rect stroke-width="0" rx="5" id="svg_9" height="20" width="23" y="4" x="51" stroke="#000" fill="#fc3c3c"/>
+  <rect stroke="#000" stroke-width="0" rx="5" id="svg_10" height="20" width="23" y="28" x="75" fill="#191919"/>
+  <rect stroke-width="0" rx="5" id="svg_11" height="20" width="23" y="28" x="2" stroke="#000" fill="#ff7f00"/>
+  <rect stroke-width="0" rx="5" id="svg_12" height="20" width="23" y="28" x="27" stroke="#000" fill="#ff7f00"/>
+  <rect stroke-width="0" rx="5" id="svg_13" height="20" width="23" y="28" x="51" stroke="#000" fill="#191919"/>
+  <rect stroke="#000" stroke-width="0" rx="5" id="svg_14" height="20" width="23" y="52" x="75" fill="#191919"/>
+  <rect stroke-width="0" rx="5" id="svg_15" height="20" width="23" y="52" x="2" stroke="#000" fill="#ffcc00"/>
+  <rect stroke-width="0" rx="5" id="svg_16" height="20" width="23" y="52" x="27" stroke="#000" fill="#ffcc00"/>
+  <rect stroke-width="0" rx="5" id="svg_17" height="20" width="23" y="52" x="51" stroke="#000" fill="#ffd800"/>
+ </g>
+</svg>
