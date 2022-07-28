@@ -36,6 +36,7 @@ const Categories = () => {
       <div className="flex flex-wrap">
         {categories?.map((category, index) => (
           <Link
+            key={category.slug}
             to={`/categories/${category.slug}`}
             className="flex justify-center items-center m-1 flex-col"
           >
