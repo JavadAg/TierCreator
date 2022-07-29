@@ -1,34 +1,12 @@
-import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { supabase } from "../utils/client"
-import { useGetCategoriesQuery } from "../store/reducers/tierSlice"
-interface Template {
-  name: string
-  image: string
-  category: string
-  slug: string
-}
+import { useGetTemplatesQuery } from "../services/tierApi"
 
 const Templates = () => {
-  const { data, error, isLoading } = useGetCategoriesQuery()
-  console.log(data)
-  const [loading, setLoading] = useState(false)
-  const [templates, setTemplates] = useState<Template[] | null | undefined>()
   const { slug } = useParams()
 
-  const getTemplates = async () => {
-    setLoading(true)
-    let { data: templates, error } = await supabase
-      .from("templates")
-      .select("*")
-      .eq("category", `${slug}`)
-    setTemplates(templates)
-    setLoading(false)
-  }
+  const { data: templates, error, isLoading } = useGetTemplatesQuery(slug!)
 
-  useEffect(() => {
-    getTemplates()
-  }, [])
+  if (error) return <div>Something went horrible wrong ...</div>
 
   return (
     <div className="flex flex-col space-y-5 justify-center items-start">
@@ -45,7 +23,7 @@ const Templates = () => {
       </div>
 
       <span>A collection of cars and racing tier list templates.</span>
-      {loading ? (
+      {isLoading ? (
         <div>Loading</div>
       ) : (
         <div>

@@ -1,28 +1,10 @@
-import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { supabase } from "../utils/client"
-
-interface Category {
-  name: string
-  image: string
-  slug: string
-}
+import { useGetCategoriesQuery } from "../services/tierApi"
 
 const Categories = () => {
-  const [categories, setCategories] = useState<Category[] | null>()
+  const { data, error, isLoading } = useGetCategoriesQuery(undefined)
 
-  const getCategories = async () => {
-    let { data: categories, error } = await supabase
-      .from("categories")
-      .select("*")
-    setCategories(categories)
-  }
-
-  useEffect(() => {
-    getCategories()
-  }, [])
-
-  console.log(categories)
+  if (error) return <div>Something went horrible wrong ...</div>
 
   return (
     <div className="space-y-5">
@@ -33,23 +15,29 @@ const Categories = () => {
         list template for anything. If the perfect template doesn't yet exist,
         you can create your own template.
       </p>
-      <div className="flex flex-wrap">
-        {categories?.map((category, index) => (
-          <Link
-            key={category.slug}
-            to={`/categories/${category.slug}`}
-            className="flex justify-center items-center m-1 flex-col"
-          >
-            <img
-              className="object-cover w-36 h-36"
-              key={index}
-              src={category.image}
-            />
-            <span className="bg-black text-white w-36 text-center">
-              {category.name}
-            </span>
-          </Link>
-        ))}
+      <div>
+        {isLoading ? (
+          <div className="text-2xl font-bold text-center">Loading...</div>
+        ) : (
+          <div className="flex flex-wrap">
+            {data?.map((category, index) => (
+              <Link
+                key={category.slug}
+                to={`/categories/${category.slug}`}
+                className="flex justify-center items-center m-1 flex-col"
+              >
+                <img
+                  className="object-cover w-36 h-36"
+                  key={index}
+                  src={category.image}
+                />
+                <span className="bg-black text-white w-36 text-center">
+                  {category.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

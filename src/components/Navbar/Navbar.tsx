@@ -23,7 +23,7 @@ const Navbar = () => {
           to="/create"
           className="bg-indigo-600 hover:bg-indigo-500 duration-200 px-2 py-1 rounded-md cursor-pointer"
         >
-          Make a Tier
+          Make a Template
         </Link>
         <Link to="/categories" className="cursor-pointer">
           Categories
