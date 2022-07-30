@@ -5,8 +5,9 @@ import { Category } from "../../models/tier"
 import { useGetCategoriesQuery } from "../../services/tierApi"
 import Resizer from "react-image-file-resizer"
 import { ChangeEvent, useState } from "react"
+import { resolve } from "path"
 
-type Inputs = {
+interface Inputs {
   name: string
   selectedCategory: string
   description: string
@@ -25,31 +26,42 @@ type Inputs = {
   extraRowFive: string
 }
 
+interface IForm extends Omit<Inputs, "cover" | "images"> {
+  cover: File[] | string[] | unknown
+  images: File[] | string[] | unknown
+}
+
 const CreateForm = () => {
   const [extraRowEnabled, setExtraRowEnabled] = useState(false)
   const { data: categories, isLoading } = useGetCategoriesQuery(undefined)
   const [coverImage, setCoverImage] = useState<string>()
-
+  const [tierImages, setTierImages] = useState<string[]>([])
+  const [form, setForm] = useState<IForm>({
+    name: "",
+    selectedCategory: "",
+    description: "",
+    cover: [],
+    images: [],
+    orientation: "",
+    rowOne: "",
+    rowTwo: "",
+    rowThree: "",
+    rowFour: "",
+    rowFive: "",
+    extraRowOne: "",
+    extraRowTwo: "",
+    extraRowThree: "",
+    extraRowFour: "",
+    extraRowFive: ""
+  })
+  console.log(form)
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors }
   } = useForm<Inputs>({ resolver: zodResolver(schema) })
-
-  /*  const setSize = () => {
-    if (watch().orientation == "Square") {
-      return { h: 80, w: 80 }
-    } else if (watch().orientation == "Landscape") {
-      return { h: 80, w: 100 }
-    } else {
-      return { h: 100, w: 80 }
-    }
-  } */
-
-  /*  const coverhandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.files instanceof FileList && resizeFile(e.target.files[0])
-  } */
 
   const resizeFile = (file: File) =>
     new Promise((resolve) => {
@@ -61,18 +73,53 @@ const CreateForm = () => {
         100,
         0,
         (uri) => {
-          /*  setCoverImage(uri) */
+          resolve(uri)
         },
         "base64"
       )
     })
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = (data) => formhandler(data)
 
-  if (errors.name) {
-    console.log(errors.name)
+  const formhandler = async (data: Inputs) => {
+    setForm({
+      name: data.name,
+      selectedCategory: data.selectedCategory,
+      description: data.description,
+      cover: data.cover,
+      images: data.images,
+      orientation: data.orientation,
+      rowOne: data.rowOne,
+      rowTwo: data.rowTwo,
+      rowThree: data.rowThree,
+      rowFour: data.rowFour,
+      rowFive: data.rowFive,
+      extraRowOne: data.extraRowOne,
+      extraRowTwo: data.extraRowTwo,
+      extraRowThree: data.extraRowThree,
+      extraRowFour: data.extraRowFour,
+      extraRowFive: data.extraRowFive
+    })
+
+    if (data.cover) {
+      const coverBase64 = await resizeFile(data.cover[0])
+      setForm((prev) => ({ ...prev, cover: { coverBase64 } }))
+    }
+
+    for (let i = 0; i < data.images.length; i++) {
+      const tierImges = await resizeFile(data.images[i])
+      setForm((prev) => ({ ...prev, images: { tierImages } }))
+    }
   }
-  console.log(coverImage)
+
+  const previewhandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileArray = Array.from(e.target.files!)
+    for (let i = 0; i < fileArray.length; i++) {
+      const url: string = URL.createObjectURL(fileArray[i])
+      setTierImages((prev) => [...prev, url])
+    }
+  }
+
   return (
     <form
       className="flex justify-center items-start flex-col space-y-4 w-full text-zinc-800"
@@ -149,7 +196,7 @@ const CreateForm = () => {
           accept="image/jpeg,image/jpg,image/png,image/webp"
           {...register("cover")}
         />
-        <img src={coverImage} />
+        <img className="h-24" src={coverImage} />
         {errors.cover?.message && (
           <span className="text-red-600 text-sm font-semibold">
             {errors.cover.message}
@@ -169,10 +216,15 @@ const CreateForm = () => {
         <input
           type="file"
           id="images"
+          onChangeCapture={previewhandler}
           multiple={true}
           accept="image/jpeg,image/jpg,image/png,image/webp"
           {...register("images")}
         />
+        {tierImages?.map((image, index) => (
+          <img key={index} className="h-24" src={image} />
+        ))}
+
         {errors.images?.message && (
           <span className="text-red-600 text-sm font-semibold">
             {errors.images.message}
