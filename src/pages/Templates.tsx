@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom"
+import TierCreator from "../components/TierCreator/TierCreator"
 import { useGetTemplatesQuery } from "../services/tierApi"
 
 const Templates = () => {
   const { slug } = useParams()
 
   const { data: templates, error, isLoading } = useGetTemplatesQuery(slug!)
-
+  console.log(templates)
   if (error) return <div>Something went horrible wrong ...</div>
 
   return (
@@ -30,20 +31,23 @@ const Templates = () => {
           {templates?.length! > 0 ? (
             <div className="flex flex-wrap justify-center items-center m-1">
               {templates?.map((template, index) => (
-                <Link
-                  key={template.slug}
-                  to={`/create/${template.slug}-${index}`}
-                  className="flex justify-center items-center m-1 flex-col"
-                >
-                  <img
-                    className="object-cover w-36 h-36"
-                    key={index}
-                    src={template.image}
-                  />
-                  <span className="bg-black text-white w-36 text-center">
-                    {template.name}
-                  </span>
-                </Link>
+                <>
+                  <Link
+                    key={template.slug}
+                    state={template}
+                    to={`/create/${template.slug}-${index}`}
+                    className="flex justify-center items-center m-1 flex-col"
+                  >
+                    <img
+                      className="object-cover w-36 h-36"
+                      key={index}
+                      src={template.cover}
+                    />
+                    <span className="bg-black text-white w-36 text-center">
+                      {template.name}
+                    </span>
+                  </Link>
+                </>
               ))}
             </div>
           ) : (
