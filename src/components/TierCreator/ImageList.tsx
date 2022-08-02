@@ -2,14 +2,14 @@ import React from "react"
 import { useDrag } from "react-dnd"
 
 interface IProps {
-  key: number
-  src: string
+  id: number
+  url: string
 }
 
-const ImageList: React.FC<IProps> = ({ key, src }) => {
+const ImageList: React.FC<IProps> = ({ id, url }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
-    item: { key: key },
+    item: { id: id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
     })
@@ -17,10 +17,12 @@ const ImageList: React.FC<IProps> = ({ key, src }) => {
 
   return (
     <img
-      src={src}
+      src={url}
       alt="tierimage"
       ref={drag}
-      className="w-24 h-24 object-cover"
+      className={`w-24 h-24 object-cover ${
+        isDragging ? "border border-red-500" : ""
+      }`}
     />
   )
 }

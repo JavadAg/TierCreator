@@ -12,7 +12,7 @@ export interface Template {
   slug: string
   created_at: string
   description: string
-  image: string[]
+  image: { id: number; url: string }[]
   name: string
   orientation: string
   rowOne: string
@@ -26,7 +26,9 @@ export interface Template {
   extraRowFour: string
   extraRowFive: string
 }
-
+interface ExtraRow {
+  value: string
+}
 export interface Inputs {
   name: string
   slug: string
@@ -35,14 +37,6 @@ export interface Inputs {
   cover: File[]
   images: File[]
   orientation: string
-  rowOne: string
-  rowTwo: string
-  rowThree: string
-  rowFour: string
-  rowFive: string
-  extraRowOne: string
-  extraRowTwo: string
-  extraRowThree: string
-  extraRowFour: string
-  extraRowFive: string
+  rows: string[]
+  extraRows: ExtraRow[]
 }

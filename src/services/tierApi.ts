@@ -3,6 +3,11 @@ import { Category, Template } from "../models/tier"
 import { Inputs } from "../models/tier"
 import { supabase } from "../utils/client"
 
+interface Image {
+  url: string
+  id: number
+}
+
 export const tierApi = createApi({
   reducerPath: "tierApi",
   baseQuery: fakeBaseQuery(),
@@ -35,7 +40,8 @@ export const tierApi = createApi({
         const coverUrl = uploadClient.getPublicUrl(
           `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`
         )
-        let imagesUrl: string[] = []
+        let id = 0
+        let imagesUrl: Image[] = []
         for (const iterator of formData.images) {
           await uploadClient.upload(
             `public/${formData.slug}/images/${iterator.name}.jpeg`,
@@ -45,7 +51,7 @@ export const tierApi = createApi({
           const coverUrl = uploadClient.getPublicUrl(
             `public/${formData.slug}/images/${iterator.name}.jpeg`
           )
-          imagesUrl.push(coverUrl.publicURL as string)
+          imagesUrl.push({ url: coverUrl.publicURL as string, id: id++ })
         }
 
         const { data, error } = await supabase.from("templates").insert([
@@ -57,16 +63,8 @@ export const tierApi = createApi({
             description: `${formData.description}`,
             cover: `${coverUrl.publicURL}`,
             orientation: `${formData.orientation}`,
-            rowOne: `${formData.rowOne}`,
-            rowTwo: `${formData.rowTwo}`,
-            rowThree: `${formData.rowThree}`,
-            rowFour: `${formData.rowFour}`,
-            rowFive: `${formData.rowFive}`,
-            extraRowOne: `${formData.extraRowOne}`,
-            extraRowTwo: `${formData.extraRowTwo}`,
-            extraRowThree: `${formData.extraRowThree}`,
-            extraRowFour: `${formData.extraRowFour}`,
-            extraRowFive: `${formData.extraRowFive}`
+            rows: formData.rows,
+            extraRows: formData.extraRows
           }
         ])
         /* return { data }  */

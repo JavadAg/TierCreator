@@ -8,21 +8,29 @@ interface LocationState {
   template: Template
 }
 
+interface Image {
+  url: string
+  id: number
+}
+
 const TierCreator = () => {
   const { state } = useLocation()
 
   const template = state as Template
 
-  console.log(template.image.indexOf(2))
+  const [board, setBoard] = useState<Image[]>([])
 
-  const [board, setBoard] = useState<string[]>([""])
+  const addImage = (id: number) => {
+    const pictureList = template.image.filter((item: Image) => id === item.id)
+    setBoard((prev) => [...prev, pictureList[0]])
+  }
+  console.log(board)
 
-  /*  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: "image",
-    drop: (item) => addImage(key)
-  })) */
-
-  /*  const addImage = (key) => {} */
+    drop: (item: Image) => addImage(item.id),
+    collect: (monitor) => ({ isOver: !!monitor.isOver() })
+  }))
 
   return (
     <>
@@ -31,9 +39,12 @@ const TierCreator = () => {
           <div className="bg-blue-200 min-w-[80px] h-full min-h-[80px] flex justify-center items-center">
             {template.rowOne}
           </div>
-          <div className="bg-zinc-400 w-full min-h-[80px] flex justify-center items-center">
-            {board.map((image: string) => (
-              <img src={image} alt="image" />
+          <div
+            ref={drop}
+            className="bg-zinc-400 w-full min-h-[80px] flex justify-center items-center"
+          >
+            {board.map((image: Image) => (
+              <img src={image.url} alt="image" />
             ))}
           </div>
           <div className="w-10 flex justify-center items-center bg-green-200 min-h-[80px]">
@@ -47,7 +58,7 @@ const TierCreator = () => {
       </div>
       <div className="flex justify-center items-center ">
         {template.image.map((image, index) => (
-          <ImageList src={image} key={index} />
+          <ImageList url={image.url} key={index} id={image.id} />
         ))}
       </div>
     </>

@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { string, z } from "zod"
 
 const accepted_types = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
 
@@ -22,29 +22,15 @@ export const schema = z.object({
     .any()
     .refine((files) => files?.length >= 2, { message: "Select more file" }),
   orientation: z.string(),
-  rowOne: z
-    .string()
-    .min(1, { message: "Required" })
-    .max(50, { message: "Too long" }),
-  rowTwo: z
-    .string()
-    .min(1, { message: "Required" })
-    .max(50, { message: "Too long" }),
-  rowThree: z
-    .string()
-    .min(1, { message: "Required" })
-    .max(50, { message: "Too long" }),
-  rowFour: z
-    .string()
-    .min(1, { message: "Required" })
-    .max(50, { message: "Too long" }),
-  rowFive: z
-    .string()
-    .min(1, { message: "Required" })
-    .max(50, { message: "Too long" }),
-  extraRowOne: z.string().max(50, { message: "Too long" }),
-  extraRowTwo: z.string().max(50, { message: "Too long" }),
-  extraRowThree: z.string().max(50, { message: "Too long" }),
-  extraRowFour: z.string().max(50, { message: "Too long" }),
-  extraRowFive: z.string().max(50, { message: "Too long" })
+  rows: z.array(
+    z.string().min(1, { message: "Required" }).max(30, { message: "Too long" })
+  ),
+  extraRows: z.array(
+    z.object({
+      value: z
+        .string()
+        .min(1, { message: "Required" })
+        .max(30, { message: "Too long" })
+    })
+  )
 })

@@ -1,4 +1,9 @@
-import { useForm, SubmitHandler } from "react-hook-form"
+import {
+  useForm,
+  SubmitHandler,
+  useFieldArray,
+  Controller
+} from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { schema } from "../../utils/zodSchema"
 import { Category } from "../../models/tier"
@@ -12,8 +17,15 @@ import slugify from "slugify"
 import { BeatLoader } from "react-spinners"
 import { Inputs } from "../../models/tier"
 
+const defaultRows = [
+  { placeholder: "S", id: 0 },
+  { placeholder: "A", id: 1 },
+  { placeholder: "B", id: 2 },
+  { placeholder: "C", id: 3 },
+  { placeholder: "D", id: 4 }
+]
+
 const CreateForm = () => {
-  const [extraRowEnabled, setExtraRowEnabled] = useState(false)
   const { data: categories, isLoading } = useGetCategoriesQuery(undefined)
   const [addTemplate, { isLoading: isAdding }] = useAddTemplateMutation()
   const [coverImage, setCoverImage] = useState<string>()
@@ -23,9 +35,17 @@ const CreateForm = () => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors }
-  } = useForm<Inputs>({ resolver: zodResolver(schema) })
-  console.log(isAdding)
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema)
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "extraRows"
+  })
+
   //resize and base64 cover and images before upload
   const resizeFile = (file: File) =>
     new Promise((resolve) => {
@@ -42,6 +62,7 @@ const CreateForm = () => {
         "file"
       )
     })
+  console.log(errors)
 
   const slugifyName = async (name: string) => {
     const slugifiedName = slugify(name, { lower: true })
@@ -53,9 +74,8 @@ const CreateForm = () => {
     addTemplate(data)
   }
 
-  console.log(watch("images"))
-
   const formhandler = async (data: Inputs) => {
+    console.log(data)
     const nameToSlug = await slugifyName(data.name)
     data.slug = nameToSlug
     const resizedCover: any = await resizeFile(data.cover[0])
@@ -219,148 +239,53 @@ const CreateForm = () => {
           )}
           <div className="flex justify-center items-start flex-col space-y-1 w-full">
             <label className="text-lg font-bold" htmlFor="defaultRowLables">
-              Default Row Label Text:
+              Fields Label:
             </label>
-            <div id="defaultRowLables" className="space-y-1">
-              <input
-                className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                type="text"
-                placeholder="S"
-                {...register("rowOne")}
-              />
-              {errors.rowOne?.message && (
-                <span className="text-red-600 text-sm font-semibold">
-                  {errors.rowOne.message}
-                </span>
-              )}
-              <input
-                className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                type="text"
-                placeholder="A"
-                {...register("rowTwo")}
-              />
-              {errors.rowTwo?.message && (
-                <span className="text-red-600 text-sm font-semibold">
-                  {errors.rowTwo.message}
-                </span>
-              )}
-              <input
-                className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                type="text"
-                placeholder="B"
-                {...register("rowThree")}
-              />
-              {errors.rowThree?.message && (
-                <span className="text-red-600 text-sm font-semibold">
-                  {errors.rowThree.message}
-                </span>
-              )}
-              <input
-                className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                type="text"
-                placeholder="C"
-                {...register("rowFour")}
-              />
-              {errors.rowFour?.message && (
-                <span className="text-red-600 text-sm font-semibold">
-                  {errors.rowFour.message}
-                </span>
-              )}
-              <input
-                className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                type="text"
-                placeholder="D"
-                {...register("rowFive")}
-              />
-              {errors.rowFive?.message && (
-                <span className="text-red-600 text-sm font-semibold">
-                  {errors.rowFive.message}
-                </span>
-              )}
-            </div>
-          </div>
+            <div
+              id="defaultRowLables"
+              className="space-y-1 flex justify-center items-start flex-col"
+            >
+              {defaultRows.map((row) => (
+                <>
+                  <input
+                    className="rounded-md p-1 "
+                    placeholder={row.placeholder}
+                    key={row.id}
+                    {...register(`rows.${row.id}` as const)}
+                  />
+                  {errors.rows?.[row.id]?.message && (
+                    <span className="text-red-600 text-sm font-semibold">
+                      {errors.rows?.[row.id]?.message}
+                    </span>
+                  )}
+                </>
+              ))}
 
-          <div id="accordionExample" className="w-full accordion">
-            <div className="accordion-item ">
-              <h2 className="accordion-header mb-0" id="headingOne">
-                <button
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseOne"
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                  className="font-bold text-lg bg-slate-100 hover:bg-slate-200 duration-200 mb-2 rounded-md p-1"
-                  onClick={() => setExtraRowEnabled((prev) => !prev)}
-                >
-                  {extraRowEnabled ? "Disable Extra Rows" : "Enable Extra Rows"}
-                </button>
-              </h2>
-              <div
-                id="collapseOne"
-                className="accordion-collapse collapse"
-                aria-labelledby="headingOne"
-                data-bs-parent="#accordionExample"
-              >
-                <div className="accordion-body space-y-1 flex justify-center items-start flex-col">
-                  <input
-                    className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                    type="text"
-                    placeholder="Row 6"
-                    {...register("extraRowOne")}
+              {fields.map((item, index: number) => (
+                <div key={item.id}>
+                  <Controller
+                    control={control}
+                    name={`extraRows.${index}.value`}
+                    render={({ field }) => (
+                      <input {...field} placeholder="Extra Row" />
+                    )}
                   />
-                  {errors.extraRowOne?.message && (
+                  <button type="button" onClick={() => remove(index)}>
+                    DELETE
+                  </button>
+                  {errors.extraRows?.[index]?.value?.message && (
                     <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRowOne.message}
-                    </span>
-                  )}
-                  <input
-                    className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                    type="text"
-                    placeholder="Row 7"
-                    {...register("extraRowTwo")}
-                  />
-                  {errors.extraRowTwo?.message && (
-                    <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRowTwo.message}
-                    </span>
-                  )}
-                  <input
-                    className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300 "
-                    type="text"
-                    placeholder="Row 8"
-                    {...register("extraRowThree")}
-                  />
-                  {errors.extraRowThree?.message && (
-                    <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRowThree.message}
-                    </span>
-                  )}
-                  <input
-                    className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                    type="text"
-                    placeholder="Row 9"
-                    {...register("extraRowFour")}
-                  />
-                  {errors.extraRowFour?.message && (
-                    <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRowFour.message}
-                    </span>
-                  )}
-                  <input
-                    className="border border-zinc-300 w-9/12 p-1 rounded-md focus-visible:outline-indigo-300"
-                    type="text"
-                    placeholder="Row 10"
-                    {...register("extraRowFive")}
-                  />
-                  {errors.extraRowFive?.message && (
-                    <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRowFive.message}
+                      {errors.extraRows?.[index]?.value?.message}
                     </span>
                   )}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
+          <button type="button" onClick={() => append({ value: "" })}>
+            APPEND
+          </button>
+
           <input
             placeholder="Submit"
             type="submit"
