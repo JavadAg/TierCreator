@@ -12,18 +12,12 @@ import {
   useAddTemplateMutation
 } from "../../services/tierApi"
 import Resizer from "react-image-file-resizer"
-import { useState } from "react"
+import { useId, useState } from "react"
 import slugify from "slugify"
 import { BeatLoader } from "react-spinners"
 import { Inputs } from "../../models/tier"
-
-const defaultRows = [
-  { placeholder: "S", id: 0 },
-  { placeholder: "A", id: 1 },
-  { placeholder: "B", id: 2 },
-  { placeholder: "C", id: 3 },
-  { placeholder: "D", id: 4 }
-]
+import { idText } from "typescript"
+import { number } from "zod"
 
 const CreateForm = () => {
   const { data: categories, isLoading } = useGetCategoriesQuery(undefined)
@@ -38,12 +32,21 @@ const CreateForm = () => {
     control,
     formState: { errors }
   } = useForm<Inputs>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      rows: [
+        { label: "" },
+        { label: "" },
+        { label: "" },
+        { label: "" },
+        { label: "" }
+      ]
+    }
   })
-
+  console.log(watch("rows"))
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "extraRows"
+    name: "rows"
   })
 
   //resize and base64 cover and images before upload
@@ -245,44 +248,28 @@ const CreateForm = () => {
               id="defaultRowLables"
               className="space-y-1 flex justify-center items-start flex-col"
             >
-              {defaultRows.map((row) => (
-                <>
-                  <input
-                    className="rounded-md p-1 "
-                    placeholder={row.placeholder}
-                    key={row.id}
-                    {...register(`rows.${row.id}` as const)}
-                  />
-                  {errors.rows?.[row.id]?.message && (
-                    <span className="text-red-600 text-sm font-semibold">
-                      {errors.rows?.[row.id]?.message}
-                    </span>
-                  )}
-                </>
-              ))}
-
               {fields.map((item, index: number) => (
                 <div key={item.id}>
                   <Controller
                     control={control}
-                    name={`extraRows.${index}.value`}
+                    name={`rows.${index}.label`}
                     render={({ field }) => (
-                      <input {...field} placeholder="Extra Row" />
+                      <input {...field} placeholder="Enter label" />
                     )}
                   />
                   <button type="button" onClick={() => remove(index)}>
                     DELETE
                   </button>
-                  {errors.extraRows?.[index]?.value?.message && (
+                  {errors.rows?.[index]?.label?.message && (
                     <span className="text-red-600 text-sm font-semibold">
-                      {errors.extraRows?.[index]?.value?.message}
+                      {errors.rows?.[index]?.label?.message}
                     </span>
                   )}
                 </div>
               ))}
             </div>
           </div>
-          <button type="button" onClick={() => append({ value: "" })}>
+          <button type="button" onClick={() => append({ label: "" })}>
             APPEND
           </button>
 

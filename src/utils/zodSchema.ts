@@ -23,11 +23,8 @@ export const schema = z.object({
     .refine((files) => files?.length >= 2, { message: "Select more file" }),
   orientation: z.string(),
   rows: z.array(
-    z.string().min(1, { message: "Required" }).max(30, { message: "Too long" })
-  ),
-  extraRows: z.array(
     z.object({
-      value: z
+      label: z
         .string()
         .min(1, { message: "Required" })
         .max(30, { message: "Too long" })

@@ -3,10 +3,10 @@ import { useDrag } from "react-dnd"
 
 interface IProps {
   id: number
-  url: string
+  src: string
 }
 
-const ImageList: React.FC<IProps> = ({ id, url }) => {
+const Image: React.FC<IProps> = ({ src, id }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
     item: { id: id },
@@ -14,10 +14,9 @@ const ImageList: React.FC<IProps> = ({ id, url }) => {
       isDragging: !!monitor.isDragging()
     })
   }))
-
   return (
     <img
-      src={url}
+      src={src}
       alt="tierimage"
       ref={drag}
       className={`w-24 h-24 object-cover ${
@@ -27,4 +26,4 @@ const ImageList: React.FC<IProps> = ({ id, url }) => {
   )
 }
 
-export default ImageList
+export default Image

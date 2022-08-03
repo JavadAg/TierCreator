@@ -63,8 +63,7 @@ export const tierApi = createApi({
             description: `${formData.description}`,
             cover: `${coverUrl.publicURL}`,
             orientation: `${formData.orientation}`,
-            rows: formData.rows,
-            extraRows: formData.extraRows
+            rows: formData.rows
           }
         ])
         /* return { data }  */
