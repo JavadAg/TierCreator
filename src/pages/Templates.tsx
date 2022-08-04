@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom"
-import TierCreator from "../components/TierCreator/TierCreator"
+
 import { useGetTemplatesQuery } from "../services/tierApi"
 
 const Templates = () => {
