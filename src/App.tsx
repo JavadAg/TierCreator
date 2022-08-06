@@ -5,8 +5,8 @@ import Categories from "./pages/Categories"
 import CreateTemplate from "./pages/CreateTemplate"
 import Home from "./pages/Home"
 import Templates from "./pages/Templates"
-import CreateTier from "./pages/CreateTier"
-import Test from "./pages/test/Test"
+
+import { MultipleContainers } from "./pages/test/Example"
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Route path="categories" element={<Categories />} />
           <Route path="categories/:slug" element={<Templates />} />
           <Route path="/create" element={<CreateTemplate />} />
-          <Route path="/create/:slug" element={<Test />} />
+          <Route path="/create/:slug" element={<MultipleContainers />} />
         </Routes>
       </div>
     </Router>

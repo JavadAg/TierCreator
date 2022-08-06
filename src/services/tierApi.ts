@@ -40,7 +40,7 @@ export const tierApi = createApi({
         const coverUrl = uploadClient.getPublicUrl(
           `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`
         )
-        let id = 0
+        let id = 1
         let imagesUrl: Image[] = []
         for (const iterator of formData.images) {
           await uploadClient.upload(

@@ -8,9 +8,9 @@ import {
   useSensors
 } from "@dnd-kit/core"
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable"
-import { Template } from "../../models/tier"
-import Container from "./container"
-import Item from "./Item"
+import { Template } from "../models/tier"
+import Container from "./test/container"
+import Item from "./test/Item"
 import { useLocation } from "react-router-dom"
 
 export default function Test() {
@@ -51,7 +51,7 @@ export default function Test() {
   const [draggedItem, setDraggedItem] = useState(null)
   console.log(draggedItem)
   return (
-    <div className="grid">
+    <div>
       <DndContext
         sensors={sensors}
         /**
@@ -118,7 +118,7 @@ export default function Test() {
           if (!over) {
             return
           }
-          console.log(active)
+
           // Abort if item is not moved from its original position
           if (active.id === over.id) {
             return

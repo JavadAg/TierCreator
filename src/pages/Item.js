@@ -7,11 +7,11 @@ function Item({ id, isActive, label }) {
     useSortable({ id: id })
 
   return (
-    <span
+    <img
       data-value={id}
       className={`
-       flex justify-center w-24 overflow-hidden items-center bg-green-200 m-2 
-       ${isActive ? " bg-blue-400" : ""} 
+       flex justify-center w-24 object-cover h-full items-center overflow-hidden
+       ${isActive ? "bg-transparent opacity-30" : ""} 
         `}
       // Sortable attributes:
       ref={setNodeRef}
@@ -21,9 +21,8 @@ function Item({ id, isActive, label }) {
       }}
       {...attributes}
       {...listeners}
-    >
-      <img src={label} />
-    </span>
+      src={label}
+    />
   )
 }
 
