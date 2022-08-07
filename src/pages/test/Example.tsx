@@ -174,7 +174,7 @@ export function MultipleContainers({
   renderItem,
   strategy = verticalListSortingStrategy,
   trashable = false,
-  vertical = false,
+  vertical = true,
   scrollable
 }: Props) {
   ////////////////////
@@ -370,8 +370,6 @@ export function MultipleContainers({
               .map((object: any) => object.id)
               .indexOf(active.id)
 
-            console.log(overIndex)
-
             let newIndex: number
 
             if (overId in items) {
@@ -394,8 +392,9 @@ export function MultipleContainers({
             return {
               ...items,
               [activeContainer]: items[activeContainer].filter(
-                (item: any) => item !== active.id
+                (item: any) => item.id !== active.id
               ),
+
               [overContainer]: [
                 ...items[overContainer].slice(0, newIndex),
                 items[activeContainer][activeIndex],
@@ -412,6 +411,7 @@ export function MultipleContainers({
         if (active.id in items && over?.id) {
           setContainers((containers: any) => {
             const activeIndex = containers.indexOf(active.id)
+
             const overIndex = containers.indexOf(over.id)
 
             return arrayMove(containers, activeIndex, overIndex)
@@ -428,17 +428,6 @@ export function MultipleContainers({
         const overId = over?.id
 
         if (overId == null) {
-          setActiveId(null)
-          return
-        }
-
-        if (overId === TRASH_ID) {
-          setItems((items: any) => ({
-            ...items,
-            [activeContainer]: items[activeContainer].filter(
-              (id: any) => id !== activeId
-            )
-          }))
           setActiveId(null)
           return
         }
@@ -463,12 +452,13 @@ export function MultipleContainers({
         const overContainer = findContainer(overId)
 
         if (overContainer) {
-          const activeIndex = items[activeContainer].indexOf(
-            active.id as unknown as Images
-          )
-          const overIndex = items[overContainer].indexOf(
-            overId as unknown as Images
-          )
+          const activeIndex = items[activeContainer]
+            .map((object: any) => object.id)
+            .indexOf(active.id as unknown as Images)
+
+          const overIndex = items[overContainer]
+            .map((object: any) => object.id)
+            .indexOf(overId as unknown as Images)
 
           if (activeIndex !== overIndex) {
             setItems((items: any) => ({
@@ -489,10 +479,8 @@ export function MultipleContainers({
       modifiers={modifiers}
     >
       <div
+        className={`first-letter:gap-8 inline-grid  box-border p-5 `}
         style={{
-          display: "inline-grid",
-          boxSizing: "border-box",
-          padding: 20,
           gridAutoFlow: vertical ? "row" : "column"
         }}
       >
@@ -508,11 +496,10 @@ export function MultipleContainers({
             <DroppableContainer
               key={containerId}
               id={containerId}
-              label={minimal ? undefined : `Column ${containerId}`}
+              label={containerId}
               columns={columns}
               items={items[containerId]}
               scrollable={scrollable}
-              style={containerStyle}
               unstyled={minimal}
             >
               <SortableContext items={items[containerId]} strategy={strategy}>
@@ -574,11 +561,8 @@ export function MultipleContainers({
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
       <Container
-        label={`Column ${containerId}`}
+        label={containerId as string}
         columns={columns}
-        style={{
-          height: "100%"
-        }}
         shadow
         unstyled={false}
       >

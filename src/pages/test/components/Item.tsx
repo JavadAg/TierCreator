@@ -61,18 +61,6 @@ export const Item = React.memo(
       },
       ref
     ) => {
-      useEffect(() => {
-        if (!dragOverlay) {
-          return
-        }
-
-        document.body.style.cursor = "grabbing"
-
-        return () => {
-          document.body.style.cursor = ""
-        }
-      }, [dragOverlay])
-
       return renderItem ? (
         renderItem({
           dragOverlay: Boolean(dragOverlay),
@@ -89,6 +77,9 @@ export const Item = React.memo(
         })
       ) : (
         <li
+          className={` ${
+            dragOverlay ? "cursor-grabbing" : "hover:cursor-grab"
+          }`}
           style={
             {
               ...wrapperStyle,
