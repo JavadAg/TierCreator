@@ -1,18 +1,16 @@
 import React, { useEffect } from "react"
 import type { DraggableSyntheticListeners } from "@dnd-kit/core"
 import type { Transform } from "@dnd-kit/utilities"
-import { Handle } from "./components/Handle"
+import styles from "./Item.module.css"
 
 export interface Props {
   dragOverlay?: boolean
-  color?: string
   disabled?: boolean
   dragging?: boolean
   handle?: boolean
   handleProps?: any
   height?: number
   index?: number
-  fadeIn?: boolean
   transform?: Transform | null
   listeners?: DraggableSyntheticListeners
   sorting?: boolean
@@ -25,7 +23,6 @@ export interface Props {
     dragging: boolean
     sorting: boolean
     index: number | undefined
-    fadeIn: boolean
     listeners: DraggableSyntheticListeners
     ref: React.Ref<HTMLElement>
     style: React.CSSProperties | undefined
@@ -39,17 +36,14 @@ export const Item = React.memo(
   React.forwardRef<HTMLLIElement, Props>(
     (
       {
-        color,
         dragOverlay,
         dragging,
         disabled,
-        fadeIn,
         handle,
         handleProps,
         height,
         index,
         listeners,
-
         renderItem,
         sorting,
         style,
@@ -61,13 +55,13 @@ export const Item = React.memo(
       },
       ref
     ) => {
+      console.log()
       return renderItem ? (
         renderItem({
           dragOverlay: Boolean(dragOverlay),
           dragging: Boolean(dragging),
           sorting: Boolean(sorting),
           index,
-          fadeIn: Boolean(fadeIn),
           listeners,
           ref,
           style,
@@ -77,34 +71,34 @@ export const Item = React.memo(
         })
       ) : (
         <li
-          className={` ${
-            dragOverlay ? "cursor-grabbing" : "hover:cursor-grab"
-          }`}
+          className={`transform-gpu list-none`}
           style={
             {
               ...wrapperStyle,
               transition: [transition, wrapperStyle?.transition]
                 .filter(Boolean)
                 .join(", "),
-              "--translate-x": transform
+              "--tw-translate-x": transform
                 ? `${Math.round(transform.x)}px`
                 : undefined,
-              "--translate-y": transform
+              "--tw-translate-y": transform
                 ? `${Math.round(transform.y)}px`
                 : undefined,
-              "--scale-x": transform?.scaleX
+              "--tw-scale-x": transform?.scaleX
                 ? `${transform.scaleX}`
                 : undefined,
-              "--scale-y": transform?.scaleY
+              "--tw-scale-y": transform?.scaleY
                 ? `${transform.scaleY}`
                 : undefined,
-              "--index": index,
-              "--color": color
+              "--index": index
             } as React.CSSProperties
           }
           ref={ref}
         >
           <div
+            className={`relative flex grow items-center p-5 bg-white shadow-md rounded-md list-none origin-center ${
+              dragging && "opacity-50"
+            } `}
             style={style}
             data-cypress="draggable-item"
             {...(!handle ? listeners : undefined)}
@@ -112,9 +106,6 @@ export const Item = React.memo(
             tabIndex={!handle ? 0 : undefined}
           >
             <span>{value}</span>
-            <span>
-              {handle ? <Handle {...handleProps} {...listeners} /> : null}
-            </span>
           </div>
         </li>
       )

@@ -20,7 +20,8 @@ import {
   useSensor,
   MeasuringStrategy,
   KeyboardCoordinateGetter,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from "@dnd-kit/core"
 import {
   AnimateLayoutChanges,
@@ -30,12 +31,11 @@ import {
   defaultAnimateLayoutChanges,
   verticalListSortingStrategy,
   SortingStrategy,
-  horizontalListSortingStrategy
+  horizontalListSortingStrategy,
+  rectSortingStrategy
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { coordinateGetter as multipleContainersCoordinateGetter } from "./multipleContainersKeyboardCoordinates"
 import { Container, ContainerProps } from "./components/Container"
-import { createRange } from "./components/components/createRange"
 import { Item } from "./components/Item"
 import { useLocation } from "react-router-dom"
 import { Template } from "../../models/tier"
@@ -58,8 +58,8 @@ const animateLayoutChanges: AnimateLayoutChanges = (args) =>
 
 function DroppableContainer({
   children,
-  columns = 1,
   disabled,
+
   id,
   items,
   style,
@@ -87,10 +87,6 @@ function DroppableContainer({
     },
     animateLayoutChanges
   })
-  const isOverContainer = over
-    ? (id === over.id && active?.data.current?.type !== "container") ||
-      items.includes(over.id as unknown as Images)
-    : false
 
   return (
     <Container
@@ -101,12 +97,10 @@ function DroppableContainer({
         transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : undefined
       }}
-      hover={isOverContainer}
       handleProps={{
         ...attributes,
         ...listeners
       }}
-      columns={columns}
       {...props}
     >
       {children}
@@ -148,32 +142,20 @@ interface Props {
   renderItem?: any
   strategy?: SortingStrategy
   modifiers?: Modifiers
-  minimal?: boolean
-  trashable?: boolean
   scrollable?: boolean
   vertical?: boolean
 }
 
-export const TRASH_ID = "void"
-const PLACEHOLDER_ID = "placeholder"
-const empty: UniqueIdentifier[] = []
-
 export function MultipleContainers({
   adjustScale = false,
-  itemCount = 3,
   cancelDrop,
   columns,
   handle = false,
-  items: initialItems,
-  containerStyle,
-  coordinateGetter = multipleContainersCoordinateGetter,
   getItemStyles = () => ({}),
   wrapperStyle = () => ({}),
-  minimal = false,
   modifiers,
   renderItem,
   strategy = verticalListSortingStrategy,
-  trashable = false,
   vertical = true,
   scrollable
 }: Props) {
@@ -183,8 +165,6 @@ export function MultipleContainers({
   const template = location.state as Template
 
   const arrayOfImages = template.image
-
-  const images: Images[] = arrayOfImages
 
   let allRows = {}
   let labels = ["default"]
@@ -196,102 +176,17 @@ export function MultipleContainers({
 
   const states: States = { ...allRows, default: arrayOfImages }
 
-  /*  const [items, setItems] = useState<Items>(
-    () =>
-      initialItems ?? {
-        A: createRange(itemCount, (index) => `X21${index + 1}`),
-        B: createRange(itemCount, (index) => `X2${index + 1}`),
-        C: createRange(itemCount, (index) => `X3${index + 1}`),
-        D: createRange(itemCount, (index) => `X4${index + 1}`)
-      }
-  )
- */
-
   const [items, setItems] = useState<States>(states)
 
   const [containers, setContainers] = useState<any>(labels)
-
-  /*   const [containers, setContainers] = useState<any>(["A", "B", "C", "D"]) */
-
-  ////////////////////
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
   const lastOverId = useRef<UniqueIdentifier | null>(null)
   const recentlyMovedToNewContainer = useRef(false)
   const isSortingContainer = activeId ? containers.includes(activeId) : false
 
-  /**
-   * Custom collision detection strategy optimized for multiple containers
-   *
-   * - First, find any droppable containers intersecting with the pointer.
-   * - If there are none, find intersecting containers with the active draggable.
-   * - If there are no intersecting containers, return the last matched intersection
-   *
-   */
-  /* const collisionDetectionStrategy: CollisionDetection = useCallback(
-    (args) => {
-      if (activeId && activeId in items) {
-        return closestCenter({
-          ...args,
-          droppableContainers: args.droppableContainers.filter(
-            (container) => container.id in items
-          )
-        })
-      }
-
-      // Start by finding any intersecting droppable
-      const pointerIntersections = pointerWithin(args)
-      const intersections =
-        pointerIntersections.length > 0
-          ? // If there are droppables intersecting with the pointer, return those
-            pointerIntersections
-          : rectIntersection(args)
-      let overId = getFirstCollision(intersections, "id")
-
-      if (overId != null) {
-        if (overId in items) {
-          const containerItems = items[overId]
-          console.log(containerItems)
-          // If a container is matched and it contains items (columns 'A', 'B', 'C')
-          if (containerItems.length > 0) {
-            // Return the closest droppable within that container
-            overId = closestCenter({
-              ...args,
-              droppableContainers: args.droppableContainers.filter(
-                (container) =>
-                  container.id !== overId &&
-                  containerItems.includes(container.id)
-              )
-            })[0]?.id
-          }
-        }
-
-        lastOverId.current = overId
-
-        return [{ id: overId }]
-      }
-
-      // When a draggable item moves to a new container, the layout may shift
-      // and the `overId` may become `null`. We manually set the cached `lastOverId`
-      // to the id of the draggable item that was moved to the new container, otherwise
-      // the previous `overId` will be returned which can cause items to incorrectly shift positions
-      if (recentlyMovedToNewContainer.current) {
-        lastOverId.current = activeId
-      }
-
-      // If no droppable is matched, return the last match
-      return lastOverId.current ? [{ id: lastOverId.current }] : []
-    },
-    [activeId, items]
-  ) */
   const [clonedItems, setClonedItems] = useState<States | null>(null)
-  const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter
-    })
-  )
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
   const findContainer = (id: UniqueIdentifier) => {
     if (id in items) {
       return id
@@ -334,7 +229,7 @@ export function MultipleContainers({
   return (
     <DndContext
       sensors={sensors}
-      /* collisionDetection={collisionDetectionStrategy} */
+      collisionDetection={closestCorners}
       measuring={{
         droppable: {
           strategy: MeasuringStrategy.Always
@@ -432,23 +327,6 @@ export function MultipleContainers({
           return
         }
 
-        if (overId === PLACEHOLDER_ID) {
-          const newContainerId = getNextContainerId()
-
-          unstable_batchedUpdates(() => {
-            setContainers((containers: any) => [...containers, newContainerId])
-            setItems((items: any) => ({
-              ...items,
-              [activeContainer]: items[activeContainer].filter(
-                (id: any) => id !== activeId
-              ),
-              [newContainerId]: [active.id]
-            }))
-            setActiveId(null)
-          })
-          return
-        }
-
         const overContainer = findContainer(overId)
 
         if (overContainer) {
@@ -479,13 +357,13 @@ export function MultipleContainers({
       modifiers={modifiers}
     >
       <div
-        className={`first-letter:gap-8 inline-grid  box-border p-5 `}
+        className={`first-letter:gap-8 inline-grid box-border p-5 w-full`}
         style={{
           gridAutoFlow: vertical ? "row" : "column"
         }}
       >
         <SortableContext
-          items={[...containers, PLACEHOLDER_ID]}
+          items={[...containers]}
           strategy={
             vertical
               ? verticalListSortingStrategy
@@ -499,10 +377,11 @@ export function MultipleContainers({
               label={containerId}
               columns={columns}
               items={items[containerId]}
-              scrollable={scrollable}
-              unstyled={minimal}
             >
-              <SortableContext items={items[containerId]} strategy={strategy}>
+              <SortableContext
+                items={items[containerId]}
+                strategy={rectSortingStrategy}
+              >
                 {items[containerId].map((value: Images, index: any) => {
                   return (
                     <SortableItem
@@ -560,12 +439,7 @@ export function MultipleContainers({
 
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
-      <Container
-        label={containerId as string}
-        columns={columns}
-        shadow
-        unstyled={false}
-      >
+      <Container label={containerId as string} columns={columns} shadow>
         {items[containerId].map((item: Images, index: any) => (
           <Item
             key={item.id}
@@ -586,13 +460,6 @@ export function MultipleContainers({
         ))}
       </Container>
     )
-  }
-
-  function getNextContainerId() {
-    const containerIds = Object.keys(items)
-    const lastContainerId = containerIds[containerIds.length - 1]
-
-    return String.fromCharCode(lastContainerId.charCodeAt(0) + 1)
   }
 }
 
@@ -655,7 +522,6 @@ function SortableItem({
       })}
       transition={transition}
       transform={transform}
-      fadeIn={mountedWhileDragging}
       listeners={listeners}
       renderItem={renderItem}
     />
