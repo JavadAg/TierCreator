@@ -1,27 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { createPortal, unstable_batchedUpdates } from "react-dom"
 import {
   CancelDrop,
-  closestCenter,
-  pointerWithin,
-  rectIntersection,
-  CollisionDetection,
   DndContext,
   DragOverlay,
   DropAnimation,
-  getFirstCollision,
-  KeyboardSensor,
   MouseSensor,
   TouchSensor,
   Modifiers,
-  useDroppable,
   UniqueIdentifier,
   useSensors,
   useSensor,
   MeasuringStrategy,
   KeyboardCoordinateGetter,
-  defaultDropAnimationSideEffects,
-  closestCorners
+  defaultDropAnimationSideEffects
 } from "@dnd-kit/core"
 import {
   AnimateLayoutChanges,
@@ -35,10 +27,12 @@ import {
   rectSortingStrategy
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { Container, ContainerProps } from "./components/Container"
-import { Item } from "./components/Item"
+import { Container, ContainerProps } from "./Container"
+
+import { Item } from "./Item"
 import { useLocation } from "react-router-dom"
 import { Template } from "../../models/tier"
+import PageToImage from "../Page2Image/PageToImage"
 
 export default {
   title: "Presets/Sortable/Multiple Containers"
@@ -59,7 +53,6 @@ const animateLayoutChanges: AnimateLayoutChanges = (args) =>
 function DroppableContainer({
   children,
   disabled,
-
   id,
   items,
   style,
@@ -78,6 +71,7 @@ function DroppableContainer({
     over,
     setNodeRef,
     transition,
+    index,
     transform
   } = useSortable({
     id,
@@ -87,16 +81,23 @@ function DroppableContainer({
     },
     animateLayoutChanges
   })
+  const isOverContainer = over
+    ? (id === over.id && active?.data.current?.type !== "container") ||
+      items.includes(over.id as unknown as Images)
+    : false
 
   return (
     <Container
+      index={index}
       ref={disabled ? undefined : setNodeRef}
+      color={getColor(index)}
       style={{
         ...style,
         transition,
         transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : undefined
       }}
+      hover={isOverContainer}
       handleProps={{
         ...attributes,
         ...listeners
@@ -146,6 +147,9 @@ interface Props {
   vertical?: boolean
 }
 
+const PLACEHOLDER_ID = "placeholder"
+const empty: Images[] = []
+
 export function MultipleContainers({
   adjustScale = false,
   cancelDrop,
@@ -155,10 +159,10 @@ export function MultipleContainers({
   wrapperStyle = () => ({}),
   modifiers,
   renderItem,
-  strategy = verticalListSortingStrategy,
-  vertical = true,
-  scrollable
+  vertical = true
 }: Props) {
+  const fieldsRef = useRef(null)
+  const excludeNode = useRef(null)
   ////////////////////
   const location = useLocation()
 
@@ -167,12 +171,13 @@ export function MultipleContainers({
   const arrayOfImages = template.image
 
   let allRows = {}
-  let labels = ["default"]
+  let labels = []
   for (const iterator of template.rows) {
     const label = iterator.label.trim()
     allRows = { ...allRows, [label]: [] }
     labels.push(label)
   }
+  labels.push(...labels.splice(0, 1))
 
   const states: States = { ...allRows, default: arrayOfImages }
 
@@ -181,12 +186,15 @@ export function MultipleContainers({
   const [containers, setContainers] = useState<any>(labels)
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
-  const lastOverId = useRef<UniqueIdentifier | null>(null)
+
   const recentlyMovedToNewContainer = useRef(false)
+
   const isSortingContainer = activeId ? containers.includes(activeId) : false
 
   const [clonedItems, setClonedItems] = useState<States | null>(null)
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+
   const findContainer = (id: UniqueIdentifier) => {
     if (id in items) {
       return id
@@ -229,7 +237,6 @@ export function MultipleContainers({
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
       measuring={{
         droppable: {
           strategy: MeasuringStrategy.Always
@@ -327,6 +334,26 @@ export function MultipleContainers({
           return
         }
 
+        if (overId === PLACEHOLDER_ID) {
+          const newContainerId = getNextContainerId()
+
+          unstable_batchedUpdates(() => {
+            setContainers((containers: string[]) => [
+              ...containers,
+              newContainerId
+            ])
+            setItems((items) => ({
+              ...items,
+              [activeContainer]: items[activeContainer].filter(
+                (item) => item.id !== activeId
+              ),
+              [newContainerId]: [active.id as any]
+            }))
+            setActiveId(null)
+          })
+          return
+        }
+
         const overContainer = findContainer(overId)
 
         if (overContainer) {
@@ -349,59 +376,107 @@ export function MultipleContainers({
             }))
           }
         }
-
         setActiveId(null)
       }}
       cancelDrop={cancelDrop}
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div
-        className={`first-letter:gap-8 inline-grid box-border p-5 w-full`}
-        style={{
-          gridAutoFlow: vertical ? "row" : "column"
-        }}
-      >
-        <SortableContext
-          items={[...containers]}
-          strategy={
-            vertical
-              ? verticalListSortingStrategy
-              : horizontalListSortingStrategy
-          }
-        >
-          {containers.map((containerId: any) => (
-            <DroppableContainer
-              key={containerId}
-              id={containerId}
-              label={containerId}
-              columns={columns}
-              items={items[containerId]}
-            >
-              <SortableContext
+      <div className={`flex flex-col  w-full`}>
+        <div ref={fieldsRef}>
+          <SortableContext
+            items={[...containers]}
+            strategy={
+              vertical
+                ? verticalListSortingStrategy
+                : horizontalListSortingStrategy
+            }
+          >
+            {containers.map((containerId: any) => (
+              <DroppableContainer
+                key={containerId}
+                id={containerId}
+                excludeNode={excludeNode}
+                templateName={template.slug}
+                label={containerId}
+                columns={columns}
                 items={items[containerId]}
-                strategy={rectSortingStrategy}
+                onRemove={() => handleRemove(containerId)}
               >
-                {items[containerId].map((value: Images, index: any) => {
-                  return (
-                    <SortableItem
-                      disabled={isSortingContainer}
-                      key={value.id}
-                      id={value.id}
-                      index={index}
-                      handle={handle}
-                      style={getItemStyles}
-                      wrapperStyle={wrapperStyle}
-                      renderItem={renderItem}
-                      containerId={containerId}
-                      getIndex={getIndex}
-                    />
-                  )
-                })}
-              </SortableContext>
-            </DroppableContainer>
-          ))}
-        </SortableContext>
+                <SortableContext
+                  items={items[containerId]}
+                  strategy={rectSortingStrategy}
+                >
+                  {items[containerId].map((value: Images, index: any) => {
+                    return (
+                      <SortableItem
+                        disabled={isSortingContainer}
+                        key={value.id}
+                        id={value.id}
+                        value={value.url}
+                        index={index}
+                        handle={handle}
+                        style={getItemStyles}
+                        wrapperStyle={wrapperStyle}
+                        renderItem={renderItem}
+                        containerId={containerId}
+                        getIndex={getIndex}
+                      />
+                    )
+                  })}
+                </SortableContext>
+              </DroppableContainer>
+            ))}
+          </SortableContext>
+        </div>
+        <DroppableContainer
+          key={"default"}
+          id={"default"}
+          templateName={template.slug}
+          label={"default"}
+          columns={columns}
+          items={items["default"]}
+          onRemove={() => handleRemove("default")}
+        >
+          <SortableContext
+            items={items["default"]}
+            strategy={rectSortingStrategy}
+          >
+            {items["default"].map((value: Images, index: any) => {
+              return (
+                <SortableItem
+                  disabled={isSortingContainer}
+                  key={value.id}
+                  id={value.id}
+                  value={value.url}
+                  index={index}
+                  handle={handle}
+                  style={getItemStyles}
+                  wrapperStyle={wrapperStyle}
+                  renderItem={renderItem}
+                  containerId={"default"}
+                  getIndex={getIndex}
+                />
+              )
+            })}
+          </SortableContext>
+        </DroppableContainer>
+
+        {containers.length !== 10 ? (
+          <button
+            data-mdb-ripple="true"
+            data-mdb-ripple-color="light"
+            className="inline-block w-2/4 my-1 self-center px-6 py-2.5 bg-zinc-200 text-slate-800 font-medium text-sm leading-tight  rounded-md shadow-md hover:bg-zinc-300 hover:shadow-lg focus:bg-zinc-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-zinc-400 active:shadow-lg transition duration-150 ease-in-out"
+            onClick={handleAddColumn}
+          >
+            Add New Field
+          </button>
+        ) : null}
+        <PageToImage
+          excludeNode={excludeNode}
+          id={fieldsRef}
+          name={template.slug}
+        />
       </div>
       {createPortal(
         <DragOverlay adjustScale={adjustScale} dropAnimation={dropAnimation}>
@@ -443,7 +518,7 @@ export function MultipleContainers({
         {items[containerId].map((item: Images, index: any) => (
           <Item
             key={item.id}
-            value={item.id}
+            value={item.url}
             handle={handle}
             style={getItemStyles({
               containerId,
@@ -461,11 +536,65 @@ export function MultipleContainers({
       </Container>
     )
   }
+  function handleRemove(containerID: UniqueIdentifier) {
+    setContainers((containers: string[]) =>
+      containers.filter((id) => id !== containerID)
+    )
+  }
+
+  function handleAddColumn() {
+    const newContainerId = getNextContainerId()
+
+    unstable_batchedUpdates(() => {
+      let placeholder = containers
+      placeholder.splice(placeholder.length, 0, newContainerId)
+      setContainers(placeholder)
+      setItems((items) => ({
+        ...items,
+        [newContainerId]: []
+      }))
+    })
+  }
+
+  function getNextContainerId() {
+    const containerIds = Object.keys(items)
+    const lastContainerId = containerIds[containerIds.length - 1]
+
+    return String.fromCharCode(lastContainerId.charCodeAt(0) + 1)
+  }
+}
+
+const saveToStorage = (items: any, color: any, label: any, template: any) => {
+  let ids = {}
+  for (const iterator in items) {
+    let imageIds = items[iterator].map((item: any) => item.id)
+    ids = { ...ids, [iterator]: imageIds }
+  }
+  console.log(ids)
+  localStorage.setItem(`${template.slug}`, `${JSON.stringify(ids)}`)
+}
+
+function getColor(id: UniqueIdentifier) {
+  switch (String(id)[0]) {
+    case "0":
+      return "#FF7F7F"
+    case "1":
+      return "#FFBF7F"
+    case "2":
+      return "#FFDF7F"
+    case "3":
+      return "#FFFE7F"
+    case "4":
+      return "#BFFE7E"
+  }
+
+  return "#ccc"
 }
 
 interface SortableItemProps {
   containerId: UniqueIdentifier
   id: UniqueIdentifier
+  value: UniqueIdentifier
   index: number
   handle: boolean
   disabled?: boolean
@@ -481,6 +610,7 @@ function SortableItem({
   index,
   handle,
   renderItem,
+  value,
   style,
   containerId,
   getIndex,
@@ -505,7 +635,7 @@ function SortableItem({
   return (
     <Item
       ref={disabled ? undefined : setNodeRef}
-      value={id}
+      value={value}
       dragging={isDragging}
       sorting={isSorting}
       handle={handle}
@@ -522,6 +652,7 @@ function SortableItem({
       })}
       transition={transition}
       transform={transform}
+      fadeIn={mountedWhileDragging}
       listeners={listeners}
       renderItem={renderItem}
     />

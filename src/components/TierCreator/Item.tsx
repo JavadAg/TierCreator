@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import type { DraggableSyntheticListeners } from "@dnd-kit/core"
 import type { Transform } from "@dnd-kit/utilities"
-import styles from "./Item.module.css"
 
 export interface Props {
   dragOverlay?: boolean
@@ -11,6 +10,7 @@ export interface Props {
   handleProps?: any
   height?: number
   index?: number
+  fadeIn?: boolean
   transform?: Transform | null
   listeners?: DraggableSyntheticListeners
   sorting?: boolean
@@ -22,6 +22,7 @@ export interface Props {
     dragOverlay: boolean
     dragging: boolean
     sorting: boolean
+    fadeIn: boolean
     index: number | undefined
     listeners: DraggableSyntheticListeners
     ref: React.Ref<HTMLElement>
@@ -43,6 +44,7 @@ export const Item = React.memo(
         handleProps,
         height,
         index,
+        fadeIn,
         listeners,
         renderItem,
         sorting,
@@ -55,13 +57,13 @@ export const Item = React.memo(
       },
       ref
     ) => {
-      console.log()
       return renderItem ? (
         renderItem({
           dragOverlay: Boolean(dragOverlay),
           dragging: Boolean(dragging),
           sorting: Boolean(sorting),
           index,
+          fadeIn: Boolean(fadeIn),
           listeners,
           ref,
           style,
@@ -71,7 +73,7 @@ export const Item = React.memo(
         })
       ) : (
         <li
-          className={`transform-gpu list-none`}
+          className={`transform-gpu list-none flex   `}
           style={
             {
               ...wrapperStyle,
@@ -95,18 +97,16 @@ export const Item = React.memo(
           }
           ref={ref}
         >
-          <div
-            className={`relative flex grow items-center p-5 bg-white shadow-md rounded-md list-none origin-center ${
-              dragging && "opacity-50"
-            } `}
+          <img
+            className={` w-24 h-24 object-cover ${dragging && "opacity-50"} `}
             style={style}
             data-cypress="draggable-item"
             {...(!handle ? listeners : undefined)}
             {...props}
+            alt="templateImage"
             tabIndex={!handle ? 0 : undefined}
-          >
-            <span>{value}</span>
-          </div>
+            src={value as string}
+          />
         </li>
       )
     }

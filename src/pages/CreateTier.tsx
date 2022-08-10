@@ -1,8 +1,8 @@
 import React from "react"
-import TierCreatorContext from "../components/TierCreator/TierCreatorContext"
+import { MultipleContainers } from "../components/TierCreator/DndContext"
 
 const CreateTier = () => {
-  return <TierCreatorContext />
+  return <MultipleContainers />
 }
 
 export default CreateTier

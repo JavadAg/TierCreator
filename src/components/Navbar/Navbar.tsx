@@ -31,7 +31,7 @@ const Navbar = () => {
         <Link to="/tier-lists/new" className="cursor-pointer">
           New Tier Lists
         </Link>
-        <Link to="/dashboard" className="capitalize cursor-pointer">
+        <Link to="/login" className="capitalize cursor-pointer">
           {user.name}
         </Link>
       </div>

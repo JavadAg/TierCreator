@@ -6,7 +6,8 @@ import CreateTemplate from "./pages/CreateTemplate"
 import Home from "./pages/Home"
 import Templates from "./pages/Templates"
 
-import { MultipleContainers } from "./pages/test/Example"
+import { MultipleContainers } from "./components/TierCreator/DndContext"
+import Login from "./pages/Login"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="categories/:slug" element={<Templates />} />
           <Route path="/create" element={<CreateTemplate />} />
           <Route path="/create/:slug" element={<MultipleContainers />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
