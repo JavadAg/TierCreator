@@ -1,12 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
+import useAuth from "../../hooks/useAuth"
 import { supabase } from "../../utils/client"
 
 const UserAuth = () => {
-  async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "google"
-    })
-  }
+  const login = useAuth()
 
   return (
     <div className="flex justify-center items-center flex-col">
@@ -17,7 +14,7 @@ const UserAuth = () => {
         need to create an account to download a tier list image created from an
         existing template.
       </p>
-      <button className="bg-red-300 p-2" onClick={signInWithGoogle}>
+      <button className="bg-red-300 p-2" onClick={() => login.mutate()}>
         Login
       </button>
       <p>

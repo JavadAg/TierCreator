@@ -205,6 +205,13 @@ export function MultipleContainers({
     )
   }
 
+  const findItemByActiveId = (id: UniqueIdentifier) => {
+    const item = Object.values(items)
+      .flat()
+      .find((item) => item.id == 2)
+    return item!.url
+  }
+
   const getIndex = (id: UniqueIdentifier) => {
     const container = findContainer(id)
 
@@ -494,7 +501,7 @@ export function MultipleContainers({
   function renderSortableItemDragOverlay(id: UniqueIdentifier) {
     return (
       <Item
-        value={id}
+        value={findItemByActiveId(id)}
         handle={handle}
         style={getItemStyles({
           containerId: findContainer(id) as UniqueIdentifier,

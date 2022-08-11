@@ -1,10 +1,6 @@
-import * as htmlToImage from "html-to-image"
 import html2canvas from "html2canvas"
-import useCORS from "html2canvas"
 
 const PageToImage = ({ id, name, excludeNode }: any) => {
-  console.log(excludeNode)
-
   const downloadImage = (blob: any, fileName: any) => {
     const fakeLink = window.document.createElement("a")
 
@@ -25,24 +21,9 @@ const PageToImage = ({ id, name, excludeNode }: any) => {
     downloadImage(image, name)
   }
 
-  /*  const filter = () => {
-    const exclusionClasses = ["exclude"]
-
-    return exclusionClasses.some((classname) =>
-      excludeNode.current.classList.contains(classname)
-    )
+  const handleSave = async () => {
+    
   }
-
-  const onCapture = () => {
-    htmlToImage
-      .toJpeg(id.current, { quality: 0.95, filter: filter })
-      .then(function (dataUrl) {
-        var link = document.createElement("a")
-        link.download = `${name}.jpeg`
-        link.href = dataUrl
-        link.click()
-      })
-  } */
 
   return (
     <>
@@ -76,7 +57,8 @@ const PageToImage = ({ id, name, excludeNode }: any) => {
                 aria-label="Close"
               ></button>
             </div>
-            <button onClick={onCapture}>SAVE</button>
+            <button onClick={onCapture}>Download</button>
+            <button onClick={handleSave}>Save</button>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
-import { useGetCategoriesQuery } from "../services/tierApi"
+import useCategory from "../hooks/useCategory"
 
 const Categories = () => {
-  const { data, error, isLoading } = useGetCategoriesQuery(undefined)
+  const { data, error, isLoading } = useCategory()
 
   if (error) return <div>Something went horrible wrong ...</div>
 
@@ -23,7 +23,7 @@ const Categories = () => {
             {data?.map((category, index) => (
               <Link
                 key={category.slug}
-                to={`/categories/${category.slug}`}
+                to={`/${category.slug}`}
                 className="flex justify-center items-center m-1 flex-col"
               >
                 <img

@@ -1,12 +1,10 @@
 import { Link, useParams } from "react-router-dom"
-
-import { useGetTemplatesQuery } from "../services/tierApi"
+import { useTemplate } from "../hooks/useTemplate"
 
 const Templates = () => {
   const { slug } = useParams()
+  const { data, error, isLoading } = useTemplate(slug!)
 
-  const { data: templates, error, isLoading } = useGetTemplatesQuery(slug!)
-  console.log(templates)
   if (error) return <div>Something went horrible wrong ...</div>
 
   return (
@@ -28,9 +26,9 @@ const Templates = () => {
         <div>Loading</div>
       ) : (
         <div>
-          {templates?.length! > 0 ? (
+          {data?.length! > 0 ? (
             <div className="flex flex-wrap justify-center items-center m-1">
-              {templates?.map((template, index) => (
+              {data?.map((template, index) => (
                 <>
                   <Link
                     key={template.slug}

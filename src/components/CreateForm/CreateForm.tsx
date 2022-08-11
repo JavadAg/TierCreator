@@ -7,10 +7,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { schema } from "../../utils/zodSchema"
 import { Category } from "../../models/tier"
-import {
-  useGetCategoriesQuery,
-  useAddTemplateMutation
-} from "../../services/tierApi"
+
 import Resizer from "react-image-file-resizer"
 import { useId, useState } from "react"
 import slugify from "slugify"
@@ -18,11 +15,14 @@ import { BeatLoader } from "react-spinners"
 import { Inputs } from "../../models/tier"
 import { idText } from "typescript"
 import { number } from "zod"
+import { usePostTemplate } from "../../hooks/usePostTemplate"
+import useCategory from "../../hooks/useCategory"
 
 const CreateForm = () => {
-  const { data: categories, isLoading } = useGetCategoriesQuery(undefined)
-  const [addTemplate, { isLoading: isAdding }] = useAddTemplateMutation()
+  const [formData, setFormData] = useState<any>()
+  const { data, error, isLoading } = useCategory()
   const [coverImage, setCoverImage] = useState<string>()
+
   const [tierImages, setTierImages] = useState<string[]>([])
 
   const {
@@ -72,9 +72,11 @@ const CreateForm = () => {
     return slugifiedName
   }
 
+  const addTemplate = usePostTemplate(formData)
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await formhandler(data)
-    addTemplate(data)
+    addTemplate.mutate()
   }
 
   const formhandler = async (data: Inputs) => {
@@ -90,6 +92,7 @@ const CreateForm = () => {
       imagesArray.push(resizedImage)
       data.images = imagesArray
     }
+    setFormData(data)
   }
 
   const previewhandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +106,7 @@ const CreateForm = () => {
 
   return (
     <>
-      {isAdding ? (
+      {addTemplate.isLoading ? (
         <BeatLoader color="#bf6be0" loading size={22} speedMultiplier={1} />
       ) : (
         <form
@@ -140,7 +143,7 @@ const CreateForm = () => {
               {isLoading ? (
                 <option>Loading Categories...</option>
               ) : (
-                categories?.map((category: Category) => (
+                data?.map((category: Category) => (
                   <option key={category.id} value={category.slug}>
                     {category.name}
                   </option>
