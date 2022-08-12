@@ -31,4 +31,5 @@ export interface Inputs {
   images: File[]
   orientation: string
   rows: Row[]
+  creator_id: string
 }

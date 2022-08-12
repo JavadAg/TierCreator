@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
-import useCategory from "../hooks/useCategory"
+import { useFetch } from "../hooks/useFetch"
 
 const Categories = () => {
-  const { data, error, isLoading } = useCategory()
+  const { data, error, isLoading } = useFetch("categories")
 
   if (error) return <div>Something went horrible wrong ...</div>
 

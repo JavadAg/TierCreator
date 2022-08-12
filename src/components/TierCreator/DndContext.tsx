@@ -162,6 +162,7 @@ export function MultipleContainers({
   vertical = true
 }: Props) {
   const fieldsRef = useRef(null)
+
   const excludeNode = useRef(null)
   ////////////////////
   const location = useLocation()
@@ -383,6 +384,7 @@ export function MultipleContainers({
             }))
           }
         }
+
         setActiveId(null)
       }}
       cancelDrop={cancelDrop}
@@ -480,9 +482,11 @@ export function MultipleContainers({
           </button>
         ) : null}
         <PageToImage
-          excludeNode={excludeNode}
+          getFieldsDetails={getFieldsDetails}
           id={fieldsRef}
           name={template.slug}
+          template_name={template.name}
+          category_name={template.category}
         />
       </div>
       {createPortal(
@@ -563,22 +567,32 @@ export function MultipleContainers({
     })
   }
 
+  function getFieldsDetails() {
+    let colors: any = []
+    let labels: any = []
+    let templateImages: any = []
+    const fields: any = fieldsRef.current
+
+    Object.values(fields.childNodes).map(
+      (item: any) => (
+        labels.push(item.innerText),
+        colors.push(item.childNodes[0].style.backgroundColor),
+        templateImages.push(
+          Object.values(item.childNodes[1].childNodes)?.map(
+            (child: any) => child.childNodes[0].currentSrc
+          )
+        )
+      )
+    )
+    return { colors, labels, templateImages }
+  }
+
   function getNextContainerId() {
     const containerIds = Object.keys(items)
     const lastContainerId = containerIds[containerIds.length - 1]
 
     return String.fromCharCode(lastContainerId.charCodeAt(0) + 1)
   }
-}
-
-const saveToStorage = (items: any, color: any, label: any, template: any) => {
-  let ids = {}
-  for (const iterator in items) {
-    let imageIds = items[iterator].map((item: any) => item.id)
-    ids = { ...ids, [iterator]: imageIds }
-  }
-  console.log(ids)
-  localStorage.setItem(`${template.slug}`, `${JSON.stringify(ids)}`)
 }
 
 function getColor(id: UniqueIdentifier) {

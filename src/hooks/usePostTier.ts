@@ -1,51 +1,23 @@
 import { useMutation } from "@tanstack/react-query"
 import { supabase } from "../utils/client"
 
-interface Image {
-  url: string
-  id: number
-}
-
-const addTemplate = async (formData: any) => {
-  const uploadClient = supabase.storage.from("template-images")
-  await uploadClient.upload(
-    `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`,
-    formData.cover[0]
-  )
-  const coverUrl = uploadClient.getPublicUrl(
-    `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`
-  )
-  let id = 1
-  let imagesUrl: Image[] = []
-
-  for (const iterator of formData.images) {
-    await uploadClient.upload(
-      `public/${formData.slug}/images/${iterator.name}.jpeg`,
-      iterator
-    )
-
-    const coverUrl = uploadClient.getPublicUrl(
-      `public/${formData.slug}/images/${iterator.name}.jpeg`
-    )
-    imagesUrl.push({ url: coverUrl.publicURL as string, id: id++ })
-  }
-
-  const { data, error } = await supabase.from("templates").insert([
+const addTier = async (form: any) => {
+  const { data, error } = await supabase.from("tier").insert([
     {
-      name: `${formData.name}`,
-      category: `${formData.selectedCategory}`,
-      slug: `${formData.slug}`,
-      image: imagesUrl,
-      description: `${formData.description}`,
-      cover: `${coverUrl.publicURL}`,
-      orientation: `${formData.orientation}`,
-      rows: formData.rows
+      name: form.name,
+      description: form.description,
+      template_name: form.template_name,
+      category_name: form.category_name,
+      fieldsdetails: form.fieldsdetails,
+      creator_id: form.creator_id,
+      creator_name: form.creator_name,
+      creator_photo: form.creator_photo
     }
   ])
 
   return data
 }
 
-export function usePostTemplate(formData: any) {
-  return useMutation(() => addTemplate(formData))
+export function usePostTier(form: any) {
+  return useMutation(() => addTier(form))
 }

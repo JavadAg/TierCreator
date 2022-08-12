@@ -8,24 +8,26 @@ interface Image {
 
 const addTemplate = async (formData: any) => {
   const uploadClient = supabase.storage.from("template-images")
+
   await uploadClient.upload(
-    `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`,
+    `public/${formData.slug}/cover/${formData.cover[0].name}`,
     formData.cover[0]
   )
+
   const coverUrl = uploadClient.getPublicUrl(
-    `public/${formData.slug}/cover/${formData.cover[0].name}.jpeg`
+    `public/${formData.slug}/cover/${formData.cover[0].name}`
   )
   let id = 1
   let imagesUrl: Image[] = []
 
   for (const iterator of formData.images) {
     await uploadClient.upload(
-      `public/${formData.slug}/images/${iterator.name}.jpeg`,
+      `public/${formData.slug}/images/${iterator.name}`,
       iterator
     )
 
     const coverUrl = uploadClient.getPublicUrl(
-      `public/${formData.slug}/images/${iterator.name}.jpeg`
+      `public/${formData.slug}/images/${iterator.name}`
     )
     imagesUrl.push({ url: coverUrl.publicURL as string, id: id++ })
   }
@@ -39,9 +41,14 @@ const addTemplate = async (formData: any) => {
       description: `${formData.description}`,
       cover: `${coverUrl.publicURL}`,
       orientation: `${formData.orientation}`,
-      rows: formData.rows
+      rows: formData.rows,
+      creator_id: formData.creator_id
     }
   ])
+
+  if (error) {
+    throw new Error(error.message)
+  }
 
   return data
 }

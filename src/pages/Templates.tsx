@@ -1,9 +1,13 @@
 import { Link, useParams } from "react-router-dom"
-import { useTemplate } from "../hooks/useTemplate"
+import useFetchById from "../hooks/useFetch"
 
 const Templates = () => {
   const { slug } = useParams()
-  const { data, error, isLoading } = useTemplate(slug!)
+  const { data, error, isLoading } = useFetchById(
+    "templates",
+    "category",
+    slug!
+  )
 
   if (error) return <div>Something went horrible wrong ...</div>
 

@@ -1,6 +1,39 @@
 import html2canvas from "html2canvas"
+import React, { useRef, useState } from "react"
+import { usePostTier } from "../../hooks/usePostTier"
+import { supabase } from "../../utils/client"
 
-const PageToImage = ({ id, name, excludeNode }: any) => {
+interface IProps {
+  id: React.MutableRefObject<null>
+  name: string
+  getFieldsDetails: () => {}
+  category_name: string
+  template_name: string
+}
+
+const PageToImage: React.FC<IProps> = ({
+  id,
+  name,
+  getFieldsDetails,
+  template_name,
+  category_name
+}) => {
+  const user = supabase.auth.user()
+
+  let form = {
+    name: "",
+    description: "",
+    template_name: "",
+    category_name: "",
+    fieldsdetails: {},
+    creator_id: "",
+    creator_name: "",
+    creator_photo: ""
+  }
+
+  console.log("form", form)
+  const addTier = usePostTier(form)
+
   const downloadImage = (blob: any, fileName: any) => {
     const fakeLink = window.document.createElement("a")
 
@@ -16,13 +49,22 @@ const PageToImage = ({ id, name, excludeNode }: any) => {
   }
 
   const onCapture = async () => {
-    const canvas = await html2canvas(id.current, { useCORS: true })
+    const canvas = await html2canvas(id.current!, { useCORS: true })
     const image = canvas.toDataURL("image/png", 1.0)
     downloadImage(image, name)
   }
 
-  const handleSave = async () => {
-    
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    getFieldsDetails()
+    form.template_name = template_name
+    form.category_name = category_name
+    form.fieldsdetails = getFieldsDetails()
+    form.creator_id = user!.id
+    form.creator_name = user!.user_metadata.name
+    form.creator_photo = user!.user_metadata.picture
+
+    addTier.mutate()
   }
 
   return (
@@ -48,7 +90,7 @@ const PageToImage = ({ id, name, excludeNode }: any) => {
                 className="text-lg font-medium leading-normal text-gray-800 "
                 id="exampleModalLabel"
               >
-                sax
+                Download or Save
               </h5>
               <button
                 type="button"
@@ -57,8 +99,44 @@ const PageToImage = ({ id, name, excludeNode }: any) => {
                 aria-label="Close"
               ></button>
             </div>
-            <button onClick={onCapture}>Download</button>
-            <button onClick={handleSave}>Save</button>
+            <form
+              onSubmit={handleSubmit}
+              className="flex justify-center items-center flex-col space-y-2 my-2"
+            >
+              <label htmlFor="name">Enter name</label>
+              <input
+                onChange={(e) => (form.name = e.target.value)}
+                className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
+                type="text"
+                id="name"
+                placeholder="name"
+              />
+              <label htmlFor="description">Enter description</label>
+              <input
+                onChange={(e) => (form.description = e.target.value)}
+                className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
+                type="text"
+                id="description"
+                placeholder="description"
+              />
+              <button
+                type="button"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                onClick={onCapture}
+              >
+                Download
+              </button>
+              <button
+                type="submit"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+              >
+                Save
+              </button>
+            </form>
           </div>
         </div>
       </div>

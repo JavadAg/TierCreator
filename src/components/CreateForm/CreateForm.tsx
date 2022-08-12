@@ -9,19 +9,27 @@ import { schema } from "../../utils/zodSchema"
 import { Category } from "../../models/tier"
 
 import Resizer from "react-image-file-resizer"
-import { useId, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import slugify from "slugify"
 import { BeatLoader } from "react-spinners"
 import { Inputs } from "../../models/tier"
 import { idText } from "typescript"
 import { number } from "zod"
 import { usePostTemplate } from "../../hooks/usePostTemplate"
-import useCategory from "../../hooks/useCategory"
+import { useFetch } from "../../hooks/useFetch"
+import { supabase } from "../../utils/client"
 
 const CreateForm = () => {
-  const [formData, setFormData] = useState<any>()
-  const { data, error, isLoading } = useCategory()
+  const [formData, setFormData] = useState<Inputs>()
+  const {
+    data: categories,
+    error,
+    isLoading: isFetching
+  } = useFetch("categories")
+
   const [coverImage, setCoverImage] = useState<string>()
+
+  const user = supabase.auth.user()
 
   const [tierImages, setTierImages] = useState<string[]>([])
 
@@ -43,7 +51,7 @@ const CreateForm = () => {
       ]
     }
   })
-  console.log(watch("rows"))
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "rows"
@@ -65,7 +73,6 @@ const CreateForm = () => {
         "file"
       )
     })
-  console.log(errors)
 
   const slugifyName = async (name: string) => {
     const slugifiedName = slugify(name, { lower: true })
@@ -76,23 +83,40 @@ const CreateForm = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await formhandler(data)
-    addTemplate.mutate()
+    setFormData(data)
+  }
+
+  useEffect(() => {
+    if (formData) {
+      addTemplate.mutate()
+    }
+  }, [formData])
+
+  function makeid(length: number) {
+    var result = ""
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
   }
 
   const formhandler = async (data: Inputs) => {
-    console.log(data)
     const nameToSlug = await slugifyName(data.name)
     data.slug = nameToSlug
     const resizedCover: any = await resizeFile(data.cover[0])
-    data.cover = [resizedCover]
-
+    const newCover = new File([resizedCover], `${makeid(10)}.JPEG`)
+    data.cover = [newCover]
+    data.creator_id = user!.id
     let imagesArray: File[] = []
     for (const iterator of data.images) {
       const resizedImage: any = await resizeFile(iterator)
-      imagesArray.push(resizedImage)
+      const newImage = new File([resizedImage], `${makeid(10)}.JPEG`)
+      imagesArray.push(newImage)
       data.images = imagesArray
     }
-    setFormData(data)
   }
 
   const previewhandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +130,11 @@ const CreateForm = () => {
 
   return (
     <>
-      {addTemplate.isLoading ? (
+      {addTemplate.error instanceof Error ? (
+        <div className="text-red-500 font-bold text-xl">
+          Error : {addTemplate.error.message}
+        </div>
+      ) : addTemplate.isLoading ? (
         <BeatLoader color="#bf6be0" loading size={22} speedMultiplier={1} />
       ) : (
         <form
@@ -140,10 +168,10 @@ const CreateForm = () => {
               id="category"
               {...register("selectedCategory")}
             >
-              {isLoading ? (
+              {isFetching ? (
                 <option>Loading Categories...</option>
               ) : (
-                data?.map((category: Category) => (
+                categories?.map((category: Category) => (
                   <option key={category.id} value={category.slug}>
                     {category.name}
                   </option>
