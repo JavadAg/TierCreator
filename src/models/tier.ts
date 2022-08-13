@@ -11,7 +11,8 @@ export interface Row {
 
 export interface Template {
   id: string
-  category: string
+  category_name: string
+  category_slug: string
   cover: string
   slug: string
   created_at: string
@@ -23,13 +24,15 @@ export interface Template {
 }
 
 export interface Inputs {
-  name: string
-  slug: string
-  selectedCategory: string
-  description: string
-  cover: File[]
-  images: File[]
-  orientation: string
-  rows: Row[]
-  creator_id: string
+  name?: string
+  slug?: string
+  category_id?: number
+  category_name?: string
+  category_slug?: string
+  description?: string
+  cover?: File[]
+  images?: File[]
+  orientation?: string
+  rows?: Row[]
+  creator_id?: string
 }

@@ -7,7 +7,7 @@ export const schema = z.object({
     .string()
     .min(1, { message: "Required" })
     .max(50, { message: "Too long" }),
-  selectedCategory: z.string(),
+  category_id: z.string(),
   description: z
     .string()
     .min(1, { message: "Required" })

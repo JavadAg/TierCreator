@@ -18,6 +18,7 @@ import { number } from "zod"
 import { usePostTemplate } from "../../hooks/usePostTemplate"
 import { useFetch } from "../../hooks/useFetch"
 import { supabase } from "../../utils/client"
+import { format } from "path"
 
 const CreateForm = () => {
   const [formData, setFormData] = useState<Inputs>()
@@ -104,14 +105,16 @@ const CreateForm = () => {
   }
 
   const formhandler = async (data: Inputs) => {
-    const nameToSlug = await slugifyName(data.name)
+    const nameToSlug = await slugifyName(data.name!)
     data.slug = nameToSlug
-    const resizedCover: any = await resizeFile(data.cover[0])
+    const resizedCover: any = await resizeFile(data.cover![0])
     const newCover = new File([resizedCover], `${makeid(10)}.JPEG`)
     data.cover = [newCover]
+    data.category_slug = categories![data.category_id!].slug
+    data.category_name = categories![data.category_id!].name
     data.creator_id = user!.id
     let imagesArray: File[] = []
-    for (const iterator of data.images) {
+    for (const iterator of data.images!) {
       const resizedImage: any = await resizeFile(iterator)
       const newImage = new File([resizedImage], `${makeid(10)}.JPEG`)
       imagesArray.push(newImage)
@@ -166,13 +169,13 @@ const CreateForm = () => {
             <select
               className="rounded-md p-1 focus-within:outline-indigo-300 w-9/12"
               id="category"
-              {...register("selectedCategory")}
+              {...register("category_id")}
             >
               {isFetching ? (
                 <option>Loading Categories...</option>
               ) : (
-                categories?.map((category: Category) => (
-                  <option key={category.id} value={category.slug}>
+                categories?.map((category: Category, index: number) => (
+                  <option key={category.id} value={index}>
                     {category.name}
                   </option>
                 ))

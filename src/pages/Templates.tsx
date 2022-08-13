@@ -5,7 +5,7 @@ const Templates = () => {
   const { slug } = useParams()
   const { data, error, isLoading } = useFetchById(
     "templates",
-    "category",
+    "category_slug",
     slug!
   )
 

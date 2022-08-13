@@ -1,37 +1,32 @@
 import html2canvas from "html2canvas"
 import React, { useRef, useState } from "react"
 import { usePostTier } from "../../hooks/usePostTier"
+import { Template } from "../../models/tier"
+import Templates from "../../pages/Templates"
 import { supabase } from "../../utils/client"
 
 interface IProps {
   id: React.MutableRefObject<null>
-  name: string
+  template: Template
   getFieldsDetails: () => {}
-  category_name: string
-  template_name: string
 }
 
-const PageToImage: React.FC<IProps> = ({
-  id,
-  name,
-  getFieldsDetails,
-  template_name,
-  category_name
-}) => {
+const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
   const user = supabase.auth.user()
 
   let form = {
     name: "",
     description: "",
     template_name: "",
+    template_slug: "",
     category_name: "",
+    category_slug: "",
     fieldsdetails: {},
     creator_id: "",
     creator_name: "",
     creator_photo: ""
   }
 
-  console.log("form", form)
   const addTier = usePostTier(form)
 
   const downloadImage = (blob: any, fileName: any) => {
@@ -51,14 +46,16 @@ const PageToImage: React.FC<IProps> = ({
   const onCapture = async () => {
     const canvas = await html2canvas(id.current!, { useCORS: true })
     const image = canvas.toDataURL("image/png", 1.0)
-    downloadImage(image, name)
+    downloadImage(image, template.slug)
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     getFieldsDetails()
-    form.template_name = template_name
-    form.category_name = category_name
+    form.template_name = template.name
+    form.template_slug = template.slug
+    form.category_name = template.category_name
+    form.category_slug = template.category_slug
     form.fieldsdetails = getFieldsDetails()
     form.creator_id = user!.id
     form.creator_name = user!.user_metadata.name
@@ -66,7 +63,7 @@ const PageToImage: React.FC<IProps> = ({
 
     addTier.mutate()
   }
-
+  console.log(template)
   return (
     <>
       <button

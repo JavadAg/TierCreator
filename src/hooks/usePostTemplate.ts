@@ -7,6 +7,7 @@ interface Image {
 }
 
 const addTemplate = async (formData: any) => {
+  console.log(formData)
   const uploadClient = supabase.storage.from("template-images")
 
   await uploadClient.upload(
@@ -35,7 +36,8 @@ const addTemplate = async (formData: any) => {
   const { data, error } = await supabase.from("templates").insert([
     {
       name: `${formData.name}`,
-      category: `${formData.selectedCategory}`,
+      category_name: `${formData.category_name}`,
+      category_slug: `${formData.category_slug}`,
       slug: `${formData.slug}`,
       image: imagesUrl,
       description: `${formData.description}`,

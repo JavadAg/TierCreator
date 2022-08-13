@@ -1,13 +1,9 @@
 import React from "react"
-import UserDetails from "../components/UserDetails/UserDetails"
+import UserDetails from "../components/UserCard/UserCard"
 import { supabase } from "../utils/client"
 
 const Dashboard = () => {
-  return (
-    <div>
-      <UserDetails />
-    </div>
-  )
+  return <UserDetails />
 }
 
 export default Dashboard

@@ -17,7 +17,7 @@ import Login from "./pages/Login"
 import { supabase } from "./utils/client"
 import Dashboard from "./pages/Dashboard"
 import { User } from "@supabase/supabase-js"
-import Tier from "./pages/Tier"
+import Tier from "./pages/TierPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,7 +49,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Navbar />
-        <div className="mx-52 mt-14">
+        <div className="w-full mt-14">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="categories" element={<Categories />} />

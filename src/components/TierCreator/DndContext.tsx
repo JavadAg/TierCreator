@@ -484,9 +484,7 @@ export function MultipleContainers({
         <PageToImage
           getFieldsDetails={getFieldsDetails}
           id={fieldsRef}
-          name={template.slug}
-          template_name={template.name}
-          category_name={template.category}
+          template={template}
         />
       </div>
       {createPortal(

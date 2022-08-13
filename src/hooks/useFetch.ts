@@ -22,10 +22,9 @@ const fetchById = async (
   slug?: string,
   id?: string
 ) => {
-  console.log(type, filterBy, slug, id)
   const { data, error } = await supabase
     .from(`${type}`)
-    .select("*")
+    .select(`*`)
     .eq(`${filterBy}`, `${slug ? slug : id}`)
 
   if (error) {
