@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { supabase } from "../utils/client"
 
 const addTier = async (form: any) => {
+  console.log(form)
   const { data, error } = await supabase.from("tier").insert([
     {
       name: form.name,
@@ -13,7 +14,12 @@ const addTier = async (form: any) => {
       fieldsdetails: form.fieldsdetails,
       creator_id: form.creator_id,
       creator_name: form.creator_name,
-      creator_photo: form.creator_photo
+      creator_photo: form.creator_photo,
+      emoji_1: form.emoji_1,
+      emoji_2: form.emoji_2,
+      emoji_3: form.emoji_3,
+      emoji_4: form.emoji_4,
+      emoji_5: form.emoji_5
     }
   ])
 

@@ -4,17 +4,12 @@ import moment from "moment"
 
 const TierContainer = ({ item, isDashboard }: any) => {
   const navigate = useNavigate()
-  console.log(isDashboard)
+
   return (
     <div
       onClick={() =>
         isDashboard
-          ? navigate(
-              `/${item.category_slug}/${item.template_slug}/${item.id}`,
-              {
-                state: item
-              }
-            )
+          ? navigate(`/${item.category_slug}/${item.template_slug}/${item.id}`)
           : undefined
       }
       className={`flex justify-center items-center bg-red-100 flex-col max-w-[1200px] m-2 w-full ${
@@ -22,16 +17,17 @@ const TierContainer = ({ item, isDashboard }: any) => {
       }`}
     >
       <div className="flex justify-center items-center flex-col">
-        <span>Name : {item.name}</span>
-        <span>Description: {item.description}</span>
+        <span>Name : {item?.name}</span>
+        <span>Description: {item?.description}</span>
       </div>
       <div className="flex justify-center items-center flex-col">
-        <span>Template Name : {item.template_name}</span>
-        <span>Category Name : {item.category_name}</span>
-        <span>{moment(item.created_at).format("L")}</span>
+        <span>Template Name : {item?.template_name}</span>
+        <span>Category Name : {item?.category_name}</span>
+        <span>{moment(item?.created_at).format("L")}</span>
       </div>
-      {item.fieldsdetails.labels.map((label: any, index: number) => (
+      {item?.fieldsdetails?.labels.map((label: any, index: number) => (
         <div
+          key={index}
           className={`flex justify-start items-center w-full ${
             isDashboard && "w-[400px]"
           }`}
@@ -47,15 +43,18 @@ const TierContainer = ({ item, isDashboard }: any) => {
             {label}
           </span>
           <div className="flex justify-center items-center">
-            {item.fieldsdetails.templateImages[index].map((image: any) => (
-              <img
-                className={`w-24 h-24 object-cover ${
-                  isDashboard && "w-16 h-16"
-                }`}
-                src={image}
-                alt="tierimage"
-              />
-            ))}
+            {item.fieldsdetails.templateImages[index].map(
+              (image: any, index: number) => (
+                <img
+                  key={index}
+                  className={`w-24 h-24 object-cover ${
+                    isDashboard && "w-16 h-16"
+                  }`}
+                  src={image}
+                  alt="tierimage"
+                />
+              )
+            )}
           </div>
         </div>
       ))}

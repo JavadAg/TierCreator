@@ -1,7 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import userEvent from "@testing-library/user-event"
-import { TbBrandWindows } from "react-icons/tb"
-import UserAuth from "../components/UserAuth/UserAuth"
+import { useMutation } from "@tanstack/react-query"
 import { supabase } from "../utils/client"
 
 const signInWithGoogle = async () => {

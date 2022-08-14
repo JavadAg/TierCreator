@@ -24,7 +24,12 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
     fieldsdetails: {},
     creator_id: "",
     creator_name: "",
-    creator_photo: ""
+    creator_photo: "",
+    emoji_1: { id: "emoji_1", counter: [] },
+    emoji_2: { id: "emoji_2", counter: [] },
+    emoji_3: { id: "emoji_3", counter: [] },
+    emoji_4: { id: "emoji_4", counter: [] },
+    emoji_5: { id: "emoji_5", counter: [] }
   }
 
   const addTier = usePostTier(form)
@@ -63,7 +68,7 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
 
     addTier.mutate()
   }
-  console.log(template)
+
   return (
     <>
       <button
