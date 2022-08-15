@@ -18,6 +18,8 @@ import { supabase } from "./utils/client"
 import Dashboard from "./pages/Dashboard"
 import { User } from "@supabase/supabase-js"
 import Tier from "./pages/TierPage"
+import CreateTier from "./pages/CreateTier"
+import Template from "./pages/Template"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,9 +56,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="categories" element={<Categories />} />
             <Route path="/:slug" element={<Templates />} />
+            <Route path="/:slug/:slug" element={<Template />} />
             <Route path=":slug/:slug/:id" element={<Tier />} />
             <Route path="/create" element={<CreateTemplate />} />
-            <Route path="/create/:slug" element={<MultipleContainers />} />
+            <Route path="/create/:slug" element={<CreateTier />} />
             <Route
               path="/login"
               element={

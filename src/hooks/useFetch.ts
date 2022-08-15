@@ -20,12 +20,14 @@ const fetchById = async (
   type: string,
   filterBy: string,
   slug?: string,
-  id?: string
+  id?: string,
+  order?: string
 ) => {
   const { data, error } = await supabase
     .from(`${type}`)
     .select(`*`)
     .eq(`${filterBy}`, `${slug ? slug : id}`)
+    .order(order ? `${order}` : "id", { ascending: order ? false : true })
 
   if (error) {
     throw new Error(error.message)
@@ -38,9 +40,14 @@ export default function useFetchById(
   type: string,
   filterBy: string,
   slug?: string,
-  id?: string
+  id?: string,
+  order?: string
 ) {
-  return useQuery([`${type}`], () => fetchById(type, filterBy, slug, id), {
-    enabled: true
-  })
+  return useQuery(
+    [`${type}`],
+    () => fetchById(type, filterBy, slug, id, order),
+    {
+      enabled: true
+    }
+  )
 }

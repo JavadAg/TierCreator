@@ -2,14 +2,17 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
 
-const TierContainer = ({ item, isDashboard }: any) => {
+const TierContainer = ({ item, isDashboard, tier }: any) => {
   const navigate = useNavigate()
 
   return (
     <div
       onClick={() =>
         isDashboard
-          ? navigate(`/${item.category_slug}/${item.template_slug}/${item.id}`)
+          ? navigate(
+              `/${item.category_slug}/${item.template_slug}/${item.id}`,
+              { state: item }
+            )
           : undefined
       }
       className={`flex justify-center items-center bg-red-100 flex-col max-w-[1200px] m-2 w-full ${
@@ -25,39 +28,44 @@ const TierContainer = ({ item, isDashboard }: any) => {
         <span>Category Name : {item?.category_name}</span>
         <span>{moment(item?.created_at).format("L")}</span>
       </div>
-      {item?.fieldsdetails?.labels.map((label: any, index: number) => (
-        <div
-          key={index}
-          className={`flex justify-start items-center w-full ${
-            isDashboard && "w-[400px]"
-          }`}
-        >
-          <span
-            className={`flex justify-center items-center w-24 h-24 text-center  ${
-              isDashboard && "text-xs w-16 h-16"
+      <div
+        className={`flex justify-start items-center w-full flex-col`}
+        ref={tier}
+      >
+        {item?.fieldsdetails?.labels.map((label: any, index: number) => (
+          <div
+            key={index}
+            className={`flex justify-start items-center w-full ${
+              isDashboard && "w-[400px]"
             }`}
-            style={{
-              backgroundColor: item.fieldsdetails.colors[index]
-            }}
           >
-            {label}
-          </span>
-          <div className="flex justify-center items-center">
-            {item.fieldsdetails.templateImages[index].map(
-              (image: any, index: number) => (
-                <img
-                  key={index}
-                  className={`w-24 h-24 object-cover ${
-                    isDashboard && "w-16 h-16"
-                  }`}
-                  src={image}
-                  alt="tierimage"
-                />
-              )
-            )}
+            <span
+              className={`flex justify-center items-center w-24 h-24 text-center  ${
+                isDashboard && "text-xs w-16 h-16"
+              }`}
+              style={{
+                backgroundColor: item.fieldsdetails.colors[index]
+              }}
+            >
+              {label}
+            </span>
+            <div className="flex justify-center items-center">
+              {item.fieldsdetails.templateImages[index].map(
+                (image: any, index: number) => (
+                  <img
+                    key={index}
+                    className={`w-24 h-24 object-cover ${
+                      isDashboard && "w-16 h-16"
+                    }`}
+                    src={image}
+                    alt="tierimage"
+                  />
+                )
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }

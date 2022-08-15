@@ -7,7 +7,7 @@ interface Image {
 }
 
 const addTemplate = async (formData: any) => {
-  console.log(formData)
+ 
   const uploadClient = supabase.storage.from("template-images")
 
   await uploadClient.upload(

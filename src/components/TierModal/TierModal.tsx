@@ -1,17 +1,19 @@
 import html2canvas from "html2canvas"
-import React, { useRef, useState } from "react"
+import React, { MutableRefObject, useRef, useState } from "react"
 import { usePostTier } from "../../hooks/usePostTier"
 import { Template } from "../../models/tier"
 import Templates from "../../pages/Templates"
 import { supabase } from "../../utils/client"
+import makeid from "../../utils/generateRanStr"
+import { downloadasImage } from "../../utils/pageToImage"
 
 interface IProps {
-  id: React.MutableRefObject<null>
+  id: MutableRefObject<HTMLElement | null>
   template: Template
   getFieldsDetails: () => {}
 }
 
-const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
+const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
   const user = supabase.auth.user()
 
   let form = {
@@ -29,34 +31,17 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
     emoji_2: { id: "emoji_2", counter: [] },
     emoji_3: { id: "emoji_3", counter: [] },
     emoji_4: { id: "emoji_4", counter: [] },
-    emoji_5: { id: "emoji_5", counter: [] }
+    emoji_5: { id: "emoji_5", counter: [] },
+    image: "",
+    placeholderName: ""
   }
 
   const addTier = usePostTier(form)
 
-  const downloadImage = (blob: any, fileName: any) => {
-    const fakeLink = window.document.createElement("a")
-
-    fakeLink.download = fileName
-
-    fakeLink.href = blob
-
-    document.body.appendChild(fakeLink)
-    fakeLink.click()
-    document.body.removeChild(fakeLink)
-
-    fakeLink.remove()
-  }
-
-  const onCapture = async () => {
-    const canvas = await html2canvas(id.current!, { useCORS: true })
-    const image = canvas.toDataURL("image/png", 1.0)
-    downloadImage(image, template.slug)
-  }
-
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     getFieldsDetails()
+    form.image = (await downloadasImage({ id, isSaving: true })) as string
     form.template_name = template.name
     form.template_slug = template.slug
     form.category_name = template.category_name
@@ -65,10 +50,9 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
     form.creator_id = user!.id
     form.creator_name = user!.user_metadata.name
     form.creator_photo = user!.user_metadata.picture
-
+    form.placeholderName = makeid(10) + Date.now()
     addTier.mutate()
   }
-
   return (
     <>
       <button
@@ -126,7 +110,7 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
                 className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                onClick={onCapture}
+                onClick={() => downloadasImage({ id })}
               >
                 Download
               </button>
@@ -146,4 +130,4 @@ const PageToImage: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
   )
 }
 
-export default PageToImage
+export default TierModal

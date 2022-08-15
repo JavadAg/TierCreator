@@ -19,6 +19,7 @@ import { usePostTemplate } from "../../hooks/usePostTemplate"
 import { useFetch } from "../../hooks/useFetch"
 import { supabase } from "../../utils/client"
 import { format } from "path"
+import makeid from "../../utils/generateRanStr"
 
 const CreateForm = () => {
   const [formData, setFormData] = useState<Inputs>()
@@ -93,22 +94,11 @@ const CreateForm = () => {
     }
   }, [formData])
 
-  function makeid(length: number) {
-    var result = ""
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    var charactersLength = characters.length
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
-  }
-
   const formhandler = async (data: Inputs) => {
     const nameToSlug = await slugifyName(data.name!)
     data.slug = nameToSlug
     const resizedCover: any = await resizeFile(data.cover![0])
-    const newCover = new File([resizedCover], `${makeid(10)}.JPEG`)
+    const newCover = new File([resizedCover], `${makeid(10) + Date.now()}.JPEG`)
     data.cover = [newCover]
     data.category_slug = categories![data.category_id!].slug
     data.category_name = categories![data.category_id!].name
@@ -116,7 +106,10 @@ const CreateForm = () => {
     let imagesArray: File[] = []
     for (const iterator of data.images!) {
       const resizedImage: any = await resizeFile(iterator)
-      const newImage = new File([resizedImage], `${makeid(10)}.JPEG`)
+      const newImage = new File(
+        [resizedImage],
+        `${makeid(10) + Date.now()}.JPEG`
+      )
       imagesArray.push(newImage)
       data.images = imagesArray
     }

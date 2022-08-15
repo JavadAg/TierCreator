@@ -12,7 +12,7 @@ const SingleEmoji = ({ item, isFetched, tierId, data }: any) => {
   }, [isFetched])
 
   const [emoji, setEmoji] = useState<any>()
-  console.log(emoji)
+
   const clickedEmoji = () => {
     const isliked = emoji.counter.some((item: string) => item === user?.id)
     if (isliked) {

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
 import SingleEmoji from "../components/SingleEmoji/SingleEmoji"
 import TierContainer from "../components/TierContainer/TierContainer"
+import useDelete from "../hooks/useDelete"
 import useFetchById from "../hooks/useFetch"
 import useUpdateEmoji from "../hooks/useUpdateEmoji"
 import { supabase } from "../utils/client"
+import { downloadasImage } from "../utils/pageToImage"
 
 const emojiIcons = [
   { id: "emoji_1", icon: "😃" },
@@ -24,6 +26,9 @@ const TierPage = () => {
     `${state.id}`
   )
 
+  const tier = useRef(null)
+  const deleteTier = useDelete()
+
   return (
     <>
       {isLoading ? (
@@ -31,6 +36,9 @@ const TierPage = () => {
       ) : (
         <div className="flex justify-center items-center flex-col w-full">
           <div>user card</div>
+          <button onClick={() => downloadasImage({ id: tier })}>
+            Download Image
+          </button>
           {emojiIcons.map((item) => (
             <SingleEmoji
               item={item}
@@ -39,8 +47,8 @@ const TierPage = () => {
               data={data?.[0][item.id]}
             />
           ))}
-          <TierContainer item={data?.[0]} isDashboard={false} />
-          <button>Delete</button>
+          <TierContainer tier={tier} item={data?.[0]} isDashboard={false} />
+          <button onClick={() => deleteTier.mutate(state.id)}>Delete</button>
         </div>
       )}
     </>

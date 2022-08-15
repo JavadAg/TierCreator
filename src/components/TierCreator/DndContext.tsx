@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { MutableRefObject, useEffect, useRef, useState } from "react"
 import { createPortal, unstable_batchedUpdates } from "react-dom"
 import {
   CancelDrop,
@@ -32,7 +32,7 @@ import { Container, ContainerProps } from "./Container"
 import { Item } from "./Item"
 import { useLocation } from "react-router-dom"
 import { Template } from "../../models/tier"
-import PageToImage from "../Page2Image/PageToImage"
+import TierModal from "../TierModal/TierModal"
 
 export default {
   title: "Presets/Sortable/Multiple Containers"
@@ -391,7 +391,7 @@ export function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div className={`flex flex-col  w-full`}>
+      <div className={`flex flex-col w-full max-w-[1100px]`}>
         <div ref={fieldsRef}>
           <SortableContext
             items={[...containers]}
@@ -481,7 +481,7 @@ export function MultipleContainers({
             Add New Field
           </button>
         ) : null}
-        <PageToImage
+        <TierModal
           getFieldsDetails={getFieldsDetails}
           id={fieldsRef}
           template={template}
