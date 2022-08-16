@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import useUpdateEmoji from "../../hooks/useUpdateEmoji"
-import { supabase } from "../../utils/client"
+import useUpdateEmoji from "../../../hooks/useUpdateEmoji"
+import { supabase } from "../../../utils/client"
 
-const SingleEmoji = ({ item, isFetched, tierId, data }: any) => {
+const SingleEmoji = ({ item, isFetched, tierId, data, type }: any) => {
   const user = supabase.auth.user()
 
   const increment = useUpdateEmoji()
@@ -26,7 +26,7 @@ const SingleEmoji = ({ item, isFetched, tierId, data }: any) => {
   }
 
   const handleEmoji = async (emoji: any) => {
-    const params = { tierId, emoji, type: "tier", userId: user!.id }
+    const params = { tierId, emoji, type: type, userId: user!.id }
     await increment.mutateAsync(params)
     clickedEmoji()
   }

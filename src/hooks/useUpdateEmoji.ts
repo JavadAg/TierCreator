@@ -6,16 +6,16 @@ import { supabase } from "../utils/client"
 const increment = async (params: any) => {
   const { type, emoji, tierId, userId } = params
 
-  const { data: fetchData, error: fetchError } = await supabase
+  const { data: emojiData, error: fetchError } = await supabase
     .from(`${type}`)
     .select(`${emoji.id}`)
     .eq("id", `${tierId}`)
-
+  console.log(tierId)
   if (fetchError) {
     throw new Error(fetchError.message)
   }
 
-  let fetchedData = fetchData![0][emoji.id]
+  let fetchedData = emojiData![0][emoji.id]
 
   const isExist = fetchedData.counter.findIndex((e: string) => e == userId)
 

@@ -81,18 +81,18 @@ const CreateForm = () => {
     return slugifiedName
   }
 
-  const addTemplate = usePostTemplate(formData)
+  const addTemplate = usePostTemplate()
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await formhandler(data)
-    setFormData(data)
+    /*  setFormData(data) */
+    await addTemplate.mutateAsync(data)
   }
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (formData) {
-      addTemplate.mutate()
     }
-  }, [formData])
+  }, [formData]) */
 
   const formhandler = async (data: Inputs) => {
     const nameToSlug = await slugifyName(data.name!)

@@ -122,6 +122,7 @@ const dropAnimation: DropAnimation = {
 type Items = Record<UniqueIdentifier, UniqueIdentifier[]>
 
 interface Props {
+  data: any
   adjustScale?: boolean
   cancelDrop?: CancelDrop
   columns?: number
@@ -151,6 +152,7 @@ const PLACEHOLDER_ID = "placeholder"
 const empty: Images[] = []
 
 export function MultipleContainers({
+  data,
   adjustScale = false,
   cancelDrop,
   columns,
@@ -167,8 +169,7 @@ export function MultipleContainers({
   ////////////////////
   const location = useLocation()
 
-  const template = location.state as Template
-
+  const template = data
   const arrayOfImages = template.image
 
   let allRows = {}

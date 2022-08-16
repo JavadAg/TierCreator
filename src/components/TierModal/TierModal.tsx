@@ -1,8 +1,6 @@
-import html2canvas from "html2canvas"
-import React, { MutableRefObject, useRef, useState } from "react"
+import React, { MutableRefObject, useEffect, useState } from "react"
 import { usePostTier } from "../../hooks/usePostTier"
 import { Template } from "../../models/tier"
-import Templates from "../../pages/Templates"
 import { supabase } from "../../utils/client"
 import makeid from "../../utils/generateRanStr"
 import { downloadasImage } from "../../utils/pageToImage"
@@ -15,44 +13,36 @@ interface IProps {
 
 const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
   const user = supabase.auth.user()
-
-  let form = {
+  const [form, setForm] = useState<any>({
     name: "",
     description: "",
-    template_name: "",
-    template_slug: "",
-    category_name: "",
-    category_slug: "",
-    fieldsdetails: {},
-    creator_id: "",
-    creator_name: "",
-    creator_photo: "",
-    emoji_1: { id: "emoji_1", counter: [] },
-    emoji_2: { id: "emoji_2", counter: [] },
-    emoji_3: { id: "emoji_3", counter: [] },
-    emoji_4: { id: "emoji_4", counter: [] },
-    emoji_5: { id: "emoji_5", counter: [] },
-    image: "",
-    placeholderName: ""
-  }
+    template_name: template.name,
+    template_slug: template.slug,
+    category_name: template.category_name,
+    category_slug: template.category_slug,
+    creator_id: user!.id,
+    creator_name: user!.user_metadata.name,
+    creator_photo: user!.user_metadata.picture,
+    placeholderName: makeid(10) + Date.now()
+  })
 
-  const addTier = usePostTier(form)
-
+  const addTier = usePostTier()
+  const [post, setPost] = useState(false)
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    getFieldsDetails()
-    form.image = (await downloadasImage({ id, isSaving: true })) as string
-    form.template_name = template.name
-    form.template_slug = template.slug
-    form.category_name = template.category_name
-    form.category_slug = template.category_slug
-    form.fieldsdetails = getFieldsDetails()
-    form.creator_id = user!.id
-    form.creator_name = user!.user_metadata.name
-    form.creator_photo = user!.user_metadata.picture
-    form.placeholderName = makeid(10) + Date.now()
-    addTier.mutate()
+    setForm({ ...form, image: downloadasImage({ id, isSaving: true }) })
+    setForm({ ...form, fieldsdetails: getFieldsDetails() })
+    setPost(true)
   }
+
+  useEffect(() => {
+    if (post) postForm()
+  }, [post])
+
+  const postForm = async () => {
+    await addTier.mutateAsync(form)
+  }
+
   return (
     <>
       <button
@@ -91,7 +81,7 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
             >
               <label htmlFor="name">Enter name</label>
               <input
-                onChange={(e) => (form.name = e.target.value)}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
                 type="text"
                 id="name"
@@ -99,7 +89,9 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
               />
               <label htmlFor="description">Enter description</label>
               <input
-                onChange={(e) => (form.description = e.target.value)}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
                 className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
                 type="text"
                 id="description"

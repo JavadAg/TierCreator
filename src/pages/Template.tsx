@@ -2,8 +2,11 @@ import React from "react"
 import { useLocation, useParams } from "react-router-dom"
 import TierContainer from "../components/TierContainer/TierContainer"
 import useFetchById from "../hooks/useFetch"
+import useBreadcrumbs from "use-react-router-breadcrumbs"
 
 const Template = (props: any) => {
+  
+
   let { slug } = useParams()
   const { data, error, isLoading } = useFetchById(
     "tier",

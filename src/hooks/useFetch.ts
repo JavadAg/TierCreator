@@ -12,7 +12,7 @@ const fetch = async (type: string) => {
 }
 
 export function useFetch(type: string) {
-  return useQuery([`${type}`], () => fetch(type))
+  return useQuery([`${type}`,type], () => fetch(type))
 }
 
 //by Id or Slug
@@ -44,7 +44,7 @@ export default function useFetchById(
   order?: string
 ) {
   return useQuery(
-    [`${type}`],
+    [`${type}`, type, filterBy, slug, id, order],
     () => fetchById(type, filterBy, slug, id, order),
     {
       enabled: true

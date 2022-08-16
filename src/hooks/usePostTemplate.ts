@@ -6,8 +6,8 @@ interface Image {
   id: number
 }
 
-const addTemplate = async (formData: any) => {
- 
+const addTemplate = async (props: any) => {
+  const { formData } = props
   const uploadClient = supabase.storage.from("template-images")
 
   await uploadClient.upload(
@@ -44,7 +44,12 @@ const addTemplate = async (formData: any) => {
       cover: `${coverUrl.publicURL}`,
       orientation: `${formData.orientation}`,
       rows: formData.rows,
-      creator_id: formData.creator_id
+      creator_id: formData.creator_id,
+      emoji_1: formData.emoji_1,
+      emoji_2: formData.emoji_2,
+      emoji_3: formData.emoji_3,
+      emoji_4: formData.emoji_4,
+      emoji_5: formData.emoji_5
     }
   ])
 
@@ -55,6 +60,6 @@ const addTemplate = async (formData: any) => {
   return data
 }
 
-export function usePostTemplate(formData: any) {
-  return useMutation(() => addTemplate(formData))
+export function usePostTemplate() {
+  return useMutation((props: any) => addTemplate(props))
 }

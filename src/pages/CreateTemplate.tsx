@@ -1,8 +1,6 @@
-import React, { useState } from "react"
 import CreateForm from "../components/CreateForm/CreateForm"
 
 const CreateTemplate = () => {
-  const [showExtra, setShowExtra] = useState(false)
   return (
     <div className="flex flex-col justify-center items-start w-full mx-24 bg-gradient-to-br from-indigo-300 to-purple-300 p-4 rounded-xl space-y-5">
       <div className="flex justify-center items-start flex-col space-y-1">

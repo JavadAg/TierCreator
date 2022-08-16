@@ -20,6 +20,7 @@ import { User } from "@supabase/supabase-js"
 import Tier from "./pages/TierPage"
 import CreateTier from "./pages/CreateTier"
 import Template from "./pages/Template"
+import Layout from "./components/Layout/Layout"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,25 +51,26 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Navbar />
-        <div className="w-full mt-14">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="/:slug" element={<Templates />} />
-            <Route path="/:slug/:slug" element={<Template />} />
-            <Route path=":slug/:slug/:id" element={<Tier />} />
-            <Route path="/create" element={<CreateTemplate />} />
-            <Route path="/create/:slug" element={<CreateTier />} />
-            <Route
-              path="/login"
-              element={
-                user ? <Navigate replace to={"/dashboard"} /> : <Login />
-              }
-            />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </div>
+        <Layout>
+          <div className="w-full mt-14">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="/:slug" element={<Templates />} />
+              <Route path="/:slug/:slug" element={<Template />} />
+              <Route path=":slug/:slug/:id" element={<Tier />} />
+              <Route path="/create" element={<CreateTemplate />} />
+              <Route path="/create/:slug" element={<CreateTier />} />
+              <Route
+                path="/login"
+                element={
+                  user ? <Navigate replace to={"/dashboard"} /> : <Login />
+                }
+              />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+          </div>
+        </Layout>
       </Router>
     </QueryClientProvider>
   )

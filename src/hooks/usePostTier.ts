@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
 import { supabase } from "../utils/client"
-import { decode } from "base64-arraybuffer"
 
-const addTier = async (form: any) => {
+const addTier = async (props: any) => {
+  const form = props
+  console.log(form)
   const uploadClient = supabase.storage.from("tier-images")
 
   const base64Response = await fetch(`${form.image}`)
@@ -24,18 +25,13 @@ const addTier = async (form: any) => {
       creator_id: form.creator_id,
       creator_name: form.creator_name,
       creator_photo: form.creator_photo,
-      emoji_1: form.emoji_1,
-      emoji_2: form.emoji_2,
-      emoji_3: form.emoji_3,
-      emoji_4: form.emoji_4,
-      emoji_5: form.emoji_5,
       image: `${image.publicURL}`
     }
   ])
 
-  return data
+  return props
 }
 
-export function usePostTier(form: any) {
-  return useMutation(() => addTier(form))
+export function usePostTier() {
+  return useMutation((props: any) => addTier(props))
 }

@@ -37,7 +37,7 @@ const Templates = () => {
                   <Link
                     key={template.slug}
                     state={template}
-                    to={`/create/${template.slug}-${index}`}
+                    to={`/create/${template.slug}`}
                     className="flex justify-center items-center m-1 flex-col"
                   >
                     <img

@@ -1,22 +1,46 @@
 import React from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
+import Emoji from "../components/Emoji/Emoji"
+import SingleEmoji from "../components/Emoji/SingleEmoji/SingleEmoji"
 import { MultipleContainers } from "../components/TierCreator/DndContext"
+import useFetchById from "../hooks/useFetch"
 
 const CreateTier = () => {
   const navigate = useNavigate()
-  const { state } = useLocation() as any
 
+  const { slug } = useParams()
+
+  const { data, error, isLoading, isFetched } = useFetchById(
+    "templates",
+    "slug",
+    slug
+  )
+  console.log(data)
   return (
-    <div className="flex justify-center items-center flex-col">
-      <button
-        onClick={() => navigate(`/${state.category_slug}/${state.slug}`)}
-        className="bg-blue-200 p-2"
-      >
-        View Community Rank
-      </button>
+    <>
+      {isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <div className="flex justify-center items-center flex-col">
+          <Emoji
+            isFetched={isFetched}
+            state={data?.[0]}
+            data={data}
+            type="templates"
+          />
+          <button
+            onClick={() =>
+              navigate(`/${data?.[0].category_slug}/${data?.[0].slug}`)
+            }
+            className="bg-blue-200 p-2"
+          >
+            View Community Rank
+          </button>
 
-      <MultipleContainers />
-    </div>
+          <MultipleContainers data={data?.[0]} />
+        </div>
+      )}
+    </>
   )
 }
 
