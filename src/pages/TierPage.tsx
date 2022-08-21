@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
-import BreadCrumb from "../components/BreadCrumb/BreadCrumb"
+import BreadCrumb from "../components/Layout/BreadCrumb/BreadCrumb"
 import Emoji from "../components/Emoji/Emoji"
 import SingleEmoji from "../components/Emoji/SingleEmoji/SingleEmoji"
 import TierContainer from "../components/TierContainer/TierContainer"
@@ -14,9 +14,11 @@ const TierPage = () => {
   const { state }: any = useLocation()
 
   const { data, error, isLoading, isFetched } = useFetchById(
-    "tier",
     "id",
+    true,
+    "tier",
     undefined,
+    "id",
     `${state.id}`
   )
 
@@ -35,7 +37,7 @@ const TierPage = () => {
             Download Image
           </button>
           <Emoji isFetched={isFetched} state={state} data={data} />
-          <TierContainer tier={tier} item={data?.[0]} isDashboard={false} />
+          <TierContainer tier={tier} item={data?.data[0]} isDashboard={false} />
           <button onClick={() => deleteTier.mutate(state.id)}>Delete</button>
         </div>
       )}

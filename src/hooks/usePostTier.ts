@@ -3,7 +3,7 @@ import { supabase } from "../utils/client"
 
 const addTier = async (props: any) => {
   const form = props
-  console.log(form)
+
   const uploadClient = supabase.storage.from("tier-images")
 
   const base64Response = await fetch(`${form.image}`)
@@ -13,7 +13,7 @@ const addTier = async (props: any) => {
 
   const image = uploadClient.getPublicUrl(`public/${form.placeholderName}.jpeg`)
 
-  const { data, error } = await supabase.from("tier").insert([
+  const { data, error, status } = await supabase.from("tier").insert([
     {
       name: form.name,
       description: form.description,
@@ -29,7 +29,22 @@ const addTier = async (props: any) => {
     }
   ])
 
-  return props
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  if (status === 201) {
+    console.log(form.template_name)
+    const { data, error } = await supabase.rpc("increment_amount", {
+      template_name: form.template_name
+    })
+
+    if (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  return data
 }
 
 export function usePostTier() {

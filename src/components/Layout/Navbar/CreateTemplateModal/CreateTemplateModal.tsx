@@ -1,13 +1,13 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import SearchBox from "../../SearchBox/SearchBox"
+import SearchBox from "../../../SearchBox/SearchBox"
 
 const NavbarModal = () => {
   const navigate = useNavigate()
   return (
     <>
       <button
-        className="bg-slate-500 flex border-b border-slate-400 p-1 justify-center items-center hover:bg-slate-400/50 h-full duration-200"
+        className="bg-slate-500 flex border-b border-slate-400 p-1 justify-center items-center hover:bg-slate-400/50  duration-200 "
         data-bs-toggle="modal"
         data-bs-target={`#searchModal`}
       >
@@ -36,8 +36,6 @@ const NavbarModal = () => {
                 aria-label="Close"
               ></button>
             </div>
-
-            <label htmlFor="SearchBox">Enter Template Name</label>
             <SearchBox />
             <button
               data-mdb-ripple="true"

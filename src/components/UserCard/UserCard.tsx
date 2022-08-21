@@ -6,19 +6,24 @@ import TierContainer from "../TierContainer/TierContainer"
 const UserDetails = () => {
   const user = supabase.auth.user()
   const { data: tiers, error } = useFetchById(
+    "created_at",
+    true,
     "tier",
-    "creator_id",
     undefined,
+    "creator_id",
     user!.id
   )
-  const { data: templates, isLoading } = useFetchById(
-    "templates",
-    "creator_id",
-    undefined,
-    user!.id
-  )
-  console.log(tiers, templates)
 
+  const { data: templates, isLoading } = useFetchById(
+    "created_at",
+    true,
+    "templates",
+    undefined,
+    "creator_id",
+    user!.id
+  )
+
+  const navigate = useNavigate()
   return (
     <>
       {isLoading ? (
@@ -31,7 +36,7 @@ const UserDetails = () => {
           </div>
           <span className="text-2xl font-bold">Tiers</span>
           <div className="flex justify-center items-start w-full flex-wrap">
-            {tiers?.map((item: any) => (
+            {tiers?.data.map((item: any) => (
               <TierContainer key={item.id} item={item} isDashboard={true} />
             ))}
           </div>
@@ -39,10 +44,11 @@ const UserDetails = () => {
             <span className="text-2xl font-bold">Templates</span>
           </div>
           <div className="flex justify-center items-center flex-wrap">
-            {templates?.map((item: any) => (
+            {templates?.data.map((item: any) => (
               <div
+                onClick={() => navigate(`/create/${item.slug}`)}
                 key={item.id}
-                className="flex justify-center items-center bg-red-200 flex-col m-2"
+                className="flex cursor-pointer justify-center items-center bg-red-200 flex-col m-2"
               >
                 <span>Name : {item.name}</span>
                 <span>Description : {item.description}</span>

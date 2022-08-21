@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { createPortal, unstable_batchedUpdates } from "react-dom"
 import {
   CancelDrop,
@@ -28,15 +28,9 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { Container, ContainerProps } from "./Container"
-
+import { IoAddCircleOutline } from "react-icons/io5"
 import { Item } from "./Item"
-import { useLocation } from "react-router-dom"
-import { Template } from "../../models/tier"
 import TierModal from "../TierModal/TierModal"
-
-export default {
-  title: "Presets/Sortable/Multiple Containers"
-}
 
 interface Images {
   url: string
@@ -149,7 +143,6 @@ interface Props {
 }
 
 const PLACEHOLDER_ID = "placeholder"
-const empty: Images[] = []
 
 export function MultipleContainers({
   data,
@@ -164,10 +157,6 @@ export function MultipleContainers({
   vertical = true
 }: Props) {
   const fieldsRef = useRef(null)
-
-  const excludeNode = useRef(null)
-  ////////////////////
-  const location = useLocation()
 
   const template = data
   const arrayOfImages = template.image
@@ -406,7 +395,6 @@ export function MultipleContainers({
               <DroppableContainer
                 key={containerId}
                 id={containerId}
-                excludeNode={excludeNode}
                 templateName={template.slug}
                 label={containerId}
                 columns={columns}
@@ -476,10 +464,10 @@ export function MultipleContainers({
           <button
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
-            className="inline-block w-2/4 my-1 self-center px-6 py-2.5 bg-zinc-200 text-slate-800 font-medium text-sm leading-tight  rounded-md shadow-md hover:bg-zinc-300 hover:shadow-lg focus:bg-zinc-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-zinc-400 active:shadow-lg transition duration-150 ease-in-out"
+            className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
             onClick={handleAddColumn}
           >
-            Add New Field
+            <IoAddCircleOutline />
           </button>
         ) : null}
         <TierModal

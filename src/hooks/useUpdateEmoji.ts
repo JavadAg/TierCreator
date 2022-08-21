@@ -10,7 +10,7 @@ const increment = async (params: any) => {
     .from(`${type}`)
     .select(`${emoji.id}`)
     .eq("id", `${tierId}`)
-  console.log(tierId)
+  
   if (fetchError) {
     throw new Error(fetchError.message)
   }

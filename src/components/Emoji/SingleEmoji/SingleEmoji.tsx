@@ -33,11 +33,13 @@ const SingleEmoji = ({ item, isFetched, tierId, data, type }: any) => {
 
   return (
     <div
-      className="border p-1 cursor-pointer"
+      className="p-1 cursor-pointer active:scale-105 duration-300"
       onClick={() => handleEmoji(data)}
     >
       <span className="text-3xl">{item.icon}</span>
-      <span>{emoji?.counter?.length}</span>
+      <span className="text-sm font-bold text-gray-600">
+        {emoji?.counter?.length}
+      </span>
     </div>
   )
 }

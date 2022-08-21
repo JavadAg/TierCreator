@@ -1,18 +1,20 @@
-import CreateForm from "../components/CreateForm/CreateForm"
+import CreateTemplateForm from "../components/CreateTemplateForm/CreateTemplateForm"
 
 const CreateTemplate = () => {
   return (
-    <div className="flex flex-col justify-center items-start w-full mx-24 bg-gradient-to-br from-indigo-300 to-purple-300 p-4 rounded-xl space-y-5">
-      <div className="flex justify-center items-start flex-col space-y-1">
-        <h1 className="text-4xl font-bold">Create a Template</h1>
-        <p>
+    <div className="flex flex-col justify-center items-center text-center w-full rounded-xl space-y-2 bg-white">
+      <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl">
+        <span className="text-lg font-bold text-gray-700">
+          Create a Template
+        </span>
+        <p className="text-sm text-start text-gray-600">
           TierMaker lets you easily create a tier list template for anything. By
           using TierMaker, you agree to follow our Guidelines and our Terms of
           Use. If you are having troubles, refer to our template creation guide
           and FAQ.
         </p>
       </div>
-      <CreateForm />
+      <CreateTemplateForm />
     </div>
   )
 }

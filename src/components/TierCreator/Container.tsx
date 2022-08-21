@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import React, { forwardRef, useState } from "react"
 import { TbDragDrop, TbTrashX, TbSettings } from "react-icons/tb"
 
 export type { Props as ContainerProps }
@@ -14,7 +8,6 @@ export interface Props {
   columns?: number
   label?: string
   color?: string
-  excludeNode?: MutableRefObject<null>
   templateName?: string
   hover?: boolean
   style?: React.CSSProperties
@@ -53,7 +46,6 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       placeholder,
       color,
       index,
-      excludeNode,
       hover,
       templateName,
       label,
@@ -87,14 +79,14 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         }
         {...props}
         ref={ref as unknown as string}
-        className={`flex my-1 rounded-md border overflow-hidden border-neutral-100/50 justify-center  min-h-[80px] w-full max-w-[1200px] bg-neutral-200`}
+        className={`flex border overflow-hidden justify-center min-h-[96px] w-full max-w-[1200px]`}
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >
         {fieldLabel !== "default" && (
           <span
             style={{ backgroundColor: labelColor && labelColor }}
-            className="p-1 flex justify-center items-center text-center max-w-[90px] w-full min-h-full"
+            className="p-1 flex justify-center items-center text-center max-w-[96px] w-full min-h-full"
           >
             {fieldLabel}
           </span>
@@ -103,7 +95,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         {placeholder ? (
           children
         ) : (
-          <ul className="flex justify-start items-center flex-wrap min-h-[80px] w-full">
+          <ul className="flex justify-start items-center flex-wrap min-h-[96px] w-full">
             {children}
           </ul>
         )}

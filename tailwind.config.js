@@ -5,7 +5,11 @@ module.exports = {
     "./node_modules/tw-elements/dist/js/**/*.js"
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        Roboto: ["Roboto", "sans-serif"]
+      }
+    }
   },
   plugins: [require("tw-elements/dist/plugin")]
 }

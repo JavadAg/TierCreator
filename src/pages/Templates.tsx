@@ -1,62 +1,59 @@
-import { Link, useParams } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import ListItems from "../components/ListItems/ListItems"
+import Paginate from "../components/Paginate/Paginate"
+import TemplateSort from "../components/TemplateSort/TemplateSort"
 import useFetchById from "../hooks/useFetch"
 
 const Templates = () => {
   const { slug } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const [sort, setSort] = useState("name")
   const { data, error, isLoading } = useFetchById(
+    sort,
+    sort === "name" ? true : false,
     "templates",
+    undefined,
     "category_slug",
-    slug!
+    slug!,
+    searchParams.get("page") ? Number(searchParams.get("page")) : 0
   )
 
-  if (error) return <div>Something went horrible wrong ...</div>
+  if (error) return <div>Error fetching templates</div>
 
   return (
-    <div className="flex flex-col space-y-5 justify-center items-start">
-      <span className="font-bold text-4xl">
-        Cars & Racing Tier List Templates
-      </span>
-      <div className="flex justify-center items-center space-x-2">
-        <button className="bg-zinc-800 hover:bg-zinc-700 duration-200 rounded-md text-slate-200 px-2 py-1">
-          Recent Cars & Racing Tier Lists
-        </button>
-        <button className="bg-indigo-800 hover:bg-indigo-700 duration-200 rounded-md text-slate-200 px-2 py-1">
-          Create a tier from this template
-        </button>
-      </div>
-
-      <span>A collection of cars and racing tier list templates.</span>
-      {isLoading ? (
-        <div>Loading</div>
-      ) : (
-        <div>
-          {data?.length! > 0 ? (
-            <div className="flex flex-wrap justify-center items-center m-1">
-              {data?.map((template, index) => (
-                <>
-                  <Link
-                    key={template.slug}
-                    state={template}
-                    to={`/create/${template.slug}`}
-                    className="flex justify-center items-center m-1 flex-col"
-                  >
-                    <img
-                      className="object-cover w-36 h-36"
-                      key={index}
-                      src={template.cover}
-                    />
-                    <span className="bg-black text-white w-36 text-center">
-                      {template.name}
-                    </span>
-                  </Link>
-                </>
-              ))}
-            </div>
-          ) : (
-            <div>No Template exist , Create one</div>
-          )}
+    <div className="flex flex-col space-y-2 justify-center items-center w-full">
+      <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl w-full">
+        <span className="font-bold text-lg text-gray-800">
+          {slug?.toUpperCase().replace("-", " & ")} Tier List Templates
+        </span>
+        <div className="flex justify-center items-center space-x-2">
+          <button
+            onClick={() => navigate(`/${slug}/recent-tiers`)}
+            className="bg-indigo-500 hover:bg-indigo-700  duration-200 rounded-md text-slate-200 px-2 py-1 text-sm"
+          >
+            Recent {slug?.toUpperCase().replace("-", " & ")} Tier Lists
+          </button>
         </div>
-      )}
+        <span className="text-sm text-start text-gray-700">
+          A collection of {slug?.toUpperCase().replace("-", " & ")} tier list
+          templates.
+        </span>
+      </div>
+      <TemplateSort setSort={setSort} />
+      <ListItems
+        isLoading={isLoading}
+        data={data?.data}
+        isTemplate={true}
+        isCreate={true}
+      />
+      <Paginate
+        lastItem={data?.to}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        count={data?.count}
+      />
     </div>
   )
 }

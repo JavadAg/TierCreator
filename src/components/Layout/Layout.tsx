@@ -1,7 +1,7 @@
 import React from "react"
-import BreadCrumb from "../BreadCrumb/BreadCrumb"
-import Footer from "../Footer/Footer"
-import Navbar from "../Navbar/Navbar"
+import BreadCrumb from "./BreadCrumb/BreadCrumb"
+import Footer from "./Footer/Footer"
+import Navbar from "./Navbar/Navbar"
 
 const Layout = ({ children }: any) => {
   return (
