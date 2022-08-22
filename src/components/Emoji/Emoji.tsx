@@ -9,15 +9,15 @@ const emojiIcons = [
   { id: "emoji_5", icon: "💩" }
 ]
 
-const Emoji = ({ isFetched, state, data, type }: any) => {
+const Emoji = ({ isFetched, data, type }: any) => {
   return (
-    <div className="flex justify-center items-center border rounded-md divide-x divide-gray-200 border-gray-200">
+    <div className="flex justify-center items-center border rounded divide-x divide-customgrey-200 shadow-100 border-customgrey-200">
       {emojiIcons.map((item) => (
         <SingleEmoji
           item={item}
+          tierId={data?.id}
+          data={data[item.id]}
           isFetched={isFetched}
-          tierId={state?.id}
-          data={data?.[0][item.id]}
           type={type}
         />
       ))}

@@ -26,14 +26,19 @@ const Navbar = () => {
           <Link to="/recent-tiers" className=" cursor-pointer">
             New Tier Lists
           </Link>
-          <Link to="/login">{user ? user?.user_metadata.name : "Login"}</Link>
+          <Link to={user ? `/user/${user?.id}` : "/login"}>
+            {user ? user?.user_metadata.name : "Login"}
+          </Link>
         </div>
       </div>
       <div className="flex sm:hidden justify-between items-center p-2 bg-gray-50 text-gray-900 h-14 w-full shadow-sm border-b border-gray-300">
         <MobileSidebar user={user} />
 
         <div className="flex justify-center items-center space-x-2">
-          <Link to="/login" className="capitalize cursor-pointer text-sm">
+          <Link
+            to={user ? `/user/${user?.id}` : "/login"}
+            className="capitalize cursor-pointer text-sm"
+          >
             {user ? (
               <span className="flex justify-center items-center space-x-1 bg-gray-100 p-1 px-2 text-gray-700 rounded-md focus:bg-gray-200">
                 {user?.user_metadata.name}

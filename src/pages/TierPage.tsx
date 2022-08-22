@@ -24,7 +24,7 @@ const TierPage = () => {
 
   const tier = useRef(null)
   const deleteTier = useDelete()
-
+  console.log(data)
   return (
     <>
       {isLoading ? (
@@ -36,7 +36,7 @@ const TierPage = () => {
           <button onClick={() => downloadasImage({ id: tier })}>
             Download Image
           </button>
-          <Emoji isFetched={isFetched} state={state} data={data} />
+          <Emoji isFetched={isFetched} data={data?.data[0]} type={"tier"} />
           <TierContainer tier={tier} item={data?.data[0]} isDashboard={false} />
           <button onClick={() => deleteTier.mutate(state.id)}>Delete</button>
         </div>

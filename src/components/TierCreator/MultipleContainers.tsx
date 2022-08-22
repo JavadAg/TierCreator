@@ -29,8 +29,10 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { Container, ContainerProps } from "./Container"
 import { IoAddCircleOutline } from "react-icons/io5"
-import { Item } from "./Item"
-import TierModal from "../TierModal/TierModal"
+import { Item } from "./TierItem"
+import TierModal from "./TierCreatorModal"
+import { usePostTier } from "../../hooks/usePostTier"
+import { BeatLoader } from "react-spinners"
 
 interface Images {
   url: string
@@ -199,7 +201,7 @@ export function MultipleContainers({
   const findItemByActiveId = (id: UniqueIdentifier) => {
     const item = Object.values(items)
       .flat()
-      .find((item) => item.id == 2)
+      .find((item) => item.id == id)
     return item!.url
   }
 
@@ -232,8 +234,11 @@ export function MultipleContainers({
     })
   }, [items])
 
+  const addTier = usePostTier()
+
   return (
     <DndContext
+      autoScroll={false}
       sensors={sensors}
       measuring={{
         droppable: {
@@ -381,101 +386,112 @@ export function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <div className={`flex flex-col w-full max-w-[1100px]`}>
-        <div ref={fieldsRef}>
-          <SortableContext
-            items={[...containers]}
-            strategy={
-              vertical
-                ? verticalListSortingStrategy
-                : horizontalListSortingStrategy
-            }
-          >
-            {containers.map((containerId: any) => (
-              <DroppableContainer
-                key={containerId}
-                id={containerId}
-                templateName={template.slug}
-                label={containerId}
-                columns={columns}
-                items={items[containerId]}
-                onRemove={() => handleRemove(containerId)}
-              >
-                <SortableContext
-                  items={items[containerId]}
-                  strategy={rectSortingStrategy}
-                >
-                  {items[containerId].map((value: Images, index: any) => {
-                    return (
-                      <SortableItem
-                        disabled={isSortingContainer}
-                        key={value.id}
-                        id={value.id}
-                        value={value.url}
-                        index={index}
-                        handle={handle}
-                        style={getItemStyles}
-                        wrapperStyle={wrapperStyle}
-                        renderItem={renderItem}
-                        containerId={containerId}
-                        getIndex={getIndex}
-                      />
-                    )
-                  })}
-                </SortableContext>
-              </DroppableContainer>
-            ))}
-          </SortableContext>
+      {addTier.isLoading ? (
+        <div className="flex justify-center items-center flex-col">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+          <span className="text-md font-bold text-customgrey-700">
+            Processing...
+          </span>
         </div>
-        <DroppableContainer
-          key={"default"}
-          id={"default"}
-          templateName={template.slug}
-          label={"default"}
-          columns={columns}
-          items={items["default"]}
-          onRemove={() => handleRemove("default")}
-        >
-          <SortableContext
+      ) : (
+        <div className={`flex flex-col w-full max-w-[1100px]`}>
+          <div ref={fieldsRef}>
+            <SortableContext
+              items={[...containers]}
+              strategy={
+                vertical
+                  ? verticalListSortingStrategy
+                  : horizontalListSortingStrategy
+              }
+            >
+              {containers.map((containerId: any) => (
+                <DroppableContainer
+                  key={containerId}
+                  id={containerId}
+                  templateName={template.slug}
+                  label={containerId}
+                  columns={columns}
+                  items={items[containerId]}
+                  onRemove={() => handleRemove(containerId)}
+                >
+                  <SortableContext
+                    items={items[containerId]}
+                    strategy={rectSortingStrategy}
+                  >
+                    {items[containerId].map((value: Images, index: any) => {
+                      return (
+                        <SortableItem
+                          disabled={isSortingContainer}
+                          key={value.id}
+                          id={value.id}
+                          value={value.url}
+                          index={index}
+                          handle={handle}
+                          style={getItemStyles}
+                          wrapperStyle={wrapperStyle}
+                          renderItem={renderItem}
+                          containerId={containerId}
+                          getIndex={getIndex}
+                        />
+                      )
+                    })}
+                  </SortableContext>
+                </DroppableContainer>
+              ))}
+            </SortableContext>
+          </div>
+          <DroppableContainer
+            key={"default"}
+            id={"default"}
+            templateName={template.slug}
+            label={"default"}
+            columns={columns}
             items={items["default"]}
-            strategy={rectSortingStrategy}
+            onRemove={() => handleRemove("default")}
           >
-            {items["default"].map((value: Images, index: any) => {
-              return (
-                <SortableItem
-                  disabled={isSortingContainer}
-                  key={value.id}
-                  id={value.id}
-                  value={value.url}
-                  index={index}
-                  handle={handle}
-                  style={getItemStyles}
-                  wrapperStyle={wrapperStyle}
-                  renderItem={renderItem}
-                  containerId={"default"}
-                  getIndex={getIndex}
-                />
-              )
-            })}
-          </SortableContext>
-        </DroppableContainer>
+            <SortableContext
+              items={items["default"]}
+              strategy={rectSortingStrategy}
+            >
+              {items["default"].map((value: Images, index: any) => {
+                return (
+                  <SortableItem
+                    disabled={isSortingContainer}
+                    key={value.id}
+                    id={value.id}
+                    value={value.url}
+                    index={index}
+                    handle={handle}
+                    style={getItemStyles}
+                    wrapperStyle={wrapperStyle}
+                    renderItem={renderItem}
+                    containerId={"default"}
+                    getIndex={getIndex}
+                  />
+                )
+              })}
+            </SortableContext>
+          </DroppableContainer>
 
-        {containers.length !== 10 ? (
-          <button
-            data-mdb-ripple="true"
-            data-mdb-ripple-color="light"
-            className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
-            onClick={handleAddColumn}
-          >
-            <IoAddCircleOutline />
-          </button>
-        ) : null}
-        <TierModal
-          getFieldsDetails={getFieldsDetails}
-          id={fieldsRef}
-          template={template}
-        />
-      </div>
+          {containers.length !== 10 ? (
+            <button
+              data-mdb-ripple="true"
+              data-mdb-ripple-color="light"
+              className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
+              onClick={handleAddColumn}
+            >
+              <IoAddCircleOutline />
+            </button>
+          ) : null}
+          <TierModal
+            addTier={addTier}
+            getFieldsDetails={getFieldsDetails}
+            id={fieldsRef}
+            template={template}
+          />
+        </div>
+      )}
+
       {createPortal(
         <DragOverlay adjustScale={adjustScale} dropAnimation={dropAnimation}>
           {activeId
@@ -558,6 +574,7 @@ export function MultipleContainers({
     let colors: any = []
     let labels: any = []
     let templateImages: any = []
+
     const fields: any = fieldsRef.current
 
     Object.values(fields.childNodes).map(

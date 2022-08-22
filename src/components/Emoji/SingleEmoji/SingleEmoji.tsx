@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react"
 import useUpdateEmoji from "../../../hooks/useUpdateEmoji"
 import { supabase } from "../../../utils/client"
 
-const SingleEmoji = ({ item, isFetched, tierId, data, type }: any) => {
+const SingleEmoji = ({ item, data, isFetched, type, tierId }: any) => {
+  console.log("data", data)
   const user = supabase.auth.user()
 
   const increment = useUpdateEmoji()
@@ -26,6 +27,7 @@ const SingleEmoji = ({ item, isFetched, tierId, data, type }: any) => {
   }
 
   const handleEmoji = async (emoji: any) => {
+    console.log(data)
     const params = { tierId, emoji, type: type, userId: user!.id }
     await increment.mutateAsync(params)
     clickedEmoji()
@@ -37,7 +39,7 @@ const SingleEmoji = ({ item, isFetched, tierId, data, type }: any) => {
       onClick={() => handleEmoji(data)}
     >
       <span className="text-3xl">{item.icon}</span>
-      <span className="text-sm font-bold text-gray-600">
+      <span className="text-sm font-bold text-customgrey-500 hover:text-black">
         {emoji?.counter?.length}
       </span>
     </div>

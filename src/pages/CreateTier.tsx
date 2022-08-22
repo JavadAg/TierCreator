@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import Emoji from "../components/Emoji/Emoji"
+import CreateTierSkeleton from "../components/Skeleton/CreateTierSkeleton"
 import { MultipleContainers } from "../components/TierCreator/MultipleContainers"
 import useFetchById from "../hooks/useFetch"
 
@@ -20,15 +21,10 @@ const CreateTier = () => {
   return (
     <>
       {isLoading ? (
-        <div>Loading</div>
+        <CreateTierSkeleton />
       ) : (
         <div className="flex justify-center items-center flex-col space-y-2">
-          <Emoji
-            isFetched={isFetched}
-            state={data?.data[0]}
-            data={data?.data}
-            type="templates"
-          />
+          <Emoji isFetched={isFetched} data={data?.data[0]} type="templates" />
           <button
             onClick={() =>
               navigate(`/${data?.data[0].category_slug}/${data?.data[0].slug}`)

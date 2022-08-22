@@ -4,7 +4,7 @@ import TierContainer from "../components/TierContainer/TierContainer"
 import useFetchById from "../hooks/useFetch"
 import useBreadcrumbs from "use-react-router-breadcrumbs"
 
-const Template = (props: any) => {
+const TierListRanking = (props: any) => {
   let { slug } = useParams()
   const { data, error, isLoading } = useFetchById(
     "emoji_2->counter",
@@ -55,4 +55,4 @@ const Template = (props: any) => {
   )
 }
 
-export default Template
+export default TierListRanking

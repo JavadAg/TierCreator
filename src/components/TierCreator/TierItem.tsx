@@ -57,6 +57,7 @@ export const Item = React.memo(
       },
       ref
     ) => {
+      console.log(dragOverlay)
       return renderItem ? (
         renderItem({
           dragOverlay: Boolean(dragOverlay),
@@ -73,7 +74,7 @@ export const Item = React.memo(
         })
       ) : (
         <li
-          className={`transform-gpu list-none flex   `}
+          className={`transform-gpu list-none flex`}
           style={
             {
               ...wrapperStyle,
@@ -98,7 +99,9 @@ export const Item = React.memo(
           ref={ref}
         >
           <img
-            className={` w-24 h-24 object-cover ${dragging && "opacity-50"} `}
+            className={`min-w-[80px] w-20 h-20 object-cover ${
+              dragging && "opacity-50"
+            } ${dragOverlay && "ring-[2px] ring-indigo-400 outline-none"}`}
             style={style}
             data-cypress="draggable-item"
             {...(!handle ? listeners : undefined)}

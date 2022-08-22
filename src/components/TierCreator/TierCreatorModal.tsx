@@ -1,57 +1,89 @@
+import { itemsEqual } from "@dnd-kit/sortable/dist/utilities"
 import React, { MutableRefObject, useEffect, useState } from "react"
+import { setErrorMap } from "zod"
 import { usePostTier } from "../../hooks/usePostTier"
 import { Template } from "../../models/tier"
 import { supabase } from "../../utils/client"
 import makeid from "../../utils/generateRanStr"
 import { downloadasImage } from "../../utils/pageToImage"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { tierschema } from "../../utils/zodSchema"
+import { useNavigate } from "react-router-dom"
+import { BeatLoader } from "react-spinners"
 
 interface IProps {
   id: MutableRefObject<HTMLElement | null>
   template: Template
-  getFieldsDetails: () => {}
+  getFieldsDetails: () => { colors: []; labels: []; templateImages: [] }
+  addTier: any
 }
 
-const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
-  const user = supabase.auth.user()
-  const [form, setForm] = useState<any>({
-    name: "",
-    description: "",
-    template_name: template.name,
-    template_slug: template.slug,
-    category_name: template.category_name,
-    category_slug: template.category_slug,
-    creator_id: user!.id,
-    creator_name: user!.user_metadata.name,
-    creator_photo: user!.user_metadata.picture,
-    placeholderName: makeid(10) + Date.now()
-  })
+interface IForm {
+  name: String
+  description: String
+}
 
-  const addTier = usePostTier()
-  const [post, setPost] = useState(false)
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    setForm({ ...form, image: downloadasImage({ id, isSaving: true }) })
-    setForm({ ...form, fieldsdetails: getFieldsDetails() })
-    setPost(true)
+const TierModal: React.FC<IProps> = ({
+  id,
+  template,
+  getFieldsDetails,
+  addTier
+}) => {
+  const user = supabase.auth.user()
+  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<IForm>({
+    resolver: zodResolver(tierschema)
+  })
+  const onSubmit = async (data: any) => {
+    await formhandler(data)
   }
 
-  useEffect(() => {
-    if (post) postForm()
-  }, [post])
+  const formhandler = async (data: any) => {
+    data.template_name = template.name
+    data.template_slug = template.slug
+    data.category_name = template.category_name
+    data.category_slug = template.category_slug
+    data.creator_id = user!.id
+    data.creator_name = user!.user_metadata.name
+    data.creator_photo = user!.user_metadata.picture
+    data.placeholderName = makeid(10) + Date.now()
+    data.image = await downloadasImage({ id, isSaving: true })
 
-  const postForm = async () => {
-    await addTier.mutateAsync(form)
+    const { colors, labels, templateImages } = getFieldsDetails()
+
+    const isEmpty = templateImages.filter((item: any) => item.length !== 0)
+
+    if (isEmpty.length == 0) {
+      toast.error("containers are empty , Create Tier !")
+      return
+    }
+
+    data.fieldsdetails = { colors, labels, templateImages }
+    await addTier.mutateAsync(data, {
+      onSuccess: () => {
+        navigate(`/${data.category_slug}/${data.template_slug}`)
+      }
+    })
   }
 
   return (
     <>
       <button
-        className="bg-slate-500 flex border-b border-slate-400 p-1 justify-center items-center hover:bg-slate-400/50 h-full duration-200"
+        className="bg-white flex border border-customgrey-220 rounded p-1 justify-center w-36 shadow-200 text-sm self-center items-center hover:bg-customgrey-100 h-full duration-200"
         data-bs-toggle="modal"
         data-bs-target={`#saveModal`}
       >
         Save or Download
       </button>
+
       <div
         className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto "
         id={`saveModal`}
@@ -76,27 +108,36 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
               ></button>
             </div>
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               className="flex justify-center items-center flex-col space-y-2 my-2"
             >
               <label htmlFor="name">Enter name</label>
               <input
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
                 type="text"
                 id="name"
                 placeholder="name"
+                {...register("name")}
               />
+
+              {errors.name?.message && (
+                <span className="text-red-600 text-sm font-semibold">
+                  {errors.name.message}
+                </span>
+              )}
               <label htmlFor="description">Enter description</label>
               <input
-                onChange={(e) =>
-                  setForm({ ...form, description: e.target.value })
-                }
                 className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
                 type="text"
                 id="description"
                 placeholder="description"
+                {...register("description")}
               />
+              {errors.description?.message && (
+                <span className="text-red-600 text-sm font-semibold">
+                  {errors.description.message}
+                </span>
+              )}
               <button
                 type="button"
                 data-mdb-ripple="true"
@@ -107,10 +148,14 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
                 Download
               </button>
               <button
+                data-bs-dismiss="modal"
+                disabled={addTier.isLoading}
                 type="submit"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
-                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                className={`inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ${
+                  addTier.isLoading && "cursor-not-allowed "
+                } `}
               >
                 Save
               </button>
@@ -118,6 +163,8 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
           </div>
         </div>
       </div>
+
+      <ToastContainer position="bottom-right" />
     </>
   )
 }

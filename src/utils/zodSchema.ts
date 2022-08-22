@@ -31,3 +31,15 @@ export const schema = z.object({
     })
   )
 })
+
+export const tierschema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Required" })
+    .max(50, { message: "Too long" }),
+
+  description: z
+    .string()
+    .min(1, { message: "Required" })
+    .max(50, { message: "Too long" })
+})

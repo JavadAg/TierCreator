@@ -19,7 +19,13 @@ const downloadImage = (blob: any, fileName: any) => {
 
 export const downloadasImage = async ({ id, isSaving }: IDownload) => {
   const { current } = id
-  const canvas = await html2canvas(current!, { useCORS: true, width: 1100 })
+  const canvas = await html2canvas(current!, {
+    useCORS: true,
+    windowWidth: 1000,
+    backgroundColor: "#000",
+    scale: 1.5
+  })
+
   const image = canvas.toDataURL("image/jpeg", 0.8)
 
   if (isSaving) return image

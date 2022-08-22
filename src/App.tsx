@@ -12,13 +12,13 @@ import Templates from "./pages/Templates"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import Login from "./pages/Login"
 import { supabase } from "./utils/client"
-import Dashboard from "./pages/Dashboard"
 import { User } from "@supabase/supabase-js"
-import Tier from "./pages/TierPage"
+import TierPage from "./pages/TierPage"
 import CreateTier from "./pages/CreateTier"
-import Template from "./pages/Template"
+import TierListRanking from "./pages/TierListRanking"
 import Layout from "./components/Layout/Layout"
 import RecentTiers from "./pages/RecentTiers"
+import UserPage from "./pages/UserPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +50,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Layout>
-          <div className="w-full mt-2 px-2 font-Roboto">
+          <div className="w-full mt-2 px-2 font-Inter">
             <Routes>
               <Route path="/" element={<Navigate replace to="/home" />} />
 
@@ -58,17 +58,15 @@ function App() {
               <Route path="categories" element={<Categories />} />
               <Route path="/:slug" element={<Templates />} />
               <Route path="/:slug?page=:page" element={<Templates />} />
-              <Route path="/:slug/:slug" element={<Template />} />
-              <Route path=":slug/:slug/:id" element={<Tier />} />
+              <Route path="/:slug/:slug" element={<TierListRanking />} />
+              <Route path=":slug/:slug/:id" element={<TierPage />} />
               <Route path="/create" element={<CreateTemplate />} />
               <Route path="/create/:slug" element={<CreateTier />} />
               <Route
                 path="/login"
-                element={
-                  user ? <Navigate replace to={"/dashboard"} /> : <Login />
-                }
+                element={user ? <Navigate replace to={"/"} /> : <Login />}
               />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/user/:userId" element={<UserPage />} />
               <Route path="/recent-tiers" element={<RecentTiers />} />
               <Route path="/:slug/recent-tiers" element={<RecentTiers />} />
             </Routes>
