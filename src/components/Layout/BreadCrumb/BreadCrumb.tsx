@@ -16,7 +16,7 @@ const BreadCrumb = () => {
     <div className="border text-sm border-customgrey-200 bg-customgrey-100 mt-2 mx-2 px-2 py-1 rounded-md">
       {breadcrumbs.map(({ match, breadcrumb }) => (
         <span
-          className="cursor-pointer py-1 hover:text-indigo-500 active:text-indigo-500 duration-200 text-gray-600"
+          className="cursor-pointer py-1 hover:text-indigo-500 active:text-indigo-500 duration-200 text-blue-600/80"
           key={match.pathname}
         >
           <NavLink to={match.pathname}>

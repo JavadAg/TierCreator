@@ -25,7 +25,7 @@ const Templates = () => {
   return (
     <div className="flex flex-col space-y-2 justify-center items-center w-full">
       <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl w-full">
-        <span className="font-bold text-lg text-gray-800">
+        <span className="font-bold text-lg text-gray-900">
           {slug?.toUpperCase().replace("-", " & ")} Tier List Templates
         </span>
         <div className="flex justify-center items-center space-x-2">

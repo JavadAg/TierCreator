@@ -15,10 +15,11 @@ import { supabase } from "./utils/client"
 import { User } from "@supabase/supabase-js"
 import TierPage from "./pages/TierPage"
 import CreateTier from "./pages/CreateTier"
-import TierListRanking from "./pages/TierListRanking"
+import TierListRanking from "./pages/CommunityRanking"
 import Layout from "./components/Layout/Layout"
 import RecentTiers from "./pages/RecentTiers"
 import UserPage from "./pages/UserPage"
+import CommunityRanking from "./pages/CommunityRanking"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +51,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Layout>
-          <div className="w-full mt-2 px-2 font-Inter">
+          <div className="w-full mt-2 px-2 font-Inter min-h-[80vh]">
             <Routes>
               <Route path="/" element={<Navigate replace to="/home" />} />
 
@@ -58,7 +59,7 @@ function App() {
               <Route path="categories" element={<Categories />} />
               <Route path="/:slug" element={<Templates />} />
               <Route path="/:slug?page=:page" element={<Templates />} />
-              <Route path="/:slug/:slug" element={<TierListRanking />} />
+              <Route path="/:slug/:slug" element={<CommunityRanking />} />
               <Route path=":slug/:slug/:id" element={<TierPage />} />
               <Route path="/create" element={<CreateTemplate />} />
               <Route path="/create/:slug" element={<CreateTier />} />

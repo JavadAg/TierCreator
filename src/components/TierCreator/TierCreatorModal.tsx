@@ -17,7 +17,12 @@ import { BeatLoader } from "react-spinners"
 interface IProps {
   id: MutableRefObject<HTMLElement | null>
   template: Template
-  getFieldsDetails: () => { colors: []; labels: []; templateImages: [] }
+  getFieldsDetails: () => {
+    colors: []
+    labels: []
+    templateImages: []
+    fieldsbgcolor: string
+  }
   addTier: any
 }
 
@@ -33,7 +38,9 @@ const TierModal: React.FC<IProps> = ({
   addTier
 }) => {
   const user = supabase.auth.user()
+
   const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -42,6 +49,7 @@ const TierModal: React.FC<IProps> = ({
   } = useForm<IForm>({
     resolver: zodResolver(tierschema)
   })
+
   const onSubmit = async (data: any) => {
     await formhandler(data)
   }
@@ -57,7 +65,7 @@ const TierModal: React.FC<IProps> = ({
     data.placeholderName = makeid(10) + Date.now()
     data.image = await downloadasImage({ id, isSaving: true })
 
-    const { colors, labels, templateImages } = getFieldsDetails()
+    const { colors, labels, templateImages, fieldsbgcolor } = getFieldsDetails()
 
     const isEmpty = templateImages.filter((item: any) => item.length !== 0)
 
@@ -66,7 +74,7 @@ const TierModal: React.FC<IProps> = ({
       return
     }
 
-    data.fieldsdetails = { colors, labels, templateImages }
+    data.fieldsdetails = { colors, labels, templateImages, fieldsbgcolor }
     await addTier.mutateAsync(data, {
       onSuccess: () => {
         navigate(`/${data.category_slug}/${data.template_slug}`)
@@ -77,7 +85,7 @@ const TierModal: React.FC<IProps> = ({
   return (
     <>
       <button
-        className="bg-white flex border border-customgrey-220 rounded p-1 justify-center w-36 shadow-200 text-sm self-center items-center hover:bg-customgrey-100 h-full duration-200"
+        className="bg-indigo-400 text-customgrey-100 flex border border-indigo-200 rounded p-1 justify-center w-52 shadow-200 text-sm self-center items-center hover:bg-indigo-500 h-full duration-200"
         data-bs-toggle="modal"
         data-bs-target={`#saveModal`}
       >

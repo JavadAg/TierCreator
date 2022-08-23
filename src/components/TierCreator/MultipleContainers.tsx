@@ -33,6 +33,7 @@ import { Item } from "./TierItem"
 import TierModal from "./TierCreatorModal"
 import { usePostTier } from "../../hooks/usePostTier"
 import { BeatLoader } from "react-spinners"
+import { colorPickerOptions } from "./ContainerEditModal"
 
 interface Images {
   url: string
@@ -159,7 +160,7 @@ export function MultipleContainers({
   vertical = true
 }: Props) {
   const fieldsRef = useRef(null)
-
+  const [backgroundColor, setBackgroundColor] = useState<any>("#222")
   const template = data
   const arrayOfImages = template.image
 
@@ -171,6 +172,8 @@ export function MultipleContainers({
     labels.push(label)
   }
   labels.push(...labels.splice(0, 1))
+
+  useEffect(() => window.scrollTo(0, 0), [])
 
   const states: States = { ...allRows, default: arrayOfImages }
 
@@ -395,7 +398,11 @@ export function MultipleContainers({
         </div>
       ) : (
         <div className={`flex flex-col w-full max-w-[1100px]`}>
-          <div ref={fieldsRef}>
+          <div
+            className="border border-customgrey-220 divide-y divide-customgrey-220"
+            style={{ backgroundColor: backgroundColor }}
+            ref={fieldsRef}
+          >
             <SortableContext
               items={[...containers]}
               strategy={
@@ -483,6 +490,30 @@ export function MultipleContainers({
               <IoAddCircleOutline />
             </button>
           ) : null}
+          <button
+            className="flex justify-center w-52 bg-white border-customgrey-220 border self-center text-customgrey-700 text-sm shadow-200 leading-tight rounded hover:bg-customgrey-100 focus:bg-customgrey-100 focus:outline-none focus:ring-0 active:bg-customgrey-100  transition duration-150 mb-2 px-2 py-1 text-center ease-in-out"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#changecolor"
+            aria-expanded="false"
+            aria-controls="changecolor"
+          >
+            Change Background Color
+          </button>
+          <div className="collapse" id="changecolor">
+            <div className="block p-2 mb-2 border border-customgrey-200 shadow-200 rounded bg-white">
+              {colorPickerOptions.map((item: any, index: number) => (
+                <button
+                  key={index}
+                  value={item}
+                  onClick={handlecolor}
+                  style={{ backgroundColor: item }}
+                  className={`m-2 py-4 px-4  rounded-full`}
+                ></button>
+              ))}
+            </div>
+          </div>
+
           <TierModal
             addTier={addTier}
             getFieldsDetails={getFieldsDetails}
@@ -570,11 +601,15 @@ export function MultipleContainers({
     })
   }
 
+  function handlecolor(e: any) {
+    setBackgroundColor(e.currentTarget.value)
+  }
+
   function getFieldsDetails() {
     let colors: any = []
     let labels: any = []
     let templateImages: any = []
-
+    let fieldsbgcolor: any = backgroundColor
     const fields: any = fieldsRef.current
 
     Object.values(fields.childNodes).map(
@@ -588,7 +623,7 @@ export function MultipleContainers({
         )
       )
     )
-    return { colors, labels, templateImages }
+    return { colors, labels, templateImages, fieldsbgcolor }
   }
 
   function getNextContainerId() {

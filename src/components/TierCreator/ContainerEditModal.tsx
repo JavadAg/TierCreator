@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { TbSettings } from "react-icons/tb"
 
-const colorPickerOptions = [
+export const colorPickerOptions = [
   "#FF7F7F",
   "#FFBF7F",
   "#FFDF7F",

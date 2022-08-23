@@ -3,7 +3,6 @@ import useUpdateEmoji from "../../../hooks/useUpdateEmoji"
 import { supabase } from "../../../utils/client"
 
 const SingleEmoji = ({ item, data, isFetched, type, tierId }: any) => {
-  console.log("data", data)
   const user = supabase.auth.user()
 
   const increment = useUpdateEmoji()

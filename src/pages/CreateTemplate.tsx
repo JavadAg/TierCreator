@@ -8,10 +8,10 @@ const CreateTemplate = () => {
           Create a Template
         </span>
         <p className="text-sm text-start text-gray-600">
-          TierMaker lets you easily create a tier list template for anything. By
-          using TierMaker, you agree to follow our Guidelines and our Terms of
-          Use. If you are having troubles, refer to our template creation guide
-          and FAQ.
+          TierCreator lets you easily create a tier list template for anything.
+          By using TierCreator, you agree to follow our Guidelines and our Terms
+          of Use. If you are having troubles, refer to our template creation
+          guide and FAQ.
         </p>
       </div>
       <CreateTemplateForm />

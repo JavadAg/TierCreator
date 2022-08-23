@@ -8,8 +8,8 @@ const getPagination = (page: number, size: number) => {
   return { from, to }
 }
 
-const fetch = async (type: string, limit?: number, order?: string) => {
-  /* const { from, to } = getPagination(page, 10) */
+/* const fetch = async (type: string, limit?: number, order?: string) => {
+  
   const { data, error } = await supabase
     .from(`${type}`)
     .select("*")
@@ -27,7 +27,7 @@ export function useFetch(type: string, limit?: number, order?: string) {
   return useQuery([`${type}`, type, limit, order], () =>
     fetch(type, limit, order)
   )
-}
+} */
 
 //by Id or Slug
 const fetchById = async (
@@ -37,7 +37,8 @@ const fetchById = async (
   limit?: number,
   filterBy?: string,
   filterValue?: string,
-  page?: number
+  page?: number,
+  isMulti?: boolean
 ) => {
   const { from, to } = getPagination(
     page ? page : 0,
@@ -56,6 +57,18 @@ const fetchById = async (
     throw new Error(error.message)
   }
 
+  if (isMulti) {
+    const { data: extraData } = await supabase
+      .from("templates")
+      .select(`*`, { count: "exact" })
+      .eq(`${filterBy}`, `${filterValue}`)
+      .limit(limit ? (limit as number) : 1000)
+      .order(order, { ascending: ascending })
+      .range(from, to)
+
+    return { data, count, from, to, extraData }
+  }
+
   return { data, count, from, to }
 }
 
@@ -66,11 +79,32 @@ export default function useFetchById(
   limit?: number,
   filterBy?: string,
   filterValue?: string,
-  page?: number
+  page?: number,
+  isMulti?: boolean
 ) {
   return useQuery(
-    [`${type}`, order, ascending, type, limit, filterBy, filterValue, page],
-    () => fetchById(order, ascending, type, limit, filterBy, filterValue, page),
+    [
+      `${type}`,
+      order,
+      ascending,
+      type,
+      limit,
+      filterBy,
+      filterValue,
+      page,
+      isMulti
+    ],
+    () =>
+      fetchById(
+        order,
+        ascending,
+        type,
+        limit,
+        filterBy,
+        filterValue,
+        page,
+        isMulti
+      ),
     {
       enabled: true
     }

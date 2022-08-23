@@ -1,5 +1,5 @@
 import ListItems from "../components/ListItems/ListItems"
-import useFetchById, { useFetch } from "../hooks/useFetch"
+import useFetchById from "../hooks/useFetch"
 
 const Categories = () => {
   const { data, error, isLoading } = useFetchById(

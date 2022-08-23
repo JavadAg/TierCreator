@@ -13,7 +13,7 @@ import slugify from "slugify"
 import { BeatLoader } from "react-spinners"
 import { Inputs } from "../../models/tier"
 import { usePostTemplate } from "../../hooks/usePostTemplate"
-import { useFetch } from "../../hooks/useFetch"
+import useFetchById from "../../hooks/useFetch"
 import { supabase } from "../../utils/client"
 import makeid from "../../utils/generateRanStr"
 import { IoTrashBinOutline, IoAddCircleOutline } from "react-icons/io5"
@@ -25,7 +25,7 @@ const CreateTemplateForm = () => {
     error,
     isLoading: isFetching,
     isError
-  } = useFetch("categories")
+  } = useFetchById("id", true, "categories", undefined, "", "")
 
   const [isSubmiting, setIsSubmiting] = useState(false)
 
@@ -105,8 +105,8 @@ const CreateTemplateForm = () => {
     const resizedCover: any = await resizeFile(data.cover![0])
     const newCover = new File([resizedCover], `${makeid(10) + Date.now()}.JPEG`)
     data.cover = [newCover]
-    data.category_slug = categories![data.category_id!].slug
-    data.category_name = categories![data.category_id!].name
+    data.category_slug = categories?.data[data.category_id!].slug
+    data.category_name = categories?.data[data.category_id!].name
     data.creator_id = user!.id
     let imagesArray: File[] = []
     for (const iterator of data.images!) {
@@ -176,7 +176,7 @@ const CreateTemplateForm = () => {
                 defaultValue={0}
                 {...register("category_id")}
               >
-                {categories?.map((category: Category, index: number) => (
+                {categories?.data.map((category: Category, index: number) => (
                   <option key={category.id} value={index}>
                     {category.name}
                   </option>

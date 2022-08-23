@@ -1,7 +1,6 @@
-import React from "react"
 import { useParams } from "react-router-dom"
-import TierContainer from "../components/TierContainer/TierContainer"
-import useFetchById, { useFetch } from "../hooks/useFetch"
+import TierImage from "../components/TierListItem/TierImage/TierImage"
+import useFetchById from "../hooks/useFetch"
 
 const RecentTiers = () => {
   const { slug } = useParams()
@@ -9,7 +8,7 @@ const RecentTiers = () => {
     "created_at",
     false,
     "tier",
-    20,
+    12,
     slug ? "category_slug" : "",
     slug ? slug : ""
   )
@@ -22,10 +21,10 @@ const RecentTiers = () => {
           Tier Lists
         </span>
         <p className="text-sm text-gray-700">
-          Check out the most recent tier lists submitted by TierMaker users. Use
-          this page to discover new, interesting TierMaker templates you might
-          be interested in making or to rate other user’s lists with the emoji
-          reactions above it.
+          Check out the most recent tier lists submitted by TierCreator users.
+          Use this page to discover new, interesting TierCreator templates you
+          might be interested in making or to rate other user’s lists with the
+          emoji reactions above it.
         </p>
       </div>
       {data?.data.length == 0 ? (
@@ -33,7 +32,7 @@ const RecentTiers = () => {
       ) : (
         <div className="flex justify-center items-center flex-wrap w-full">
           {data?.data.map((item: any) => (
-            <TierContainer key={item.id} item={item} isDashboard={false} />
+            <TierImage key={item.id} item={item} isDashboard={false} />
           ))}
         </div>
       )}

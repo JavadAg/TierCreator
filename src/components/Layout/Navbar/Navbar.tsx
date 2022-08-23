@@ -8,7 +8,7 @@ import { BiLogInCircle } from "react-icons/bi"
 
 const Navbar = () => {
   const user = supabase.auth.user()
-
+  console.log(user)
   return (
     <>
       <div className="hidden sm:flex justify-between items-center p-2 bg-gray-50 text-gray-900 h-16">
@@ -40,14 +40,23 @@ const Navbar = () => {
             className="capitalize cursor-pointer text-sm"
           >
             {user ? (
-              <span className="flex justify-center items-center space-x-1 bg-gray-100 p-1 px-2 text-gray-700 rounded-md focus:bg-gray-200">
+              <button
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+              >
+                <img
+                  src={user?.user_metadata.picture}
+                  crossOrigin="use-credentials"
+                  alt="x"
+                />
                 {user?.user_metadata.name}
-              </span>
+              </button>
             ) : (
-              <div className="flex justify-center items-center space-x-1 bg-gray-100 p-1 rounded-md focus:bg-gray-200">
+              <button className="flex justify-center items-center space-x-1 bg-gray-100 text-gray-900 p-1 rounded border border-gray-300/50 focus:bg-gray-200">
                 <BiLogInCircle />
-                <span>Login</span>
-              </div>
+                <span>SignIn</span>
+              </button>
             )}
           </Link>
           <Link to="/">

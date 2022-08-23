@@ -1,59 +1,34 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
 import moment from "moment"
-import { itemsEqual } from "@dnd-kit/sortable/dist/utilities"
 
-const TierContainer = ({ item, isDashboard, tier }: any) => {
-  const navigate = useNavigate()
-
+const TierContainer = ({ item, tier }: any) => {
   return (
     <div
-      onClick={() =>
-        isDashboard
-          ? navigate(
-              `/${item.category_slug}/${item.template_slug}/${item.id}`,
-              { state: item }
-            )
-          : undefined
-      }
-      className={`flex justify-center items-center bg-customgrey-100 rounded border border-customgrey-300 shadow-200 flex-col max-w-[600px] my-1 w-full ${
-        isDashboard && "cursor-pointer max-w-[400px]"
-      }`}
+      className={`flex justify-center items-center bg-customgrey-100 border border-customgrey-300 shadow-200 flex-col max-w-[600px] my-1 w-full `}
     >
       <div
-        className={`flex justify-start items-center w-full flex-col h-[100px] overflow-hidden`}
+        className={`flex justify-start items-center w-full flex-col overflow-hidden divide-y divide-customgrey-300`}
         ref={tier}
       >
-        <img
-          src={item?.image}
-          alt="tier_image"
-          className="rounded object-contain w-full h-auto"
-        />
-        {/* {item?.fieldsdetails?.labels.map((label: any, index: number) => (
+        {item?.fieldsdetails?.labels.map((label: any, index: number) => (
           <div
+            style={{ backgroundColor: `${item.fieldsdetails.fieldsbgcolor}` }}
             key={index}
-            className={`flex justify-start items-center w-full ${
-              isDashboard && "w-[400px]"
-            }`}
+            className={`flex justify-start items-center w-full`}
           >
             <span
-              className={`flex justify-center items-center w-24 h-24 text-center  ${
-                isDashboard && "text-xs w-16 h-16"
-              }`}
+              className={`flex break-all border-r border-customgrey-240 p-1 justify-center items-center text-sm h-20 text-center max-w-[80px] w-full`}
               style={{
                 backgroundColor: item.fieldsdetails.colors[index]
               }}
             >
               {label}
             </span>
-            <div className="flex justify-center items-center">
+            <div className="flex w-20 h-20 justify-center items-center">
               {item.fieldsdetails.templateImages[index].map(
                 (image: any, index: number) => (
                   <img
                     key={index}
-                    className={`w-24 h-24 object-cover ${
-                      isDashboard && "w-16 h-16"
-                    }`}
+                    className={`w-full h-full object-cover`}
                     src={image}
                     alt="tierimage"
                   />
@@ -61,7 +36,7 @@ const TierContainer = ({ item, isDashboard, tier }: any) => {
               )}
             </div>
           </div>
-        ))} */}
+        ))}
       </div>
 
       <div className="flex justify-around items-start w-full p-2 bg-indigo-100 rounded-b text-customgrey-600 divide-x divide-customgrey-400 border-t border-customgrey-300 text-center">

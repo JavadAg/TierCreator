@@ -14,6 +14,12 @@ import useLogout from "../../../../hooks/useLogout"
 const MobileSidebar = ({ user }: any) => {
   const signout = useLogout()
   const navigate = useNavigate()
+
+  const handleSignout = () => {
+    signout.mutate()
+   
+  }
+
   return (
     <>
       <div className="flex">
@@ -106,7 +112,7 @@ const MobileSidebar = ({ user }: any) => {
                 <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12">
                   <BiLogOutCircle className="text-lg" />
                   <button
-                    onClick={() => signout.mutate()}
+                    onClick={() => handleSignout()}
                     data-bs-dismiss="offcanvas"
                   >
                     Log out

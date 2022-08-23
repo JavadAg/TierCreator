@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
+import { Navigate, useNavigate } from "react-router-dom"
 import { supabase } from "../utils/client"
 
 const signout = async () => {
@@ -10,5 +11,6 @@ const signout = async () => {
 }
 
 export default function useLogout() {
-  return useMutation(() => signout())
+  const navigate = useNavigate()
+  return useMutation(() => signout(), { onSuccess: () => navigate("/") })
 }

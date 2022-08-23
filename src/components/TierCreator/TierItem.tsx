@@ -57,7 +57,6 @@ export const Item = React.memo(
       },
       ref
     ) => {
-      console.log(dragOverlay)
       return renderItem ? (
         renderItem({
           dragOverlay: Boolean(dragOverlay),
