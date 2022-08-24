@@ -10,7 +10,7 @@ interface IProps {
 const TierContainer: React.FC<IProps> = ({ item, tier }) => {
   return (
     <div
-      className={`flex justify-center items-center border border-gray-300 shadow-100 flex-col max-w-[1200px] my-1 w-full `}
+      className={`flex justify-center items-center border border-gray-300 outline-none shadow-100 flex-col max-w-[1200px] my-1 w-full `}
     >
       <div
         className={`flex justify-start items-center w-full flex-col overflow-hidden divide-y divide-gray-300`}
@@ -20,17 +20,21 @@ const TierContainer: React.FC<IProps> = ({ item, tier }) => {
           <div
             style={{ backgroundColor: `${item.fieldsdetails.fieldsbgcolor}` }}
             key={index}
-            className={`flex justify-start items-center w-full relative min-h-[96px]`}
+            className={`flex justify-start items-center w-full min-h-[96px] relative`}
           >
-            <span
-              className={`break-all justify-center items-center flex border-r border-gray-200 p-1 text-md text-center max-w-[96px] w-full h-24`}
+            <div
               style={{
                 backgroundColor: item.fieldsdetails.colors[index]
               }}
+              className="justify-center relative items-center flex max-w-[96px] place-self-stretch w-full min-w-[96px] min-h-[96px]"
             >
-              {label}
-            </span>
-            <div className="flex justify-center items-center">
+              <span
+                className={`break-all absolute border-r border-gray-200 p-1 text-md text-center `}
+              >
+                {label}
+              </span>
+            </div>
+            <div className="flex flex-wrap justify-start items-center">
               {item.fieldsdetails.templateImages[index].map(
                 (image: string, index: number) => (
                   <img
