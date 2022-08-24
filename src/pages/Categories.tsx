@@ -13,8 +13,12 @@ const Categories = () => {
     undefined
   )
 
-  if (error) return <div>Error fetching categories</div>
-
+  if (error)
+    return (
+      <div className="text-red-500 text-sm font-bold flex justify-center">
+        Error fetching
+      </div>
+    )
   return (
     <div className="space-y-2 flex justify-center items-center flex-col text-center w-full md:space-y-4">
       <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl divide-y divide-gray-400 md:px-5 md:py-4 lg:px-20 xl:space-y-4">

@@ -1,6 +1,6 @@
+import { BeatLoader } from "react-spinners"
 import { Category } from "../../types/category.types"
 import { Template } from "../../types/template.types"
-import CardSkeleton from "../Skeleton/CardSkeleton"
 import SingleItem from "./SingleItem/SingleItem"
 
 interface IProps {
@@ -17,8 +17,12 @@ const ListItems: React.FC<IProps> = ({
   isTemplate
 }) => {
   return (
-    <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
-      {isLoading && <CardSkeleton cards={10} />}
+    <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4 w-full">
+      {isLoading && (
+        <div className="flex justify-center items-center">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        </div>
+      )}
       {data?.map((card: Template | Category) => (
         <SingleItem
           slug={card.slug}

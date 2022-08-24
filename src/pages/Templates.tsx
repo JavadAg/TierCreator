@@ -21,7 +21,12 @@ const Templates = () => {
     searchParams.get("page") ? Number(searchParams.get("page")) : 0
   )
 
-  if (error) return <div>Error fetching templates</div>
+  if (error)
+    return (
+      <div className="text-red-500 text-sm font-bold flex justify-center">
+        Error fetching
+      </div>
+    )
 
   return (
     <div className="flex flex-col space-y-2 justify-center items-center w-full">

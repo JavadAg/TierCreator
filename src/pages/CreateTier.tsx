@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
+import { BeatLoader } from "react-spinners"
 import Emoji from "../components/Emoji/Emoji"
-import CreateTierSkeleton from "../components/Skeleton/CreateTierSkeleton"
 import { MultipleContainers } from "../components/TierCreator/MultipleContainers"
 import useFetchById from "../hooks/useFetch"
 
@@ -21,10 +21,16 @@ const CreateTier = () => {
   return (
     <>
       {isLoading ? (
-        <span>Loading...</span>
+        <div className="flex justify-center items-center">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        </div>
       ) : (
         <div className="flex justify-center items-center flex-col space-y-2">
-          <Emoji isFetched={isFetched} data={data?.data[0]} type="templates" />
+          <Emoji
+            isFetched={isFetched}
+            data={data?.data[0]}
+            type="template_emojies"
+          />
           <button
             onClick={() =>
               navigate(`/${data?.data[0].category_slug}/${data?.data[0].slug}`)

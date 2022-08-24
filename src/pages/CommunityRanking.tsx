@@ -3,6 +3,7 @@ import TierContainer from "../components/TierListItem/TierContainer/TierContaine
 import useFetchById from "../hooks/useFetch"
 import TierImage from "../components/TierListItem/TierImage/TierImage"
 import { Tier } from "../types/tier.types"
+import { BeatLoader } from "react-spinners"
 
 const CommunityRanking = () => {
   const navigate = useNavigate()
@@ -21,14 +22,16 @@ const CommunityRanking = () => {
   if (error)
     return (
       <div className="text-red-500 text-sm font-bold flex justify-center">
-        Error fetching categories
+        Error fetching
       </div>
     )
 
   return (
     <>
       {isLoading ? (
-        <div>Loading ...</div>
+        <div className="flex justify-center items-center">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        </div>
       ) : data?.data.length == 0 ? (
         <span className="font-bold text-red-600 justify-center flex mt-10">
           No tier exist for this template

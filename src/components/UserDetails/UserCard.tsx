@@ -4,6 +4,7 @@ import useFetchById from "../../hooks/useFetch"
 import { IoLogOutOutline } from "react-icons/io5"
 import useLogout from "../../hooks/useLogout"
 import { supabase } from "../../utils/client"
+import { BeatLoader } from "react-spinners"
 
 const UserCard = () => {
   const { userId } = useParams()
@@ -32,7 +33,9 @@ const UserCard = () => {
   return (
     <>
       {isLoading ? (
-        <span>Loading...</span>
+        <div className="flex justify-center items-center">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        </div>
       ) : (
         <div className="flex justify-center items-center bg-gray-50 p-1 rounded shadow-100 border border-gray-200 text-center space-x-1 px-2 w-full sm:h-24 md:h-28 lg:h-32 lg:space-x-3 xl:h-36">
           {user && (

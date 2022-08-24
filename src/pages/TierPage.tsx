@@ -9,6 +9,7 @@ import { IoTrashBinOutline } from "react-icons/io5"
 import { downloadasImage } from "../utils/pageToImage"
 import { IoPeopleOutline, IoAddCircleOutline } from "react-icons/io5"
 import { supabase } from "../utils/client"
+import { BeatLoader } from "react-spinners"
 
 const TierPage = () => {
   const { id } = useParams()
@@ -37,10 +38,19 @@ const TierPage = () => {
     })
   }
 
+  if (error)
+    return (
+      <div className="text-red-500 text-sm font-bold flex justify-center">
+        Error fetching
+      </div>
+    )
+
   return (
     <>
       {isLoading ? (
-        <div>Loading ...</div>
+        <div className="flex justify-center items-center">
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        </div>
       ) : (
         <div className="flex justify-center items-center flex-col space-y-2 w-full">
           <div
@@ -57,7 +67,11 @@ const TierPage = () => {
             </span>
           </div>
 
-          <Emoji isFetched={isFetched} data={data?.data[0]} type={"tier"} />
+          <Emoji
+            isFetched={isFetched}
+            data={data?.data[0]}
+            type={"tier_emojies"}
+          />
 
           <button
             disabled={deleteTier.isLoading}
