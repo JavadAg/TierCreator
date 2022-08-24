@@ -1,13 +1,14 @@
-import React from "react"
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import TierContainer from "../components/TierListItem/TierContainer/TierContainer"
 import useFetchById from "../hooks/useFetch"
-import useBreadcrumbs from "use-react-router-breadcrumbs"
 import TierImage from "../components/TierListItem/TierImage/TierImage"
+import { Tier } from "../types/tier.types"
 
-const CommunityRanking = (props: any) => {
+const CommunityRanking = () => {
   const navigate = useNavigate()
+
   let { slug } = useParams()
+
   const { data, error, isLoading } = useFetchById(
     "emoji_2->counter",
     false,
@@ -17,27 +18,28 @@ const CommunityRanking = (props: any) => {
     slug
   )
 
+  if (error)
+    return (
+      <div className="text-red-500 text-sm font-bold flex justify-center">
+        Error fetching categories
+      </div>
+    )
+
   return (
     <>
       {isLoading ? (
         <div>Loading ...</div>
+      ) : data?.data.length == 0 ? (
+        <span className="font-bold text-red-600 justify-center flex mt-10">
+          No tier exist for this template
+        </span>
       ) : (
-        <div className="flex flex-col space-y-2 justify-center items-center w-full">
-          <div
-            className="flex
-            justify-center
-            items-center
-            flex-col
-            space-y-2
-            bg-indigo-200
-            p-2
-            rounded-xl
-            w-full"
-          >
-            <span className="font-bold text-lg text-gray-900 text-center">
+        <div className="space-y-2 flex justify-center items-center flex-col text-center w-full md:space-y-4">
+          <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl divide-y divide-gray-400 md:px-5 md:py-4 lg:px-20 xl:space-y-4">
+            <span className="font-bold text-lg text-gray-800 md:text-xl">
               {data?.data[0].template_name} Tier List Community Rankings
             </span>
-            <p className="text-sm font-normal">
+            <p className="text-sm text-start text-gray-700 pt-2 md:text-[.9rem]">
               {data?.data[0].template_name} Tier List below is created by
               community voting and is the cumulative average rankings from{" "}
               {data?.data.length} submitted tier lists. The best{" "}
@@ -45,7 +47,7 @@ const CommunityRanking = (props: any) => {
               rankings are on the top of the list and the worst rankings are on
               the bottom.
             </p>
-            <p className="text-sm font-semibold">
+            <p className="text-sm text-start text-gray-700 pt-2 md:text-[.9rem]">
               In order for your ranking to be included, you need to be logged in
               and publish the list to the site (not simply downloading the tier
               list image).
@@ -58,13 +60,13 @@ const CommunityRanking = (props: any) => {
             onClick={() => navigate(`/create/${data?.data[0].template_slug}`)}
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
-            className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out"
+            className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out md:text-[.9rem]"
             type="button"
           >
-            <span>Create Your Own Ranking</span>
+            <span>Create Your Tier</span>
           </button>
-          <div className="flex justify-center items-start flex-wrap">
-            {data?.data.slice(1).map((item: any) => (
+          <div className="grid gap-3 xl:grid-cols-2  w-full">
+            {data?.data.slice(1).map((item: Tier) => (
               <TierImage key={item.id} item={item} isDashboard={true} />
             ))}
           </div>

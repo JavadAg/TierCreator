@@ -8,27 +8,6 @@ const getPagination = (page: number, size: number) => {
   return { from, to }
 }
 
-/* const fetch = async (type: string, limit?: number, order?: string) => {
-  
-  const { data, error } = await supabase
-    .from(`${type}`)
-    .select("*")
-    .limit(limit ? (limit as number) : 1000)
-    .order(order ? `${order}` : "id", { ascending: order ? false : true })
-
-  if (error) {
-    throw new Error(error.message)
-  }
-
-  return data
-}
-
-export function useFetch(type: string, limit?: number, order?: string) {
-  return useQuery([`${type}`, type, limit, order], () =>
-    fetch(type, limit, order)
-  )
-} */
-
 //by Id or Slug
 const fetchById = async (
   order: string | number | symbol,
@@ -37,8 +16,7 @@ const fetchById = async (
   limit?: number,
   filterBy?: string,
   filterValue?: string,
-  page?: number,
-  isMulti?: boolean
+  page?: number
 ) => {
   const { from, to } = getPagination(
     page ? page : 0,
@@ -49,24 +27,12 @@ const fetchById = async (
     .from(`${type}`)
     .select(`*`, { count: "exact" })
     .eq(`${filterBy}`, `${filterValue}`)
-    .limit(limit ? (limit as number) : 1000)
-    .order(order, { ascending: ascending })
     .range(from, to)
+    .order(order, { ascending: ascending })
+    .limit(limit ? limit : 1000)
 
   if (error) {
     throw new Error(error.message)
-  }
-
-  if (isMulti) {
-    const { data: extraData } = await supabase
-      .from("templates")
-      .select(`*`, { count: "exact" })
-      .eq(`${filterBy}`, `${filterValue}`)
-      .limit(limit ? (limit as number) : 1000)
-      .order(order, { ascending: ascending })
-      .range(from, to)
-
-    return { data, count, from, to, extraData }
   }
 
   return { data, count, from, to }
@@ -79,32 +45,11 @@ export default function useFetchById(
   limit?: number,
   filterBy?: string,
   filterValue?: string,
-  page?: number,
-  isMulti?: boolean
+  page?: number
 ) {
   return useQuery(
-    [
-      `${type}`,
-      order,
-      ascending,
-      type,
-      limit,
-      filterBy,
-      filterValue,
-      page,
-      isMulti
-    ],
-    () =>
-      fetchById(
-        order,
-        ascending,
-        type,
-        limit,
-        filterBy,
-        filterValue,
-        page,
-        isMulti
-      ),
+    [`${type}`, order, ascending, type, limit, filterBy, filterValue, page],
+    () => fetchById(order, ascending, type, limit, filterBy, filterValue, page),
     {
       enabled: true
     }

@@ -51,7 +51,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Layout>
-          <div className="w-full mt-2 px-2 font-Inter min-h-[80vh]">
+          <div className="w-full mt-2 px-2 font-Inter min-h-[80vh] sm:px-10 md:px-24 lg:px-40 xl:px-56 2xl:px-72">
             <Routes>
               <Route path="/" element={<Navigate replace to="/home" />} />
 

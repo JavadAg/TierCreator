@@ -21,7 +21,7 @@ export const downloadasImage = async ({ id, isSaving }: IDownload) => {
   const { current } = id
   const canvas = await html2canvas(current!, {
     useCORS: true,
-    windowWidth: 1000,
+    windowWidth: 1200,
     backgroundColor: "#000",
     scale: 1.5
   })

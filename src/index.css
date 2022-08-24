@@ -5,18 +5,18 @@
 @layer utilities {
   .scrollbar::-webkit-scrollbar {
     width: 20px;
-    height: 15px;
+    height: 13px;
   }
 
   .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
-    background: #f6f7ed;
+    background: #f4f4f4;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
     background: #6376f1;
     border-radius: 100vh;
-    border: 2px solid #f6f7ed;
+    border: 2px solid #f4f4f4;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {

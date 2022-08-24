@@ -1,4 +1,5 @@
 import React from "react"
+import { Tier } from "../../types/tier.types"
 import SingleEmoji from "./SingleEmoji/SingleEmoji"
 
 const emojiIcons = [
@@ -9,14 +10,20 @@ const emojiIcons = [
   { id: "emoji_5", icon: "💩" }
 ]
 
-const Emoji = ({ isFetched, data, type }: any) => {
+interface IProps {
+  isFetched: boolean
+  data: Tier
+  type: string
+}
+
+const Emoji: React.FC<IProps> = ({ isFetched, data, type }) => {
   return (
     <div className="flex justify-center items-center border rounded divide-x divide-customgrey-200 shadow-100 border-customgrey-200">
       {emojiIcons.map((item) => (
         <SingleEmoji
           item={item}
           tierId={data?.id}
-          data={data[item.id]}
+          data={data[item.id as keyof Tier]}
           isFetched={isFetched}
           type={type}
         />

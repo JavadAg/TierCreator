@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, {
+  EventHandler,
+  LegacyRef,
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState
+} from "react"
 import { createPortal, unstable_batchedUpdates } from "react-dom"
 import {
   CancelDrop,
@@ -34,14 +42,10 @@ import TierModal from "./TierCreatorModal"
 import { usePostTier } from "../../hooks/usePostTier"
 import { BeatLoader } from "react-spinners"
 import { colorPickerOptions } from "./ContainerEditModal"
-
-interface Images {
-  url: string
-  id: number
-}
+import { Image } from "../../types/template.types"
 
 interface States {
-  [key: string]: Images[]
+  [key: string]: Image[]
 }
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
@@ -57,7 +61,7 @@ function DroppableContainer({
 }: ContainerProps & {
   disabled?: boolean
   id: UniqueIdentifier
-  items: Images[]
+  items: Image[]
   style?: React.CSSProperties
 }) {
   const {
@@ -80,7 +84,7 @@ function DroppableContainer({
   })
   const isOverContainer = over
     ? (id === over.id && active?.data.current?.type !== "container") ||
-      items.includes(over.id as unknown as Images)
+      items.includes(over.id as unknown as Image)
     : false
 
   return (
@@ -159,8 +163,8 @@ export function MultipleContainers({
   renderItem,
   vertical = true
 }: Props) {
-  const fieldsRef = useRef(null)
-  const [backgroundColor, setBackgroundColor] = useState<any>("#222")
+  const fieldsRef = useRef<MutableRefObject<LegacyRef<HTMLDivElement>>>(null)
+  const [backgroundColor, setBackgroundColor] = useState<string>("#222")
   const template = data
   const arrayOfImages = template.image
 
@@ -179,13 +183,15 @@ export function MultipleContainers({
 
   const [items, setItems] = useState<States>(states)
 
-  const [containers, setContainers] = useState<any>(labels)
+  const [containers, setContainers] = useState<string[]>(labels)
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
 
   const recentlyMovedToNewContainer = useRef(false)
 
-  const isSortingContainer = activeId ? containers.includes(activeId) : false
+  const isSortingContainer = activeId
+    ? containers.includes(activeId as string)
+    : false
 
   const [clonedItems, setClonedItems] = useState<States | null>(null)
 
@@ -237,8 +243,6 @@ export function MultipleContainers({
     })
   }, [items])
 
-  const addTier = usePostTier()
-
   return (
     <DndContext
       autoScroll={false}
@@ -267,12 +271,12 @@ export function MultipleContainers({
         }
 
         if (activeContainer !== overContainer) {
-          setItems((items: any) => {
+          setItems((items: States) => {
             const activeItems = items[activeContainer]
             const overItems = items[overContainer]
             const overIndex = overItems
-              .map((object: any) => object.id)
-              .indexOf(overId)
+              .map((object: Image) => object.id)
+              .indexOf(overId as number)
 
             const activeIndex = activeItems
               .map((object: any) => object.id)
@@ -300,7 +304,7 @@ export function MultipleContainers({
             return {
               ...items,
               [activeContainer]: items[activeContainer].filter(
-                (item: any) => item.id !== active.id
+                (item: Image) => item.id !== active.id
               ),
 
               [overContainer]: [
@@ -317,10 +321,10 @@ export function MultipleContainers({
       }}
       onDragEnd={({ active, over }) => {
         if (active.id in items && over?.id) {
-          setContainers((containers: any) => {
-            const activeIndex = containers.indexOf(active.id)
+          setContainers((containers: string[]) => {
+            const activeIndex = containers.indexOf(active.id as string)
 
-            const overIndex = containers.indexOf(over.id)
+            const overIndex = containers.indexOf(over.id as string)
 
             return arrayMove(containers, activeIndex, overIndex)
           })
@@ -352,8 +356,8 @@ export function MultipleContainers({
               ...items,
               [activeContainer]: items[activeContainer].filter(
                 (item) => item.id !== activeId
-              ),
-              [newContainerId]: [active.id as any]
+              ) as Image[],
+              [newContainerId]: [active.id] as unknown as Image[]
             }))
             setActiveId(null)
           })
@@ -364,15 +368,15 @@ export function MultipleContainers({
 
         if (overContainer) {
           const activeIndex = items[activeContainer]
-            .map((object: any) => object.id)
-            .indexOf(active.id as unknown as Images)
+            .map((object: Image) => object.id)
+            .indexOf(active.id as number)
 
           const overIndex = items[overContainer]
-            .map((object: any) => object.id)
-            .indexOf(overId as unknown as Images)
+            .map((object: Image) => object.id)
+            .indexOf(overId as number)
 
           if (activeIndex !== overIndex) {
-            setItems((items: any) => ({
+            setItems((items: States) => ({
               ...items,
               [overContainer]: arrayMove(
                 items[overContainer],
@@ -389,144 +393,136 @@ export function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      {addTier.isLoading ? (
-        <div className="flex justify-center items-center flex-col">
-          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
-          <span className="text-md font-bold text-customgrey-700">
-            Processing...
-          </span>
-        </div>
-      ) : (
-        <div className={`flex flex-col w-full max-w-[1100px]`}>
-          <div
-            className="border border-customgrey-220 divide-y divide-customgrey-220"
-            style={{ backgroundColor: backgroundColor }}
-            ref={fieldsRef}
+      <div className={`flex flex-col w-full max-w-[1100px]`}>
+        <div
+          className="border border-gray-220 divide-y divide-gray-220"
+          style={{ backgroundColor: backgroundColor }}
+          ref={fieldsRef}
+        >
+          <SortableContext
+            items={[...containers]}
+            strategy={
+              vertical
+                ? verticalListSortingStrategy
+                : horizontalListSortingStrategy
+            }
           >
-            <SortableContext
-              items={[...containers]}
-              strategy={
-                vertical
-                  ? verticalListSortingStrategy
-                  : horizontalListSortingStrategy
-              }
-            >
-              {containers.map((containerId: any) => (
-                <DroppableContainer
-                  key={containerId}
-                  id={containerId}
-                  templateName={template.slug}
-                  label={containerId}
-                  columns={columns}
+            {containers.map((containerId: string) => (
+              <DroppableContainer
+                key={containerId}
+                id={containerId}
+                templateName={template.slug}
+                label={containerId}
+                columns={columns}
+                items={items[containerId]}
+                onRemove={() => handleRemove(containerId)}
+              >
+                <SortableContext
                   items={items[containerId]}
-                  onRemove={() => handleRemove(containerId)}
+                  strategy={rectSortingStrategy}
                 >
-                  <SortableContext
-                    items={items[containerId]}
-                    strategy={rectSortingStrategy}
-                  >
-                    {items[containerId].map((value: Images, index: any) => {
-                      return (
-                        <SortableItem
-                          disabled={isSortingContainer}
-                          key={value.id}
-                          id={value.id}
-                          value={value.url}
-                          index={index}
-                          handle={handle}
-                          style={getItemStyles}
-                          wrapperStyle={wrapperStyle}
-                          renderItem={renderItem}
-                          containerId={containerId}
-                          getIndex={getIndex}
-                        />
-                      )
-                    })}
-                  </SortableContext>
-                </DroppableContainer>
-              ))}
-            </SortableContext>
-          </div>
-          <DroppableContainer
-            key={"default"}
-            id={"default"}
-            templateName={template.slug}
-            label={"default"}
-            columns={columns}
-            items={items["default"]}
-            onRemove={() => handleRemove("default")}
-          >
-            <SortableContext
-              items={items["default"]}
-              strategy={rectSortingStrategy}
-            >
-              {items["default"].map((value: Images, index: any) => {
-                return (
-                  <SortableItem
-                    disabled={isSortingContainer}
-                    key={value.id}
-                    id={value.id}
-                    value={value.url}
-                    index={index}
-                    handle={handle}
-                    style={getItemStyles}
-                    wrapperStyle={wrapperStyle}
-                    renderItem={renderItem}
-                    containerId={"default"}
-                    getIndex={getIndex}
-                  />
-                )
-              })}
-            </SortableContext>
-          </DroppableContainer>
-
-          {containers.length !== 10 ? (
-            <button
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="light"
-              className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
-              onClick={handleAddColumn}
-            >
-              <IoAddCircleOutline />
-            </button>
-          ) : null}
-          <button
-            className="flex justify-center w-52 bg-white border-customgrey-220 border self-center text-customgrey-700 text-sm shadow-200 leading-tight rounded hover:bg-customgrey-100 focus:bg-customgrey-100 focus:outline-none focus:ring-0 active:bg-customgrey-100  transition duration-150 mb-2 px-2 py-1 text-center ease-in-out"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#changecolor"
-            aria-expanded="false"
-            aria-controls="changecolor"
-          >
-            Change Background Color
-          </button>
-          <div className="collapse" id="changecolor">
-            <div className="block p-2 mb-2 border border-customgrey-200 shadow-200 rounded bg-white">
-              {colorPickerOptions.map((item: any, index: number) => (
-                <button
-                  key={index}
-                  value={item}
-                  onClick={handlecolor}
-                  style={{ backgroundColor: item }}
-                  className={`m-2 py-4 px-4  rounded-full`}
-                ></button>
-              ))}
-            </div>
-          </div>
-
-          <TierModal
-            addTier={addTier}
-            getFieldsDetails={getFieldsDetails}
-            id={fieldsRef}
-            template={template}
-          />
+                  {items[containerId].map((value: Image, index: number) => {
+                    return (
+                      <SortableItem
+                        disabled={isSortingContainer}
+                        key={value.id}
+                        id={value.id}
+                        value={value.url}
+                        index={index}
+                        handle={handle}
+                        style={getItemStyles}
+                        wrapperStyle={wrapperStyle}
+                        renderItem={renderItem}
+                        containerId={containerId}
+                        getIndex={getIndex}
+                      />
+                    )
+                  })}
+                </SortableContext>
+              </DroppableContainer>
+            ))}
+          </SortableContext>
         </div>
-      )}
+        <DroppableContainer
+          key={"default"}
+          id={"default"}
+          templateName={template.slug}
+          label={"default"}
+          columns={columns}
+          items={items["default"]}
+          onRemove={() => handleRemove("default")}
+        >
+          <SortableContext
+            items={items["default"]}
+            strategy={rectSortingStrategy}
+          >
+            {items["default"].map((value: Image, index: number) => {
+              return (
+                <SortableItem
+                  disabled={isSortingContainer}
+                  key={value.id}
+                  id={value.id}
+                  value={value.url}
+                  index={index}
+                  handle={handle}
+                  style={getItemStyles}
+                  wrapperStyle={wrapperStyle}
+                  renderItem={renderItem}
+                  containerId={"default"}
+                  getIndex={getIndex}
+                />
+              )
+            })}
+          </SortableContext>
+        </DroppableContainer>
+
+        {containers.length !== 10 ? (
+          <button
+            data-mdb-ripple="true"
+            data-mdb-ripple-color="light"
+            className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
+            onClick={handleAddColumn}
+          >
+            <IoAddCircleOutline />
+          </button>
+        ) : null}
+        <button
+          data-mdb-ripple="true"
+          data-mdb-ripple-color="light"
+          className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition self-center duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem] mb-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#changecolor"
+          aria-expanded="false"
+          aria-controls="changecolor"
+        >
+          Change Background Color
+        </button>
+        <div className="collapse" id="changecolor">
+          <div className="block p-2 mb-2 border border-gray-200 shadow-200 rounded bg-white">
+            {colorPickerOptions.map((item: string, index: number) => (
+              <button
+                key={index}
+                value={item}
+                onClick={handlecolor}
+                style={{ backgroundColor: item }}
+                className={`m-2 py-4 px-4  rounded-full`}
+              ></button>
+            ))}
+          </div>
+        </div>
+
+        <TierModal
+          getFieldsDetails={getFieldsDetails}
+          id={fieldsRef}
+          template={template}
+        />
+      </div>
 
       {createPortal(
         <DragOverlay adjustScale={adjustScale} dropAnimation={dropAnimation}>
           {activeId
-            ? containers.includes(activeId)
+            ? containers.includes(activeId as string)
               ? renderContainerDragOverlay(activeId)
               : renderSortableItemDragOverlay(activeId)
             : null}
@@ -560,7 +556,7 @@ export function MultipleContainers({
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
       <Container label={containerId as string} columns={columns} shadow>
-        {items[containerId].map((item: Images, index: any) => (
+        {items[containerId].map((item: Image, index: number) => (
           <Item
             key={item.id}
             value={item.url}
@@ -601,16 +597,16 @@ export function MultipleContainers({
     })
   }
 
-  function handlecolor(e: any) {
+  function handlecolor(e: React.MouseEvent<HTMLButtonElement>) {
     setBackgroundColor(e.currentTarget.value)
   }
 
   function getFieldsDetails() {
-    let colors: any = []
-    let labels: any = []
-    let templateImages: any = []
-    let fieldsbgcolor: any = backgroundColor
-    const fields: any = fieldsRef.current
+    let colors: string[] = []
+    let labels: string[] = []
+    let templateImages: string[][] = []
+    let fieldsbgcolor: string = backgroundColor
+    const fields: MutableRefObject<HTMLInputElement> = fieldsRef.current
 
     Object.values(fields.childNodes).map(
       (item: any) => (

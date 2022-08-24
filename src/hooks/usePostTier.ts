@@ -25,7 +25,8 @@ const addTier = async (props: any) => {
       creator_id: form.creator_id,
       creator_name: form.creator_name,
       creator_photo: form.creator_photo,
-      image: `${image.publicURL}`
+      image: `${image.publicURL}`,
+      image_name: form.placeholderName
     }
   ])
 
@@ -34,9 +35,8 @@ const addTier = async (props: any) => {
   }
 
   if (status === 201) {
-    console.log(form.template_name)
-    const { data, error } = await supabase.rpc("increment_amount", {
-      template_name: form.template_name
+    const { data, error } = await supabase.rpc("increment_template", {
+      template_slug: form.template_slug
     })
 
     if (error) {

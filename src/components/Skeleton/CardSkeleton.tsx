@@ -2,7 +2,11 @@ import React from "react"
 import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 
-const CardSkeleton = ({ cards }: any) => {
+interface IProps {
+  cards: number
+}
+
+const CardSkeleton: React.FC<IProps> = ({ cards }) => {
   const placeholder = Array(cards).fill(0)
   console.log(placeholder)
   return (

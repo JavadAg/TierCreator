@@ -4,6 +4,7 @@ import ListItems from "../components/ListItems/ListItems"
 import Paginate from "../components/Paginate/Paginate"
 import TemplateSort from "../components/TemplateSort/TemplateSort"
 import useFetchById from "../hooks/useFetch"
+import { Template } from "../types/template.types"
 
 const Templates = () => {
   const { slug } = useParams()
@@ -41,19 +42,26 @@ const Templates = () => {
           templates.
         </span>
       </div>
-      <TemplateSort setSort={setSort} />
-      <ListItems
-        isLoading={isLoading}
-        data={data?.data}
-        isTemplate={true}
-        isCreate={true}
-      />
-      <Paginate
-        lastItem={data?.to}
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
-        count={data?.count}
-      />
+
+      {data?.data.length == 0 ? (
+        <span>No template exist , create one</span>
+      ) : (
+        <>
+          <TemplateSort setSort={setSort} />
+          <ListItems
+            isLoading={isLoading}
+            data={data?.data as unknown as Template[]}
+            isTemplate={true}
+            isCreate={true}
+          />
+          <Paginate
+            lastItem={data?.to as number}
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+            count={data?.count as number}
+          />
+        </>
+      )}
     </div>
   )
 }

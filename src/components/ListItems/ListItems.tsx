@@ -1,16 +1,28 @@
-import React from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Category } from "../../types/category.types"
+import { Template } from "../../types/template.types"
 import CardSkeleton from "../Skeleton/CardSkeleton"
 import SingleItem from "./SingleItem/SingleItem"
 
-const ListItems = ({ isLoading, data, isCreate, isTemplate }: any) => {
+interface IProps {
+  isLoading: boolean
+  data: Template[] | Category[]
+  isCreate: boolean
+  isTemplate: boolean
+}
+
+const ListItems: React.FC<IProps> = ({
+  isLoading,
+  data,
+  isCreate,
+  isTemplate
+}) => {
   return (
-    <div className="flex flex-wrap justify-start items-center w-full gap-2 ">
+    <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
       {isLoading && <CardSkeleton cards={10} />}
-      {data?.map((card: any) => (
+      {data?.map((card: Template | Category) => (
         <SingleItem
           slug={card.slug}
-          image={isTemplate ? card.cover : card.image}
+          image={isTemplate ? (card.cover as string) : (card.image as string)}
           name={card.name}
           isCreate={isCreate}
         />

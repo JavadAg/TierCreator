@@ -1,7 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
-import { itemsEqual } from "@dnd-kit/sortable/dist/utilities"
 
 const TierImage = ({ item, tier }: any) => {
   const navigate = useNavigate()
@@ -11,10 +10,10 @@ const TierImage = ({ item, tier }: any) => {
       onClick={() =>
         navigate(`/${item.category_slug}/${item.template_slug}/${item.id}`)
       }
-      className={`flex justify-center items-center bg-customgrey-100 rounded border border-customgrey-300 shadow-200 flex-col max-w-[600px] my-1 w-full ${"cursor-pointer max-w-[400px]"}`}
+      className={`flex justify-center items-center bg-gray-100 rounded border border-gray-300 shadow-100 flex-col w-full cursor-pointer`}
     >
       <div
-        className={`flex justify-start items-center w-full flex-col h-[100px] overflow-hidden`}
+        className={`flex justify-start items-center w-full flex-col h-[140px] overflow-hidden md:h-[220px] xl:h-[170px]`}
         ref={tier}
       >
         <img
@@ -24,7 +23,7 @@ const TierImage = ({ item, tier }: any) => {
         />
       </div>
 
-      <div className="flex justify-around items-start w-full p-2 bg-indigo-100 rounded-b text-customgrey-600 divide-x divide-customgrey-400 border-t border-customgrey-300 text-center">
+      <div className="flex justify-around items-start w-full p-2 bg-gray-100 rounded-b text-gray-900 divide-x divide-gray-300 border-t border-gray-300 text-center">
         <div className="flex flex-col justify-start items-center w-full">
           <span className="text-sm font-semibold break-all">
             Name : {item?.name}

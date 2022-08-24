@@ -20,7 +20,10 @@ export const schema = z.object({
     }),
   images: z
     .any()
-    .refine((files) => files?.length >= 2, { message: "Select more file" }),
+    .refine((files) => files?.length >= 2, { message: "Select more file" })
+    .refine((files) => accepted_types.includes(files?.[2]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted."
+    }),
   orientation: z.string(),
   rows: z.array(
     z.object({

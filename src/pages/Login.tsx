@@ -3,7 +3,7 @@ import UserAuth from "../components/UserAuth/UserAuth"
 
 const Login = () => {
   return (
-    <div className="s">
+    <div>
       <UserAuth />
     </div>
   )

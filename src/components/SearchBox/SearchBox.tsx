@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import useSearch from "../../hooks/useSearch"
+import { Template } from "../../types/template.types"
 
 const SearchBox = () => {
-  const [searchTerm, setSearchTerm] = useState<any>()
-  const { refetch, data } = useSearch(searchTerm)
+  const [searchTerm, setSearchTerm] = useState<string>()
+  const { refetch, data } = useSearch(searchTerm as string)
 
   const handleSearch = (value: string) => {
     setSearchTerm(value)
@@ -25,9 +26,11 @@ const SearchBox = () => {
         </span>
         <input
           value={searchTerm}
-          onChange={(e: any) => handleSearch(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleSearch(e.target.value)
+          }
           type="search"
-          className={` form-control placeholder:italic placeholder:text-slate-400 block w-full text-sm py-1.5  my-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 pl-9 pr-3 focus:bg-white focus:border-indigo-600 focus:outline-none`}
+          className={` form-control placeholder:italic placeholder:text-slate-400 block w-full text-sm py-1.5  my-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 pl-9 pr-3 focus:bg-white focus:border-indigo-600 focus:outline-none xl:w-72`}
           placeholder="Type a template name"
         />
       </label>
@@ -38,9 +41,10 @@ const SearchBox = () => {
           onClick={() => setSearchTerm("")}
           className="flex absolute bg-white border border-indigo-300 rounded justify-center items-center text-center flex-col z-40 text-sm divide-y divide-gray-700 w-full text-gray-800 dark:text-zinc-200 top-12 font-bold "
         >
-          {data!.map((item: any) => (
+          {data!.map((item: Template) => (
             <Link
-              className="w-full py-1 bg-red-400"
+              data-bs-dismiss="modal"
+              className="w-full py-1 rounded text-gray-900  bg-indigo-100"
               key={item.id}
               to={`/create/${item.slug}`}
             >

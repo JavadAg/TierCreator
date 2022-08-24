@@ -5,16 +5,15 @@ import VideosCarousel from "./VideosCarousel/VideosCarousel"
 
 const Videos = () => {
   return (
-    <div className="text-sm">
+    <div className=" font-bold pb-4">
       TierCreator User
-      <Link className="text-gray-500 font-bold" to="/">
+      <Link className="text-indigo-800 font-bold" to="/">
         {" "}
-        Videos
+        Videos{" "}
       </Link>
-      <Link className="text-gray-500 font-bold" to="/">
-        {" "}
+      <button className="text-indigo-800 font-bold">
         <UploadVideo />
-      </Link>
+      </button>
       <VideosCarousel />
     </div>
   )

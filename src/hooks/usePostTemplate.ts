@@ -32,7 +32,7 @@ const addTemplate = async (props: any) => {
     imagesUrl.push({ url: coverUrl.publicURL as string, id: id++ })
   }
 
-  const { data, error } = await supabase.from("templates").insert([
+  const { data, error, status } = await supabase.from("templates").insert([
     {
       name: `${props.name}`,
       category_name: `${props.category_name}`,
@@ -49,6 +49,16 @@ const addTemplate = async (props: any) => {
 
   if (error) {
     throw new Error(error.message)
+  }
+
+  if (status === 201) {
+    const { data, error } = await supabase.rpc("increment_category", {
+      category_slug: props.category_slug
+    })
+
+    if (error) {
+      throw new Error(error.message)
+    }
   }
 
   return data

@@ -1,5 +1,26 @@
-const Paginate = ({ count, searchParams, setSearchParams, lastItem }: any) => {
-  console.log(lastItem, count)
+import { URLSearchParamsInit } from "react-router-dom"
+
+interface IProps {
+  count: number
+  searchParams: URLSearchParams
+  setSearchParams: (
+    nextInit: URLSearchParamsInit,
+    navigateOptions?:
+      | {
+          replace?: boolean | undefined
+          state?: any
+        }
+      | undefined
+  ) => void
+  lastItem: number
+}
+
+const Paginate: React.FC<IProps> = ({
+  count,
+  searchParams,
+  setSearchParams,
+  lastItem
+}) => {
   const nexthandler = () => {
     setSearchParams(`page=${Number(searchParams.get("page")) + 1}`)
   }

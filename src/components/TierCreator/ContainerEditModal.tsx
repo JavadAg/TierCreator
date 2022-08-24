@@ -18,12 +18,19 @@ export const colorPickerOptions = [
   "#F7F7F7"
 ]
 
-const ContainerEditModal = ({
+interface IProps {
+  index: number | undefined
+  fieldLabel: string | undefined
+  setLabelColor: React.Dispatch<React.SetStateAction<string | undefined>>
+  setFieldLabel: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+const ContainerEditModal: React.FC<IProps> = ({
   index,
   fieldLabel,
   setLabelColor,
   setFieldLabel
-}: any) => {
+}) => {
   const handleColor = (
     e: React.MouseEvent<HTMLButtonElement | HTMLInputElement>
   ) => {
@@ -71,7 +78,7 @@ const ContainerEditModal = ({
             <div className="modal-body relative p-4 flex flex-col justify-center items-center flex-wrap">
               <span>Choose a Label Background Color:</span>
               <div className="flex justify-center items-center flex-wrap">
-                {colorPickerOptions.map((item: any, index: number) => (
+                {colorPickerOptions.map((item: string, index: number) => (
                   <button
                     key={index}
                     value={item}

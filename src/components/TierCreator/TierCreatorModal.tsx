@@ -1,8 +1,5 @@
-import { itemsEqual } from "@dnd-kit/sortable/dist/utilities"
-import React, { MutableRefObject, useEffect, useState } from "react"
-import { setErrorMap } from "zod"
-import { usePostTier } from "../../hooks/usePostTier"
-import { Template } from "../../models/tier"
+import React, { MutableRefObject, useRef, useState } from "react"
+import { Template } from "../../types/template.types"
 import { supabase } from "../../utils/client"
 import makeid from "../../utils/generateRanStr"
 import { downloadasImage } from "../../utils/pageToImage"
@@ -12,7 +9,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { tierschema } from "../../utils/zodSchema"
 import { useNavigate } from "react-router-dom"
-import { BeatLoader } from "react-spinners"
+import { usePostTier } from "../../hooks/usePostTier"
 
 interface IProps {
   id: MutableRefObject<HTMLElement | null>
@@ -23,7 +20,6 @@ interface IProps {
     templateImages: []
     fieldsbgcolor: string
   }
-  addTier: any
 }
 
 interface IForm {
@@ -31,15 +27,12 @@ interface IForm {
   description: String
 }
 
-const TierModal: React.FC<IProps> = ({
-  id,
-  template,
-  getFieldsDetails,
-  addTier
-}) => {
+const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
+  const closeModal: any = useRef()
   const user = supabase.auth.user()
-
   const navigate = useNavigate()
+
+  const addTier = usePostTier()
 
   const {
     register,
@@ -70,14 +63,18 @@ const TierModal: React.FC<IProps> = ({
     const isEmpty = templateImages.filter((item: any) => item.length !== 0)
 
     if (isEmpty.length == 0) {
-      toast.error("containers are empty , Create Tier !")
+      toast.error("Containers are empty , drag some photos")
       return
     }
 
     data.fieldsdetails = { colors, labels, templateImages, fieldsbgcolor }
+
     await addTier.mutateAsync(data, {
-      onSuccess: () => {
-        navigate(`/${data.category_slug}/${data.template_slug}`)
+      onSuccess(data, variables, context) {
+        closeModal.current.click()
+        navigate(
+          `/${data[0].category_slug}/${data[0].template_slug}/${data[0].id}`
+        )
       }
     })
   }
@@ -85,7 +82,9 @@ const TierModal: React.FC<IProps> = ({
   return (
     <>
       <button
-        className="bg-indigo-400 text-customgrey-100 flex border border-indigo-200 rounded p-1 justify-center w-52 shadow-200 text-sm self-center items-center hover:bg-indigo-500 h-full duration-200"
+        data-mdb-ripple="true"
+        data-mdb-ripple-color="light"
+        className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0 self-center  transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem]"
         data-bs-toggle="modal"
         data-bs-target={`#saveModal`}
       >
@@ -110,7 +109,8 @@ const TierModal: React.FC<IProps> = ({
               </h5>
               <button
                 type="button"
-                className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                className="btn-close box-content w-4 h-4 p-1 text-gray-900 border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                ref={closeModal}
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
@@ -121,7 +121,7 @@ const TierModal: React.FC<IProps> = ({
             >
               <label htmlFor="name">Enter name</label>
               <input
-                className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
+                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic"
                 type="text"
                 id="name"
                 placeholder="name"
@@ -135,7 +135,7 @@ const TierModal: React.FC<IProps> = ({
               )}
               <label htmlFor="description">Enter description</label>
               <input
-                className="border border-zinc-200 px-2 py-1 rounded-xl w-3/4"
+                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic"
                 type="text"
                 id="description"
                 placeholder="description"
@@ -146,27 +146,35 @@ const TierModal: React.FC<IProps> = ({
                   {errors.description.message}
                 </span>
               )}
-              <button
-                type="button"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                onClick={() => downloadasImage({ id })}
-              >
-                Download
-              </button>
-              <button
-                data-bs-dismiss="modal"
-                disabled={addTier.isLoading}
-                type="submit"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-                className={`inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ${
-                  addTier.isLoading && "cursor-not-allowed "
-                } `}
-              >
-                Save
-              </button>
+              <div className="flex justify-center items-center flex-col space-y-2 pt-2">
+                <button
+                  data-mdb-ripple="true"
+                  data-mdb-ripple-color="light"
+                  className={`flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem] ${
+                    addTier.isLoading && "cursor-not-allowed "
+                  } `}
+                  onClick={() => downloadasImage({ id })}
+                >
+                  Download
+                </button>
+                {user ? (
+                  <button
+                    disabled={addTier.isLoading}
+                    type="submit"
+                    data-mdb-ripple="true"
+                    data-mdb-ripple-color="light"
+                    className={`flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem] ${
+                      addTier.isLoading && "cursor-not-allowed "
+                    } `}
+                  >
+                    Save
+                  </button>
+                ) : (
+                  <span className="font-bold text-red-500">
+                    Login to submit
+                  </span>
+                )}
+              </div>
             </form>
           </div>
         </div>
