@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import useUpdateEmoji from "../../../hooks/useUpdateEmoji"
-import { Emoji } from "../../../types/tier.types"
+import { Emoji, Fieldsdetails } from "../../../types/tier.types"
 import { supabase } from "../../../utils/client"
 
 interface IProps {
@@ -9,7 +9,7 @@ interface IProps {
     id: string
     icon: string
   }
-  data: string | Emoji
+  data: string | Fieldsdetails | Emoji
   isFetched: boolean
   type: string
   tierId: string

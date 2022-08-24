@@ -33,7 +33,7 @@ const RecentTiers = () => {
       ) : (
         <div className="grid gap-3 xl:grid-cols-2  w-full">
           {data?.data.map((item: Tier) => (
-            <TierImage key={item.id} item={item} isDashboard={false} />
+            <TierImage key={item.id} item={item} />
           ))}
         </div>
       )}

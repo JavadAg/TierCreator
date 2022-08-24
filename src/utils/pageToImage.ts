@@ -7,7 +7,7 @@ interface IDownload {
   isSaving?: boolean
 }
 
-const downloadImage = (blob: any, fileName: any) => {
+const downloadImage = (blob: any, fileName: string) => {
   const fakeLink = window.document.createElement("a")
   fakeLink.download = fileName
   fakeLink.href = blob

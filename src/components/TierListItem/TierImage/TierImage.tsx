@@ -1,8 +1,13 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
+import { Tier } from "../../../types/tier.types"
 
-const TierImage = ({ item, tier }: any) => {
+interface IProps {
+  item: Tier
+}
+
+const TierImage: React.FC<IProps> = ({ item }) => {
   const navigate = useNavigate()
 
   return (
@@ -14,7 +19,6 @@ const TierImage = ({ item, tier }: any) => {
     >
       <div
         className={`flex justify-start items-center w-full flex-col h-[140px] overflow-hidden md:h-[220px] xl:h-[170px]`}
-        ref={tier}
       >
         <img
           src={item?.image}

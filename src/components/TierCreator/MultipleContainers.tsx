@@ -1,12 +1,4 @@
-import React, {
-  EventHandler,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { createPortal, unstable_batchedUpdates } from "react-dom"
 import {
   CancelDrop,
@@ -39,8 +31,6 @@ import { Container, ContainerProps } from "./Container"
 import { IoAddCircleOutline } from "react-icons/io5"
 import { Item } from "./TierItem"
 import TierModal from "./TierCreatorModal"
-import { usePostTier } from "../../hooks/usePostTier"
-import { BeatLoader } from "react-spinners"
 import { colorPickerOptions } from "./ContainerEditModal"
 import { Image } from "../../types/template.types"
 
@@ -60,7 +50,7 @@ function DroppableContainer({
   ...props
 }: ContainerProps & {
   disabled?: boolean
-  id: UniqueIdentifier
+  id: string
   items: Image[]
   style?: React.CSSProperties
 }) {
@@ -84,7 +74,7 @@ function DroppableContainer({
   })
   const isOverContainer = over
     ? (id === over.id && active?.data.current?.type !== "container") ||
-      items.includes(over.id as unknown as Image)
+      items.some((obj) => obj.id === over.id)
     : false
 
   return (
@@ -163,7 +153,7 @@ export function MultipleContainers({
   renderItem,
   vertical = true
 }: Props) {
-  const fieldsRef = useRef<MutableRefObject<LegacyRef<HTMLDivElement>>>(null)
+  const fieldsRef = useRef<HTMLDivElement>(null)
   const [backgroundColor, setBackgroundColor] = useState<string>("#222")
   const template = data
   const arrayOfImages = template.image
@@ -221,7 +211,9 @@ export function MultipleContainers({
       return -1
     }
 
-    const index = items[container].indexOf(id as unknown as Images)
+    const index = items[container as string].findIndex(
+      (obj) => obj.id == (id as number)
+    )
 
     return index
   }
@@ -279,8 +271,8 @@ export function MultipleContainers({
               .indexOf(overId as number)
 
             const activeIndex = activeItems
-              .map((object: any) => object.id)
-              .indexOf(active.id)
+              .map((object: Image) => object.id)
+              .indexOf(active.id as number)
 
             let newIndex: number
 
@@ -606,9 +598,9 @@ export function MultipleContainers({
     let labels: string[] = []
     let templateImages: string[][] = []
     let fieldsbgcolor: string = backgroundColor
-    const fields: MutableRefObject<HTMLInputElement> = fieldsRef.current
+    const fields = fieldsRef.current
 
-    Object.values(fields.childNodes).map(
+    Object.values(fields!.childNodes).map(
       (item: any) => (
         labels.push(item.innerText),
         colors.push(item.childNodes[0].style.backgroundColor),

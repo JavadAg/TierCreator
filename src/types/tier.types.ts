@@ -5,6 +5,7 @@ export interface Tier {
   creator_id: string
   creator_name: string
   creator_photo: string
+  fieldsdetails: Fieldsdetails
   emoji_1: Emoji
   emoji_2: Emoji
   emoji_3: Emoji
@@ -22,4 +23,25 @@ export interface Tier {
 export interface Emoji {
   id: string
   counter: string[]
+}
+
+export interface Fieldsdetails {
+  colors: string[]
+  labels: string[]
+  templateImages: string[][]
+  fieldsbgcolor: string
+}
+export interface TierInputs {
+  name: string
+  description: string
+  template_name: string
+  template_slug: string
+  category_name: string
+  category_slug: string
+  creator_id: string
+  creator_name: string
+  creator_photo: string
+  placeholderName: string
+  image: string | undefined
+  fieldsdetails: Fieldsdetails
 }

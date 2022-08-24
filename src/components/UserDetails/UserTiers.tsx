@@ -2,6 +2,7 @@ import React from "react"
 import { IoArrowDownCircleOutline } from "react-icons/io5"
 import { useParams } from "react-router-dom"
 import useFetchById from "../../hooks/useFetch"
+import { Tier } from "../../types/tier.types"
 import TierImage from "../TierListItem/TierImage/TierImage"
 
 const UserTiers = () => {
@@ -50,8 +51,8 @@ const UserTiers = () => {
               No data exist
             </span>
           )}
-          {data?.data.map((item: any) => (
-            <TierImage key={item.id} item={item} isDashboard={true} />
+          {data?.data.map((item: Tier) => (
+            <TierImage key={item.id} item={item} />
           ))}
         </div>
       </div>

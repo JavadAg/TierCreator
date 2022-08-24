@@ -21,7 +21,7 @@ const CreateTier = () => {
   return (
     <>
       {isLoading ? (
-        <CreateTierSkeleton />
+        <span>Loading...</span>
       ) : (
         <div className="flex justify-center items-center flex-col space-y-2">
           <Emoji isFetched={isFetched} data={data?.data[0]} type="templates" />

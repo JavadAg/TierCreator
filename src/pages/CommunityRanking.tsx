@@ -54,7 +54,7 @@ const CommunityRanking = () => {
             </p>
           </div>
           <div className="flex justify-center items-start w-full max-w-[1200px] flex-col">
-            <TierContainer item={data?.data[0]} isDashboard={false} />
+            <TierContainer item={data?.data[0]} />
           </div>
           <button
             onClick={() => navigate(`/create/${data?.data[0].template_slug}`)}
@@ -67,7 +67,7 @@ const CommunityRanking = () => {
           </button>
           <div className="grid gap-3 xl:grid-cols-2  w-full">
             {data?.data.slice(1).map((item: Tier) => (
-              <TierImage key={item.id} item={item} isDashboard={true} />
+              <TierImage key={item.id} item={item} />
             ))}
           </div>
         </div>

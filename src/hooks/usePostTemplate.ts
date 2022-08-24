@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
+import { Inputs } from "../types/template.types"
 import { supabase } from "../utils/client"
 
 interface Image {
@@ -6,21 +7,21 @@ interface Image {
   id: number
 }
 
-const addTemplate = async (props: any) => {
+const addTemplate = async (props: Inputs) => {
   const uploadClient = supabase.storage.from("template-images")
 
   await uploadClient.upload(
-    `public/${props.slug}/cover/${props.cover[0].name}`,
-    props.cover[0]
+    `public/${props.slug}/cover/${props.cover![0].name}`,
+    props.cover![0]
   )
 
   const coverUrl = uploadClient.getPublicUrl(
-    `public/${props.slug}/cover/${props.cover[0].name}`
+    `public/${props.slug}/cover/${props.cover![0].name}`
   )
   let id = 1
   let imagesUrl: Image[] = []
 
-  for (const iterator of props.images) {
+  for (const iterator of props.images!) {
     await uploadClient.upload(
       `public/${props.slug}/images/${iterator.name}`,
       iterator
@@ -65,5 +66,5 @@ const addTemplate = async (props: any) => {
 }
 
 export function usePostTemplate() {
-  return useMutation((props: any) => addTemplate(props))
+  return useMutation((props: Inputs) => addTemplate(props))
 }

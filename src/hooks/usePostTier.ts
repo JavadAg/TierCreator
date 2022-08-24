@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
+import { TierInputs } from "../types/tier.types"
 import { supabase } from "../utils/client"
 
-const addTier = async (props: any) => {
+const addTier = async (props: TierInputs) => {
   const form = props
 
   const uploadClient = supabase.storage.from("tier-images")
@@ -48,5 +49,5 @@ const addTier = async (props: any) => {
 }
 
 export function usePostTier() {
-  return useMutation((props: any) => addTier(props))
+  return useMutation((props: TierInputs) => addTier(props))
 }

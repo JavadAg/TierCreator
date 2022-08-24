@@ -2,6 +2,7 @@ import React from "react"
 import { IoArrowDownCircleOutline } from "react-icons/io5"
 import { useParams } from "react-router-dom"
 import useFetchById from "../../hooks/useFetch"
+import { Template } from "../../types/template.types"
 import ListItems from "../ListItems/ListItems"
 
 const UserTemplates = () => {
@@ -50,7 +51,12 @@ const UserTemplates = () => {
               No data exist
             </span>
           )}
-          <ListItems isTemplate={true} isCreate={true} data={data?.data} />
+          <ListItems
+            isLoading={isLoading}
+            isTemplate={true}
+            isCreate={true}
+            data={data?.data as Template[]}
+          />
         </div>
       </div>
     </>

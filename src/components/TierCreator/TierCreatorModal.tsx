@@ -10,16 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { tierschema } from "../../utils/zodSchema"
 import { useNavigate } from "react-router-dom"
 import { usePostTier } from "../../hooks/usePostTier"
+import { Fieldsdetails, TierInputs } from "../../types/tier.types"
 
 interface IProps {
   id: MutableRefObject<HTMLElement | null>
   template: Template
-  getFieldsDetails: () => {
-    colors: []
-    labels: []
-    templateImages: []
-    fieldsbgcolor: string
-  }
+  getFieldsDetails: () => Fieldsdetails
 }
 
 interface IForm {
@@ -28,8 +24,10 @@ interface IForm {
 }
 
 const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
-  const closeModal: any = useRef()
+  const closeModal = useRef<HTMLButtonElement>(null)
+
   const user = supabase.auth.user()
+
   const navigate = useNavigate()
 
   const addTier = usePostTier()
@@ -39,15 +37,15 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
     handleSubmit,
     watch,
     formState: { errors }
-  } = useForm<IForm>({
+  } = useForm<TierInputs>({
     resolver: zodResolver(tierschema)
   })
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: TierInputs) => {
     await formhandler(data)
   }
 
-  const formhandler = async (data: any) => {
+  const formhandler = async (data: TierInputs) => {
     data.template_name = template.name
     data.template_slug = template.slug
     data.category_name = template.category_name
@@ -60,7 +58,7 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
 
     const { colors, labels, templateImages, fieldsbgcolor } = getFieldsDetails()
 
-    const isEmpty = templateImages.filter((item: any) => item.length !== 0)
+    const isEmpty = templateImages.filter((item: string[]) => item.length !== 0)
 
     if (isEmpty.length == 0) {
       toast.error("Containers are empty , drag some photos")
@@ -71,7 +69,7 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
 
     await addTier.mutateAsync(data, {
       onSuccess(data, variables, context) {
-        closeModal.current.click()
+        closeModal.current?.click()
         navigate(
           `/${data[0].category_slug}/${data[0].template_slug}/${data[0].id}`
         )

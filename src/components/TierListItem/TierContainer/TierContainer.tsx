@@ -1,6 +1,13 @@
+import React, { RefObject, useRef } from "react"
 import moment from "moment"
+import { Tier } from "../../../types/tier.types"
 
-const TierContainer = ({ item, tier }: any) => {
+interface IProps {
+  item: Tier
+  tier?: RefObject<HTMLDivElement>
+}
+
+const TierContainer: React.FC<IProps> = ({ item, tier }) => {
   return (
     <div
       className={`flex justify-center items-center border border-gray-300 shadow-100 flex-col max-w-[1200px] my-1 w-full `}
@@ -9,7 +16,7 @@ const TierContainer = ({ item, tier }: any) => {
         className={`flex justify-start items-center w-full flex-col overflow-hidden divide-y divide-gray-300`}
         ref={tier}
       >
-        {item?.fieldsdetails?.labels.map((label: any, index: number) => (
+        {item?.fieldsdetails?.labels.map((label: string, index: number) => (
           <div
             style={{ backgroundColor: `${item.fieldsdetails.fieldsbgcolor}` }}
             key={index}
@@ -25,7 +32,7 @@ const TierContainer = ({ item, tier }: any) => {
             </span>
             <div className="flex justify-center items-center">
               {item.fieldsdetails.templateImages[index].map(
-                (image: any, index: number) => (
+                (image: string, index: number) => (
                   <img
                     key={index}
                     className={`min-w-[96px] w-24 h-24 object-cover`}

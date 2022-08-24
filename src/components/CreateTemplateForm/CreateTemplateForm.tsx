@@ -6,7 +6,7 @@ import {
 } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { schema } from "../../utils/zodSchema"
-import { Category, Row } from "../../types/template.types"
+import { Row } from "../../types/template.types"
 import Resizer from "react-image-file-resizer"
 import { useState } from "react"
 import slugify from "slugify"
@@ -20,6 +20,7 @@ import { IoTrashBinOutline, IoAddCircleOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 
 import { ToastContainer, toast } from "react-toastify"
+import { Category } from "../../types/category.types"
 
 const CreateTemplateForm = () => {
   const {
@@ -107,7 +108,6 @@ const CreateTemplateForm = () => {
       }
     }
   }
-  console.log(watch("images"))
 
   const formhandler = async (data: Inputs) => {
     await cmprows(data.rows!)

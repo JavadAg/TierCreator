@@ -27,7 +27,7 @@ const TierPage = () => {
   )
   useEffect(() => window.scrollTo(0, 0), [])
 
-  const tier = useRef(null)
+  const tier = useRef<HTMLDivElement>(null)
 
   const deleteTier = useDelete()
 

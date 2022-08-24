@@ -1,16 +1,22 @@
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
-
+import { Emoji } from "../types/tier.types"
 import { supabase } from "../utils/client"
 
-const increment = async (params: any) => {
+interface IProps {
+  type: string
+  emoji: Emoji
+  tierId: string
+  userId: string
+}
+
+const increment = async (params: IProps) => {
   const { type, emoji, tierId, userId } = params
 
   const { data: emojiData, error: fetchError } = await supabase
     .from(`${type}`)
     .select(`${emoji.id}`)
     .eq("id", `${tierId}`)
-  
+
   if (fetchError) {
     throw new Error(fetchError.message)
   }
@@ -37,5 +43,5 @@ const increment = async (params: any) => {
 }
 
 export default function useUpdateEmoji() {
-  return useMutation((params: any) => increment(params))
+  return useMutation((params: IProps) => increment(params))
 }

@@ -55,7 +55,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
           fieldLabel == "default"
             ? "mt-2 border-customgrey-220 bg-customgrey-100 shadow-100 sticky bottom-0"
             : "flex justify-center w-full "
-        } `}
+        } ${hover && "bg-gray-50/10"} `}
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >

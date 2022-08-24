@@ -1,5 +1,6 @@
 import ListItems from "../components/ListItems/ListItems"
 import useFetchById from "../hooks/useFetch"
+import { Category } from "../types/category.types"
 
 const Categories = () => {
   const { data, error, isLoading } = useFetchById(
@@ -27,7 +28,12 @@ const Categories = () => {
         </p>
       </div>
 
-      <ListItems isLoading={isLoading} data={data?.data} />
+      <ListItems
+        isCreate={false}
+        isTemplate={false}
+        isLoading={isLoading}
+        data={data?.data as Category[]}
+      />
     </div>
   )
 }

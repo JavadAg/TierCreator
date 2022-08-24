@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
+import { Tier } from "../types/tier.types"
 import { supabase } from "../utils/client"
 
-const deleteTier = async (data: any) => {
+const deleteTier = async (data: Tier) => {
   const {
     data: tier,
     error,
@@ -27,5 +28,5 @@ const deleteTier = async (data: any) => {
 }
 
 export default function useDelete() {
-  return useMutation((data: any) => deleteTier(data))
+  return useMutation((data: Tier) => deleteTier(data))
 }
