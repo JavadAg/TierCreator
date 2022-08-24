@@ -147,6 +147,7 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
               <div className="flex justify-center items-center flex-col space-y-2 pt-2">
                 <button
                   data-mdb-ripple="true"
+                  type="button"
                   data-mdb-ripple-color="light"
                   className={`flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 py-1.5 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem] ${
                     addTier.isLoading && "cursor-not-allowed "

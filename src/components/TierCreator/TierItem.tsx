@@ -98,7 +98,7 @@ export const Item = React.memo(
           ref={ref}
         >
           <img
-            className={`min-w-[96px] w-24 h-24 object-cover ${
+            className={`min-w-[96px] w-24 h-24 object-cover border border-gray-200/50 ${
               dragging && "opacity-50"
             } ${dragOverlay && "ring-[2px] ring-indigo-400 outline-none"}`}
             style={style}
