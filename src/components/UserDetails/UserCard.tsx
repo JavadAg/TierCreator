@@ -1,10 +1,10 @@
-import React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useFetchById from "../../hooks/useFetch"
 import { IoLogOutOutline } from "react-icons/io5"
 import useLogout from "../../hooks/useLogout"
 import { supabase } from "../../utils/client"
 import { BeatLoader } from "react-spinners"
+import ImageWithFallback from "../ImageWithFallback/ImageWithFallback"
 
 const UserCard = () => {
   const { userId } = useParams()
@@ -51,12 +51,10 @@ const UserCard = () => {
               <span>Logout</span>
             </button>
           )}
-          <img
+          <ImageWithFallback
+            fallback="https://placehold.co/400/png?text=Error"
             className="object-cover h-12 rounded-full sm:h-16 md:h-20 lg:h-24 xl:h-28"
-            src={
-              data?.data[0].user_photo ||
-              "https://feliwhcrkkjbvhycuxzk.supabase.co/storage/v1/object/public/category-images/Dylan39968148.png"
-            }
+            src={data?.data[0].user_photo}
             alt="user_photo"
           />
           <span className="capitalize font-bold text-gray-900 sm:text-xl md:text-2xl xl:text-3xl">

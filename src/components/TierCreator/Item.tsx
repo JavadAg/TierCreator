@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import type { DraggableSyntheticListeners } from "@dnd-kit/core"
 import type { Transform } from "@dnd-kit/utilities"
 

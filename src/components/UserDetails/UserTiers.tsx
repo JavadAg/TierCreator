@@ -1,4 +1,3 @@
-import React from "react"
 import { IoArrowDownCircleOutline } from "react-icons/io5"
 import { useParams } from "react-router-dom"
 import useFetchById from "../../hooks/useFetch"

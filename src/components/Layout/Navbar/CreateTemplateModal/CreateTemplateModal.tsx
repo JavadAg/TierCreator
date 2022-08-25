@@ -1,5 +1,3 @@
-import { spawn } from "child_process"
-import React from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../../../../utils/client"
 import SearchBox from "../../../SearchBox/SearchBox"

@@ -21,6 +21,7 @@ const Emoji: React.FC<IProps> = ({ isFetched, data, type }) => {
     <div className="flex justify-center items-center border rounded divide-x divide-customgrey-200 shadow-100 border-customgrey-200">
       {emojiIcons.map((item) => (
         <SingleEmoji
+          key={item.id}
           item={item}
           tierId={data?.id}
           data={data[item.id as keyof Tier]}

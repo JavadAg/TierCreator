@@ -10,6 +10,7 @@ import { downloadasImage } from "../utils/pageToImage"
 import { IoPeopleOutline, IoAddCircleOutline } from "react-icons/io5"
 import { supabase } from "../utils/client"
 import { BeatLoader } from "react-spinners"
+import ImageWithFallback from "../components/ImageWithFallback/ImageWithFallback"
 
 const TierPage = () => {
   const { id } = useParams()
@@ -57,7 +58,8 @@ const TierPage = () => {
             onClick={() => navigate(`/user/${data?.data[0].creator_id}`)}
             className="flex justify-center items-center border border-gray-200 shadow-100 rounded-md px-2 py-1 space-x-1"
           >
-            <img
+            <ImageWithFallback
+              fallback="https://placehold.co/400/png?text=Error"
               className="object-cover h-12 rounded-full"
               src={data?.data[0].creator_photo}
               alt="creator_photo"

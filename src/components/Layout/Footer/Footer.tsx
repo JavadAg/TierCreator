@@ -1,6 +1,3 @@
-import React from "react"
-import { Link } from "react-router-dom"
-
 const Footer = () => {
   return (
     <footer className="text-center lg:text-left text-sm bg-gray-100 text-gray-800 mt-2">

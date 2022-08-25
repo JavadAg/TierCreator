@@ -25,6 +25,7 @@ const ListItems: React.FC<IProps> = ({
       )}
       {data?.map((card: Template | Category) => (
         <SingleItem
+          key={card.id}
           slug={card.slug}
           image={isTemplate ? (card.cover as string) : (card.image as string)}
           name={card.name}

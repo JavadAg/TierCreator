@@ -1,6 +1,4 @@
-import React, { useEffect } from "react"
 import useAuth from "../../hooks/useAuth"
-import { supabase } from "../../utils/client"
 
 const UserAuth = () => {
   const login = useAuth()

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { TbSettings } from "react-icons/tb"
 
 export const colorPickerOptions = [

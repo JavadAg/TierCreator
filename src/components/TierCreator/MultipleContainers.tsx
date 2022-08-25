@@ -29,7 +29,7 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { Container, ContainerProps } from "./Container"
 import { IoAddCircleOutline } from "react-icons/io5"
-import { Item } from "./TierItem"
+import { Item } from "./Item"
 import TierModal from "./TierCreatorModal"
 import { colorPickerOptions } from "./ContainerEditModal"
 import { Image } from "../../types/template.types"

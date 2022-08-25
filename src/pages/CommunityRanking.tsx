@@ -4,6 +4,7 @@ import useFetchById from "../hooks/useFetch"
 import TierImage from "../components/TierListItem/TierImage/TierImage"
 import { Tier } from "../types/tier.types"
 import { BeatLoader } from "react-spinners"
+import PageDescription from "../components/PageDescription/PageDescription"
 
 const CommunityRanking = () => {
   const navigate = useNavigate()
@@ -38,24 +39,20 @@ const CommunityRanking = () => {
         </span>
       ) : (
         <div className="space-y-2 flex justify-center items-center flex-col text-center w-full md:space-y-4">
-          <div className="flex justify-center items-center flex-col space-y-2 bg-indigo-200 p-2 rounded-xl divide-y divide-gray-400 md:px-5 md:py-4 lg:px-20 xl:space-y-4">
-            <span className="font-bold text-lg text-gray-800 md:text-xl">
-              {data?.data[0].template_name} Tier List Community Rankings
-            </span>
-            <p className="text-sm text-start text-gray-700 pt-2 md:text-[.9rem]">
-              {data?.data[0].template_name} Tier List below is created by
-              community voting and is the cumulative average rankings from{" "}
-              {data?.data.length} submitted tier lists. The best{" "}
-              {data?.data[0].template_name}
+          <PageDescription
+            title={`${data?.data[0].template_name} Tier List Community Rankings`}
+            description={`${
+              data?.data[0].template_name
+            } Tier List below is created by
+              community voting and is the cumulative average rankings from${" "}
+              ${data?.data.length} submitted tier lists. The best${" "}
+              ${data?.data[0].template_name}
               rankings are on the top of the list and the worst rankings are on
-              the bottom.
-            </p>
-            <p className="text-sm text-start text-gray-700 pt-2 md:text-[.9rem]">
-              In order for your ranking to be included, you need to be logged in
-              and publish the list to the site (not simply downloading the tier
-              list image).
-            </p>
-          </div>
+              the bottom.`}
+            extraDescription={`In order for your ranking to be included, you need to be logged in
+            and publish the list to the site (not simply downloading the tier
+            list image).`}
+          />
           <div className="flex justify-center items-start w-full max-w-[1200px] flex-col">
             <TierContainer item={data?.data[0]} />
           </div>

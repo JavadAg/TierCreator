@@ -1,7 +1,5 @@
-import React from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import SearchBox from "../../../SearchBox/SearchBox"
-import NavbarModal from "../CreateTemplateModal/CreateTemplateModal"
 import {
   BiListUl,
   BiFolderOpen,

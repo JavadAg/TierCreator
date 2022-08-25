@@ -2,6 +2,7 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
 import { Tier } from "../../../types/tier.types"
+import ImageWithFallback from "../../ImageWithFallback/ImageWithFallback"
 
 interface IProps {
   item: Tier
@@ -20,7 +21,8 @@ const TierImage: React.FC<IProps> = ({ item }) => {
       <div
         className={`flex justify-start items-center w-full flex-col h-[140px] overflow-hidden md:h-[220px] xl:h-[170px]`}
       >
-        <img
+        <ImageWithFallback
+          fallback="https://placehold.co/400/png?text=Error"
           src={item?.image}
           alt="tier_image"
           className="rounded object-contain w-full h-auto"

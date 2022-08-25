@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { Image } from "../../../types/template.types"
+import ImageWithFallback from "../../ImageWithFallback/ImageWithFallback"
 
 interface IProps {
   slug: string
@@ -17,7 +17,8 @@ const SingleItem: React.FC<IProps> = ({ slug, image, name, isCreate }) => {
       onClick={() => navigate(isCreate ? `/create/${slug}` : `/${slug}`)}
       className="flex flex-auto cursor-pointer justify-center w-full h-44 items-center flex-col p-1 border border-gray-300 rounded-md shadow-sm active:shadow-md active:ring-1 active:ring-indigo-300 duration-200 active:scale-105 sm:h-52"
     >
-      <img
+      <ImageWithFallback
+        fallback="https://placehold.co/400/png?text=Error"
         className="object-cover border border-gray-100 overflow-hidden h-full w-full rounded-md"
         src={image}
         alt="card_image"

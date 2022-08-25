@@ -1,3 +1,4 @@
+import { itemsEqual } from "@dnd-kit/sortable/dist/utilities"
 import { useNavigate } from "react-router-dom"
 import { BeatLoader } from "react-spinners"
 import useFetchById from "../../hooks/useFetch"
@@ -33,11 +34,14 @@ const FeaturedTemplates = () => {
       ) : (
         <div className="flex justify-center items-center flex-col w-full space-y-8">
           {data?.data.map((item: Category) => (
-            <div className="flex justify-start items-center flex-col w-full space-y-1 max-w-[1200px] ">
+            <div
+              key={item.id}
+              className="flex justify-start items-center flex-col w-full space-y-1 max-w-[1200px] "
+            >
               <span className="font-bold text-gray-900 ">
                 Featured{" "}
                 <span
-                  onClick={() => navigate(`/categories/${item.slug}`)}
+                  onClick={() => navigate(`/${item.slug}`)}
                   className="text-indigo-800 cursor-pointer"
                 >
                   {item.name}{" "}

@@ -7,7 +7,7 @@ const UploadVideo = () => {
     <>
       <button
         type="button"
-        className=""
+        className="text-indigo-800 font-bold"
         data-bs-toggle="modal"
         data-bs-target="#videoModal"
       >

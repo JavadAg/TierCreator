@@ -5,6 +5,7 @@ import SearchBox from "../../SearchBox/SearchBox"
 import MobileSidebar from "./MobileSidebar/MobileSidebar"
 import { supabase } from "../../../utils/client"
 import { BiLogInCircle } from "react-icons/bi"
+import ImageWithFallback from "../../ImageWithFallback/ImageWithFallback"
 
 const Navbar = () => {
   const user = supabase.auth.user()
@@ -16,7 +17,12 @@ const Navbar = () => {
       <div className="hidden md:flex justify-between items-center p-2 bg-white text-gray-900 h-14 shadow-100 border-b border-gray-100 xl:h-16 lg:px-10 xl:px-16">
         <div className="flex justify-center items-center lg:space-x-4">
           <Link to="/">
-            <img src={logo} alt="tiercreator-logo" className="h-10 md:h-8" />
+            <ImageWithFallback
+              fallback="https://placehold.co/400/png?text=Error"
+              src={logo}
+              alt="tiercreator-logo"
+              className="h-10 md:h-8"
+            />
           </Link>
           <SearchBox />
         </div>
@@ -41,13 +47,11 @@ const Navbar = () => {
               data-mdb-ripple-color="light"
               className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out xl:text-[.9rem]"
             >
-              <img
+              <ImageWithFallback
+                fallback="https://placehold.co/400/png?text=Error"
                 className="object-cover h-5 rounded-full mr-1 "
-                src={
-                  user?.user_metadata.picture ||
-                  "https://feliwhcrkkjbvhycuxzk.supabase.co/storage/v1/object/public/category-images/Dylan39968148.png"
-                }
-                alt="user_picture"
+                src={user?.user_metadata.picture}
+                alt="avatar"
               />
               {user?.user_metadata.name}
             </button>
@@ -72,13 +76,11 @@ const Navbar = () => {
               data-mdb-ripple-color="light"
               className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
             >
-              <img
+              <ImageWithFallback
+                fallback="https://placehold.co/400/png?text=Error"
                 className="object-cover h-5 rounded-full mr-1"
-                src={
-                  user?.user_metadata.picture ||
-                  "https://feliwhcrkkjbvhycuxzk.supabase.co/storage/v1/object/public/category-images/Dylan39968148.png"
-                }
-                alt="user_picture"
+                src={user?.user_metadata.picture}
+                alt="avatar"
               />
               {user?.user_metadata.name}
             </button>
@@ -92,7 +94,12 @@ const Navbar = () => {
             </button>
           )}
           <Link to="/">
-            <img src={logo} alt="tiercreator-logo" className="h-7" />
+            <ImageWithFallback
+              fallback="https://placehold.co/400/png?text=Error"
+              src={logo}
+              alt="tiercreator-logo"
+              className="h-7"
+            />
           </Link>
         </div>
       </div>

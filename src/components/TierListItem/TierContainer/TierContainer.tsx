@@ -1,6 +1,7 @@
-import React, { RefObject, useRef } from "react"
+import React, { RefObject } from "react"
 import moment from "moment"
 import { Tier } from "../../../types/tier.types"
+import ImageWithFallback from "../../ImageWithFallback/ImageWithFallback"
 
 interface IProps {
   item: Tier
@@ -10,7 +11,7 @@ interface IProps {
 const TierContainer: React.FC<IProps> = ({ item, tier }) => {
   return (
     <div
-      className={`flex justify-center items-center border border-gray-300 outline-none shadow-100 flex-col max-w-[1200px] my-1 w-full `}
+      className={`flex justify-center items-center shadow-100 flex-col max-w-[1200px] my-1 w-full  `}
     >
       <div
         className={`flex justify-start items-center w-full flex-col overflow-hidden divide-y divide-gray-300`}
@@ -20,7 +21,7 @@ const TierContainer: React.FC<IProps> = ({ item, tier }) => {
           <div
             style={{ backgroundColor: `${item.fieldsdetails.fieldsbgcolor}` }}
             key={index}
-            className={`flex justify-start items-center w-full min-h-[96px] relative`}
+            className={`flex justify-start  items-center w-full min-h-[96px] relative`}
           >
             <div
               style={{
@@ -28,16 +29,14 @@ const TierContainer: React.FC<IProps> = ({ item, tier }) => {
               }}
               className="justify-center relative items-center flex max-w-[96px] place-self-stretch w-full min-w-[96px] min-h-[96px]"
             >
-              <span
-                className={`break-all absolute border-r border-gray-200 p-1 text-md text-center `}
-              >
+              <span className={`break-all absolute p-1 text-md text-center `}>
                 {label}
               </span>
             </div>
             <div className="flex flex-wrap justify-start items-center">
               {item.fieldsdetails.templateImages[index].map(
                 (image: string, index: number) => (
-                  <img
+                  <ImageWithFallback
                     key={index}
                     className={`min-w-[96px] w-24 h-24 object-cover`}
                     src={image}

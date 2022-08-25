@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from "react"
-import { TbDragDrop, TbTrashX, TbSettings } from "react-icons/tb"
+import { TbDragDrop, TbTrashX } from "react-icons/tb"
 import ContainerEditModal from "./ContainerEditModal"
 
 export type { Props as ContainerProps }

@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom"
 
 import { ToastContainer, toast } from "react-toastify"
 import { Category } from "../../types/category.types"
+import ImageWithFallback from "../ImageWithFallback/ImageWithFallback"
 
 const CreateTemplateForm = () => {
   const {
@@ -239,7 +240,9 @@ const CreateTemplateForm = () => {
               accept="image/jpeg,image/jpg,image/png,image/webp"
               {...register("cover")}
             />
-            {coverImage && <img className="h-24" src={coverImage} />}
+            {coverImage && (
+              <ImageWithFallback className="h-24" src={coverImage} />
+            )}
             {errors.cover?.message && (
               <span className="text-red-600 text-sm font-semibold">
                 {errors.cover.message}
@@ -272,7 +275,7 @@ const CreateTemplateForm = () => {
             />
             <div className="flex justify-center gap-1 items-center flex-wrap">
               {tierImages?.map((image, index) => (
-                <img
+                <ImageWithFallback
                   key={index}
                   className="h-24 w-24 object-cover"
                   src={image}

@@ -11,9 +11,7 @@ const Videos = () => {
         {" "}
         Videos{" "}
       </Link>
-      <button className="text-indigo-800 font-bold">
-        <UploadVideo />
-      </button>
+      <UploadVideo />
       <VideosCarousel />
     </div>
   )
