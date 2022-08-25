@@ -44,9 +44,9 @@ const ContainerEditModal: React.FC<IProps> = ({
   }
 
   return (
-    <div>
+    <>
       <button
-        className="w-full flex border-b border-customgrey-220 p-1 justify-center items-center hover:bg-indigo-200/50 h-full duration-200"
+        className="w-full flex border-b border-gray-300 p-1 justify-center items-center hover:bg-indigo-200/50 h-full duration-200"
         data-bs-toggle="modal"
         data-bs-target={`#settingsModal${index}`}
       >
@@ -99,7 +99,7 @@ const ContainerEditModal: React.FC<IProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

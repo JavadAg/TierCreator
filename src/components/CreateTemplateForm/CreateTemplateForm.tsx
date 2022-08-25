@@ -154,7 +154,12 @@ const CreateTemplateForm = () => {
           Error : {addTemplate.error.message}
         </div>
       ) : addTemplate.isLoading ? (
-        <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+        <>
+          <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
+          <span className="italic font-bold text-indigo-300">
+            it take a while , dont worry
+          </span>
+        </>
       ) : (
         <form
           className="flex justify-center items-center text-center flex-col space-y-4 pb-4 w-full text-gray-700 bg-gray-50 rounded-xl divide-y divide-gray-200 sm:px-10 xl:px-20"
@@ -240,9 +245,7 @@ const CreateTemplateForm = () => {
               accept="image/jpeg,image/jpg,image/png,image/webp"
               {...register("cover")}
             />
-            {coverImage && (
-              <ImageWithFallback className="h-24" src={coverImage} />
-            )}
+            {coverImage && <img className="h-24" src={coverImage} />}
             {errors.cover?.message && (
               <span className="text-red-600 text-sm font-semibold">
                 {errors.cover.message}
@@ -275,7 +278,7 @@ const CreateTemplateForm = () => {
             />
             <div className="flex justify-center gap-1 items-center flex-wrap">
               {tierImages?.map((image, index) => (
-                <ImageWithFallback
+                <img
                   key={index}
                   className="h-24 w-24 object-cover"
                   src={image}

@@ -84,7 +84,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         {label !== "default" && (
           <div
             data-html2canvas-ignore
-            className="flex flex-col justify-center items-center bg-indigo-50  w-12 "
+            className="flex flex-col justify-center items-center bg-indigo-50 w-12"
           >
             <ContainerEditModal
               index={index}
@@ -94,7 +94,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
             />
             {onRemove ? (
               <button
-                className="w-full flex border-b border-customgrey-220 p-1 justify-center items-center hover:bg-indigo-200/50 h-full duration-200"
+                className="w-full flex border-b border-gray-300 p-1 justify-center items-center hover:bg-indigo-200/50 h-full duration-200"
                 onClick={onRemove}
                 data-bs-toggle="tooltip"
                 data-bs-placement="right"

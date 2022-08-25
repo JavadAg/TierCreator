@@ -32,7 +32,7 @@ import { IoAddCircleOutline } from "react-icons/io5"
 import { Item } from "./Item"
 import TierModal from "./TierCreatorModal"
 import { colorPickerOptions } from "./ContainerEditModal"
-import { Image } from "../../types/template.types"
+import { Image, Template } from "../../types/template.types"
 
 interface States {
   [key: string]: Image[]
@@ -113,10 +113,8 @@ const dropAnimation: DropAnimation = {
 type Items = Record<UniqueIdentifier, UniqueIdentifier[]>
 
 interface Props {
-  data: any
+  template: Template
   adjustScale?: boolean
-  cancelDrop?: CancelDrop
-  columns?: number
   containerStyle?: React.CSSProperties
   coordinateGetter?: KeyboardCoordinateGetter
   getItemStyles?(args: {
@@ -142,10 +140,8 @@ interface Props {
 const PLACEHOLDER_ID = "placeholder"
 
 export function MultipleContainers({
-  data,
+  template,
   adjustScale = false,
-  cancelDrop,
-  columns,
   handle = false,
   getItemStyles = () => ({}),
   wrapperStyle = () => ({}),
@@ -154,18 +150,21 @@ export function MultipleContainers({
   vertical = true
 }: Props) {
   const fieldsRef = useRef<HTMLDivElement>(null)
+
   const [backgroundColor, setBackgroundColor] = useState<string>("#222")
-  const template = data
+
   const arrayOfImages = template.image
 
   let allRows = {}
+
   let labels = []
+
   for (const iterator of template.rows) {
     const label = iterator.label.trim()
     allRows = { ...allRows, [label]: [] }
     labels.push(label)
   }
-  labels.push(...labels.splice(0, 1))
+  labels.push(...labels.splice(0))
 
   useEffect(() => window.scrollTo(0, 0), [])
 
@@ -381,7 +380,6 @@ export function MultipleContainers({
 
         setActiveId(null)
       }}
-      cancelDrop={cancelDrop}
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
@@ -405,7 +403,6 @@ export function MultipleContainers({
                 id={containerId}
                 templateName={template.slug}
                 label={containerId}
-                columns={columns}
                 items={items[containerId]}
                 onRemove={() => handleRemove(containerId)}
               >
@@ -440,7 +437,6 @@ export function MultipleContainers({
           id={"default"}
           templateName={template.slug}
           label={"default"}
-          columns={columns}
           items={items["default"]}
           onRemove={() => handleRemove("default")}
         >
@@ -525,46 +521,14 @@ export function MultipleContainers({
   )
 
   function renderSortableItemDragOverlay(id: UniqueIdentifier) {
-    return (
-      <Item
-        value={findItemByActiveId(id)}
-        handle={handle}
-        style={getItemStyles({
-          containerId: findContainer(id) as UniqueIdentifier,
-          overIndex: -1,
-          index: getIndex(id),
-          value: id,
-          isSorting: true,
-          isDragging: true,
-          isDragOverlay: true
-        })}
-        wrapperStyle={wrapperStyle({ index: 0 })}
-        renderItem={renderItem}
-        dragOverlay
-      />
-    )
+    return <Item value={findItemByActiveId(id)} handle={handle} dragOverlay />
   }
 
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
-      <Container label={containerId as string} columns={columns} shadow>
+      <Container label={containerId as string} shadow>
         {items[containerId].map((item: Image, index: number) => (
-          <Item
-            key={item.id}
-            value={item.url}
-            handle={handle}
-            style={getItemStyles({
-              containerId,
-              overIndex: -1,
-              index: getIndex(item.id),
-              value: item.id,
-              isDragging: false,
-              isSorting: false,
-              isDragOverlay: false
-            })}
-            wrapperStyle={wrapperStyle({ index })}
-            renderItem={renderItem}
-          />
+          <Item key={item.id} value={item.url} handle={handle} />
         ))}
       </Container>
     )

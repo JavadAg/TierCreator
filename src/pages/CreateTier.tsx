@@ -18,6 +18,13 @@ const CreateTier = () => {
     slug
   )
 
+  if (error)
+    return (
+      <div className="text-red-500 text-sm font-bold flex justify-center">
+        Error fetching
+      </div>
+    )
+
   return (
     <>
       {isLoading ? (
@@ -42,7 +49,7 @@ const CreateTier = () => {
             View Community Rank
           </button>
 
-          <MultipleContainers data={data?.data[0]} />
+          <MultipleContainers template={data?.data[0]} />
         </div>
       )}
     </>
