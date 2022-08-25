@@ -78,21 +78,16 @@ const MobileSidebar = () => {
                     Search if template already exist
                   </span>
                   <SearchBox />
-                  {user ? (
-                    <button
-                      data-bs-dismiss="offcanvas"
-                      data-mdb-ripple="true"
-                      data-mdb-ripple-color="light"
-                      className="inline-block px-6 py-2.5 bg-indigo-100 text-gray-900 font-medium text-xs leading-tight uppercase rounded-md hover:bg-indigo-200 hover:shadow-lg focus:bg-indigo-200 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-300 active:shadow-lg transition duration-150 ease-in-out"
-                      onClick={() => navigate("/create")}
-                    >
-                      Create a New Template
-                    </button>
-                  ) : (
-                    <span className="text-sm md:text-[.9rem] text-red-400 font-bold text-center">
-                      Please Login First
-                    </span>
-                  )}
+
+                  <button
+                    data-bs-dismiss="offcanvas"
+                    data-mdb-ripple="true"
+                    data-mdb-ripple-color="light"
+                    className="inline-block px-6 py-2.5 bg-indigo-100 text-gray-900 font-medium text-xs leading-tight uppercase rounded-md hover:bg-indigo-200 hover:shadow-lg focus:bg-indigo-200 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-300 active:shadow-lg transition duration-150 ease-in-out"
+                    onClick={() => navigate("/create")}
+                  >
+                    Create a New Template
+                  </button>
                 </li>
               </ul>
               <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12">

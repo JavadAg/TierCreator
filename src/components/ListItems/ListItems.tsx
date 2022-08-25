@@ -17,22 +17,24 @@ const ListItems: React.FC<IProps> = ({
   isTemplate
 }) => {
   return (
-    <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4 w-full">
+    <>
       {isLoading && (
         <div className="flex justify-center items-center">
           <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
         </div>
       )}
-      {data?.map((card: Template | Category) => (
-        <SingleItem
-          key={card.id}
-          slug={card.slug}
-          image={isTemplate ? (card.cover as string) : (card.image as string)}
-          name={card.name}
-          isCreate={isCreate}
-        />
-      ))}
-    </div>
+      <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4 w-full">
+        {data?.map((card: Template | Category) => (
+          <SingleItem
+            key={card.id}
+            slug={card.slug}
+            image={isTemplate ? (card.cover as string) : (card.image as string)}
+            name={card.name}
+            isCreate={isCreate}
+          />
+        ))}
+      </div>
+    </>
   )
 }
 

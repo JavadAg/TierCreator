@@ -40,21 +40,16 @@ const NavbarModal = () => {
               ></button>
             </div>
             <SearchBox />
-            {user ? (
-              <button
-                data-bs-dismiss="modal"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-                className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 h-8 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out sm:w-56 self-center md:w-60 xl:w-64 xl:text-[.9rem]"
-                onClick={() => navigate("/create")}
-              >
-                Create New Template
-              </button>
-            ) : (
-              <span className="text-sm md:text-[.9rem] text-red-400 font-bold text-center">
-                Please Login First
-              </span>
-            )}
+
+            <button
+              data-bs-dismiss="modal"
+              data-mdb-ripple="true"
+              data-mdb-ripple-color="light"
+              className="flex justify-center items-center text-sm space-x-1 bg-indigo-100 focus:bg-indigo-200 hover:bg-indigo-200 active:bg-indigo-300 w-52 h-8 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0   transition duration-150 ease-in-out sm:w-56 self-center md:w-60 xl:w-64 xl:text-[.9rem]"
+              onClick={() => navigate("/create")}
+            >
+              Create New Template
+            </button>
           </div>
         </div>
       </div>
