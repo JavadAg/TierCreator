@@ -60,7 +60,7 @@ const SingleEmoji: React.FC<IProps> = ({
       }
     >
       <span className="text-3xl">{item.icon}</span>
-      <span className="text-sm font-bold text-customgrey-500 hover:text-black">
+      <span className="text-sm font-bold text-gray-500 hover:text-black dark:hover:text-gray-300 dark:text-gray-200">
         {emoji?.counter?.length}
       </span>
     </div>

@@ -4,7 +4,7 @@ const UserAuth = () => {
   const login = useAuth()
 
   return (
-    <div className="flex justify-center items-center flex-col text-gray-900 space-y-3 text-center">
+    <div className="flex justify-center items-center flex-col text-gray-900 space-y-3 text-center dark:text-gray-200">
       <span className="text-xl font-bold">
         Login or Create a TierCreator Account
       </span>

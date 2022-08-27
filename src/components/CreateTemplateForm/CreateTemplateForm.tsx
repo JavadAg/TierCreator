@@ -162,7 +162,7 @@ const CreateTemplateForm = () => {
         </>
       ) : (
         <form
-          className="flex justify-center items-center text-center flex-col space-y-4 pb-4 w-full text-gray-700 bg-gray-50 rounded-xl divide-y divide-gray-200 sm:px-10 xl:px-20"
+          className="flex justify-center items-center text-center flex-col space-y-4 pb-4 w-full text-gray-700 bg-gray-50 rounded-xl divide-y divide-gray-200 sm:px-10 xl:px-20 dark:bg-gray-800 dark:text-gray-200 dark:divide-gray-700"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex justify-center items-center text-center flex-col space-y-2 w-full p-2">
@@ -170,7 +170,7 @@ const CreateTemplateForm = () => {
               Name of Template
             </label>
             <input
-              className="border placeholder:italic placeholder:text-slate-400 border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300"
+              className="border placeholder:italic placeholder:text-slate-400 border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300 dark:border-gray-700 dark:bg-gray-700"
               id="name"
               type="text"
               placeholder="Describe the Template Name"
@@ -183,7 +183,7 @@ const CreateTemplateForm = () => {
               </span>
             )}
           </div>
-          <div className="flex justify-center items-center flex-col space-y-1 w-full  p-2">
+          <div className="flex justify-center items-center flex-col space-y-1 w-full p-2">
             <label className="text-md font-bold" htmlFor="category">
               Select a Category
             </label>
@@ -193,7 +193,7 @@ const CreateTemplateForm = () => {
               <span>Loading Categories...</span>
             ) : (
               <select
-                className="rounded-md py-1 focus-within:outline-indigo-300 w-full border px-2"
+                className="rounded-md py-1 focus-within:outline-indigo-300 w-full border px-2 dark:border-gray-700 dark:bg-gray-700"
                 id="category"
                 defaultValue={0}
                 {...register("category_id")}
@@ -211,7 +211,7 @@ const CreateTemplateForm = () => {
               Description of Template
             </label>
             <input
-              className="border placeholder:italic placeholder:text-slate-400 block border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300 "
+              className="border placeholder:italic placeholder:text-slate-400 block border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300 dark:border-gray-700 dark:bg-gray-700"
               id="description"
               type="text"
               placeholder="Description of the Template"
@@ -224,7 +224,7 @@ const CreateTemplateForm = () => {
               </span>
             )}
           </div>
-          <div className="flex justify-center items-center flex-col space-y-2 w-full bg-gray-50 p-2">
+          <div className="flex justify-center items-center flex-col space-y-2 w-full p-2">
             <label className="text-md font-bold" htmlFor="cover">
               Select Template Cover Photo
             </label>
@@ -234,7 +234,7 @@ const CreateTemplateForm = () => {
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
             file:bg-violet-50 file:text-indigo-400
-            hover:file:bg-violet-100"
+            hover:file:bg-violet-100 dark:border-gray-700 dark:bg-gray-800 dark:file:bg-indigo-600 dark:file:text-indigo-100"
               type="file"
               id="cover"
               onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -269,7 +269,7 @@ const CreateTemplateForm = () => {
               file:rounded-full file:border-0
               file:text-sm file:font-semibold
               file:bg-violet-50 file:text-indigo-400
-              hover:file:bg-violet-100"
+              hover:file:bg-violet-100 dark:border-gray-700 dark:bg-gray-800 dark:file:bg-indigo-600 dark:file:text-indigo-100"
               id="images"
               onChangeCapture={previewhandler}
               multiple={true}
@@ -298,7 +298,7 @@ const CreateTemplateForm = () => {
             </label>
             <select
               id="imageOrientation"
-              className="border border-gray-200 w-full px-2 p-1 rounded-md focus-visible:outline-indigo-300 focus:outline-indigo-400"
+              className="border border-gray-200 w-full px-2 p-1 rounded-md focus-visible:outline-indigo-300 focus:outline-indigo-400 dark:border-gray-700 dark:bg-gray-700"
               {...register("orientation")}
               defaultValue="1"
             >
@@ -332,14 +332,14 @@ const CreateTemplateForm = () => {
                       <input
                         {...field}
                         placeholder={`Enter Label ${index + 1}`}
-                        className="placeholder:italic placeholder:text-slate-400 border border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300"
+                        className="placeholder:italic placeholder:text-slate-400 border border-gray-200 w-full px-2 py-1 rounded-md focus-visible:outline-indigo-300  dark:border-gray-700 dark:bg-gray-700"
                       />
                     )}
                   />
                   {index > 4 && (
                     <button
                       disabled={isSubmiting}
-                      className={`bg-white py-1 shadow shoadow-sm px-3 cursor-pointer hover:bg-gray-50 duration-200 text-lg rounded-md `}
+                      className={`bg-white py-1 shadow shoadow-sm px-3 cursor-pointer hover:bg-gray-50 duration-200 text-lg rounded-md dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-900 dark:hover:border-gray-80 `}
                       type="button"
                       onClick={() => remove(index)}
                     >
@@ -363,7 +363,7 @@ const CreateTemplateForm = () => {
             {fields.length < 10 && (
               <button
                 disabled={isSubmiting}
-                className="py-1 px-3 bg-white border shadow shoadow-sm border-gray-200  cursor-pointer hover:bg-gray-50 duration-200 text-lg rounded-md"
+                className="py-1 px-3 bg-white border shadow shoadow-sm border-gray-200  cursor-pointer hover:bg-gray-50 duration-200 text-lg rounded-md dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-900 dark:hover:border-gray-800"
                 type="button"
                 onClick={() => append({ label: "" })}
               >
@@ -376,7 +376,7 @@ const CreateTemplateForm = () => {
               disabled={isSubmiting}
               placeholder="Submit"
               type="submit"
-              className={`inline-flex items-center px-4 py-1 leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 ${
+              className={`inline-flex items-center px-4 py-1 leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150  ${
                 isSubmiting && "cursor-not-allowed "
               }`}
             >

@@ -90,17 +90,17 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
       </button>
 
       <div
-        className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto "
+        className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto backdrop-blur-md dark:bg-gray-800/40"
         id={`saveModal`}
         tabIndex={-1}
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog relative w-auto pointer-events-none">
-          <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+          <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current dark:bg-gray-900">
             <div className="modal-header flex flex-shrink-0 p-4 border-b border-gray-200 rounded-t-md ">
               <h5
-                className="text-lg font-medium leading-normal text-gray-800 "
+                className="text-lg font-medium leading-normal text-gray-800 dark:text-gray-200"
                 id="exampleModalLabel"
               >
                 Download or Save
@@ -115,11 +115,13 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
             </div>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="flex justify-center items-center flex-col space-y-2 my-2"
+              className="flex justify-center items-center flex-col space-y-2 my-2 "
             >
-              <label htmlFor="name">Enter name</label>
+              <label className="dark:text-gray-200" htmlFor="name">
+                Enter name
+              </label>
               <input
-                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic"
+                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic dark:bg-gray-700 dark:border-gray-800 dark:text-gray-200"
                 type="text"
                 id="name"
                 placeholder="name"
@@ -131,9 +133,11 @@ const TierModal: React.FC<IProps> = ({ id, template, getFieldsDetails }) => {
                   {errors.name.message}
                 </span>
               )}
-              <label htmlFor="description">Enter description</label>
+              <label className="dark:text-gray-200" htmlFor="description">
+                Enter description
+              </label>
               <input
-                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic"
+                className="border border-zinc-200 px-2 py-1 rounded-md w-3/4 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none placeholder:italic dark:bg-gray-700 dark:border-gray-800 dark:text-gray-200"
                 type="text"
                 id="description"
                 placeholder="description"

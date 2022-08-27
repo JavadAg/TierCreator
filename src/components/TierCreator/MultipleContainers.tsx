@@ -468,7 +468,7 @@ export function MultipleContainers({
           <button
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
-            className="bg-white shadow-sm shadow-gray-200 hover:bg-gray-50 duration-200 border border-gray-200 p-1 self-center my-2 rounded-md text-xl "
+            className="bg-white hover:bg-gray-50 duration-200 border border-gray-300 p-1 self-center my-2 rounded-md text-xl dark:bg-gray-700 dark:hover:bg-gray-900 dark:border-gray-800 dark:text-gray-200"
             onClick={handleAddColumn}
           >
             <IoAddCircleOutline />
@@ -487,7 +487,7 @@ export function MultipleContainers({
           Change Background Color
         </button>
         <div className="collapse" id="changecolor">
-          <div className="block p-2 mb-2 border border-gray-200 shadow-200 rounded bg-white">
+          <div className="block p-2 mb-2 border border-gray-200 shadow-200 rounded bg-white dark:bg-gray-700 dark:border-gray-600">
             {colorPickerOptions.map((item: string, index: number) => (
               <button
                 key={index}

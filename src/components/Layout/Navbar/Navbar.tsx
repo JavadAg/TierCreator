@@ -58,7 +58,7 @@ const Navbar = () => {
               onClick={() => navigate(`/user/${user.id}`)}
               data-mdb-ripple="true"
               data-mdb-ripple-color="light"
-              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out xl:text-[.9rem]"
+              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out xl:text-[.9rem] dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-900"
             >
               <ImageWithFallback
                 fallback="https://placehold.co/400/png?text=Error"
@@ -90,7 +90,7 @@ const Navbar = () => {
               onClick={() => navigate(`/user/${user.id}`)}
               data-mdb-ripple="true"
               data-mdb-ripple-color="light"
-              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 active:bg-gray-300 px-1 py-1.5 rounded-md text-grey-900 border border-gray-300/40 capitalize leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out  dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-900"
             >
               <ImageWithFallback
                 fallback="https://placehold.co/400/png?text=Error"

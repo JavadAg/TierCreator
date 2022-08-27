@@ -56,7 +56,7 @@ const TierPage = () => {
         <div className="flex justify-center items-center flex-col space-y-2 w-full">
           <div
             onClick={() => navigate(`/user/${data?.data[0].creator_id}`)}
-            className="flex justify-center items-center border border-gray-200 shadow-100 rounded-md px-2 py-1 space-x-1"
+            className="flex justify-center items-center border border-gray-200 shadow-100 rounded-md px-2 py-1 space-x-1 dark:border-gray-700"
           >
             <ImageWithFallback
               fallback="https://placehold.co/400/png?text=Error"
@@ -64,7 +64,7 @@ const TierPage = () => {
               src={data?.data[0].creator_photo}
               alt="creator_photo"
             />
-            <span className="text-sm text-gray-600  md:text-[.9rem]">
+            <span className="text-sm text-gray-600  md:text-[.9rem] dark:text-gray-300">
               Creator : {data?.data[0].creator_name}
             </span>
           </div>
@@ -120,7 +120,7 @@ const TierPage = () => {
                   disabled={deleteTier.isLoading}
                   data-mdb-ripple="true"
                   data-mdb-ripple-color="light"
-                  className="flex justify-center items-center text-sm space-x-1 bg-red-400 focus:bg-red-500 hover:bg-red-600 active:bg-red-600 w-52 h-8 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem]"
+                  className="flex justify-center items-center text-sm space-x-1 bg-red-400 focus:bg-red-500 hover:bg-red-600 active:bg-red-600 w-52 h-8 rounded-md text-grey-900 border border-indigo-100 leading-tight focus:outline-none focus:ring-0 transition duration-150 ease-in-out sm:w-56 md:w-60 xl:w-64 xl:text-[.9rem] dark:border-gray-700"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#deleteCollapse"
@@ -132,10 +132,10 @@ const TierPage = () => {
                 </button>
               </p>
               <div className="collapse" id="deleteCollapse">
-                <div className="p-2 w-44 rounded-lg shadow-lg bg-white flex justify-around items-center space-x-2 border border-gray-200 ">
+                <div className="p-2 w-44 rounded-lg shadow-lg bg-white flex justify-around items-center space-x-2 border border-gray-200 dark:border-gray-700 dark:bg-gray-700 ">
                   <button
                     disabled={deleteTier.isLoading}
-                    className="cursor-pointer text-gray-800 hover:text-red-500 active:text-red-500 disabled:text-red-200 disabled:cursor-not-allowed"
+                    className="cursor-pointer text-gray-800 hover:text-red-500 active:text-red-500 disabled:text-red-200 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-red-500"
                     onClick={() => handledelete()}
                   >
                     Yes
@@ -144,7 +144,7 @@ const TierPage = () => {
                     disabled={deleteTier.isLoading}
                     data-bs-toggle="collapse"
                     data-bs-target="#deleteCollapse"
-                    className="cursor-pointer text-gray-800 hover:text-blue-500 active:text-blue-500 disabled:text-blue-200 disabled:cursor-not-allowed"
+                    className="cursor-pointer text-gray-800 hover:text-blue-500 active:text-blue-500 disabled:text-blue-200 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-blue-500"
                   >
                     No
                   </button>

@@ -32,7 +32,7 @@ const Paginate: React.FC<IProps> = ({
   return (
     <div className=" p-2">
       <button
-        className="disabled:text-gray-400 hover:bg-gray-200 duration-200 text-gray-800 bg-gray-100 p-2 rounded-md px-3"
+        className="disabled:text-gray-400 hover:bg-gray-200 duration-200 text-gray-800 bg-gray-100 p-2 rounded-md px-3 dark:bg-gray-800 dark:disabled:gray-500 dark:text-gray-300 dark:disabled:text-gray-400"
         disabled={Number(searchParams.get("page")) === 0}
         onClick={() => prevhandler()}
       >
@@ -41,7 +41,7 @@ const Paginate: React.FC<IProps> = ({
       |{" "}
       <button
         disabled={lastItem >= count}
-        className="disabled:text-gray-400 hover:bg-gray-200 duration-200 text-gray-800 bg-gray-100 p-2 rounded-md px-3"
+        className="disabled:text-gray-400 hover:bg-gray-200 duration-200 text-gray-800 bg-gray-100 p-2 rounded-md px-3 dark:bg-gray-800 dark:disabled:gray-500 dark:text-gray-300 dark:disabled:text-gray-400"
         onClick={() => nexthandler()}
       >
         Next

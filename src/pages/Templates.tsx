@@ -47,7 +47,9 @@ const Templates = () => {
         </button>
       </div>
       {data?.data.length == 0 ? (
-        <span>No template exist , create one</span>
+        <span className="dark:text-gray-200">
+          No template exist , create one
+        </span>
       ) : (
         <>
           <TemplateSort setSort={setSort} />

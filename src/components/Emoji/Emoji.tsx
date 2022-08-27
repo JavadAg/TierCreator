@@ -18,7 +18,7 @@ interface IProps {
 
 const Emoji: React.FC<IProps> = ({ isFetched, data, type }) => {
   return (
-    <div className="flex justify-center items-center border rounded divide-x divide-customgrey-200 shadow-100 border-customgrey-200">
+    <div className="flex justify-center items-center border rounded divide-x divide-gray-200 shadow-100 border-gray-200 dark:divide-gray-700 dark:border-gray-700">
       {emojiIcons.map((item) => (
         <SingleEmoji
           key={item.id}

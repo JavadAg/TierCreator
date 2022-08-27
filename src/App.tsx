@@ -53,7 +53,7 @@ function App() {
       <Router>
         <Layout>
           <div
-            className={`w-full pt-2 px-2 font-Inter min-h-[80vh] sm:px-10 md:px-24 lg:px-40 xl:px-56 2xl:px-72 dark:bg-gray-900`}
+            className={`w-full py-2 px-2 font-Inter min-h-[80vh] sm:px-10 md:px-24 lg:px-40 xl:px-56 2xl:px-72 dark:bg-gray-900`}
           >
             <Routes>
               <Route path="/" element={<Navigate replace to="/home" />} />

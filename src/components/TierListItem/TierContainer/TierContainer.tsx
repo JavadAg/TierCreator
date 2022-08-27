@@ -49,7 +49,7 @@ const TierContainer: React.FC<IProps> = ({ item, tier }) => {
         ))}
       </div>
 
-      <div className="flex justify-around items-start w-full p-2 bg-gray-50  text-gray-900 divide-x divide-gray-300 border-t border-gray-300 text-center">
+      <div className="flex justify-around items-start w-full p-2 bg-gray-50  text-gray-900 divide-x divide-gray-300 border-t border-gray-300 text-center dark:bg-gray-800 dark:text-gray-300 dark:divide-gray-600">
         <div className="flex flex-col justify-start items-center w-full">
           <span className="text-sm font-semibold break-all md:text-[.9rem]">
             Name : {item?.name}

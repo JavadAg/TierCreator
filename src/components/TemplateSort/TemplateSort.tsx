@@ -13,8 +13,8 @@ const TemplateSort: React.FC<IProps> = ({ setSort }) => {
             setSort(e.target.value)
           }
           defaultValue="1"
-          className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-300 focus:outline-none"
-          aria-label="Default select example"
+          className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-300 focus:outline-none dark:bg-gray-900 dark:border-gray-800 dark:text-gray-200"
+          aria-label="Default select example "
         >
           <option id="1" value="name">
             Alephbatical

@@ -102,7 +102,7 @@ const MobileSidebar = () => {
                   Categories
                 </button>
               </div>
-              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12  dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900">
+              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12 dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900">
                 <BiListUl className="text-lg" />
                 <button
                   onClick={() => navigate("/recent-tiers")}
@@ -112,7 +112,7 @@ const MobileSidebar = () => {
                 </button>
               </div>
               {user ? (
-                <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12">
+                <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12 dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900">
                   <BiLogOutCircle className="text-lg" />
                   <button
                     onClick={() => handleSignout()}

@@ -53,7 +53,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         ref={ref as unknown as string}
         className={`min-h-[96px] max-w-[1200px] ${
           fieldLabel == "default"
-            ? "mt-2 border-customgrey-220 bg-customgrey-100 shadow-100 sticky bottom-0"
+            ? "mt-2 border-gray-200 bg-gray-100 shadow-100 sticky bottom-0 dark:border-gray-700 dark:bg-gray-800"
             : "flex justify-center w-full "
         } ${hover && "bg-gray-50/10"} `}
         onClick={onClick}
@@ -62,7 +62,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         {fieldLabel !== "default" && (
           <span
             style={{ backgroundColor: labelColor && labelColor }}
-            className="flex break-all border-r border-customgrey-240 p-1 justify-center items-center text-md text-center max-w-[96px] w-full min-h-full"
+            className="flex break-all border-r border-gray-200 p-1 justify-center items-center text-md text-center max-w-[96px] w-full min-h-full"
           >
             {fieldLabel}
           </span>
