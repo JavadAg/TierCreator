@@ -5,9 +5,9 @@ import VideosCarousel from "./VideosCarousel/VideosCarousel"
 
 const Videos = () => {
   return (
-    <div className=" font-bold pb-4">
+    <div className="text-gray-900 font-bold pb-4 dark:text-gray-200">
       TierCreator User
-      <Link className="text-indigo-800 font-bold" to="/">
+      <Link className="text-indigo-800 font-bold dark:text-indigo-400" to="/">
         {" "}
         Videos{" "}
       </Link>

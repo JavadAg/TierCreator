@@ -37,11 +37,11 @@ const SingleFeatured: React.FC<IProps> = ({ item }) => {
           <BeatLoader color="#c7d2fe" loading size={22} speedMultiplier={1} />
         </div>
       ) : (
-        <div className="flex justify-start items-center border rounded h-32 border-gray-200 space-x-1 w-full overflow-y-hidden overflow-x-scroll scrollbar md:h-36 xl:h-40">
+        <div className="flex justify-start items-center border rounded h-32 border-gray-200 space-x-2 w-full overflow-y-hidden overflow-x-scroll scrollbar md:h-36 xl:h-40 dark:border-gray-700">
           {data?.data.map((template: Template) => (
             <div
               key={template.id}
-              className="flex justify-start items-start flex-col h-full cursor-pointer shadow-100 hover:border hover:border-gray-200 hover:scale-105 duration-300"
+              className="flex justify-start items-start flex-col h-full cursor-pointer shadow-100 hover:border hover:border-gray-200 hover:scale-105 duration-300 dark:hover:border-gray-700 "
             >
               <div
                 onClick={() => navigate(`/create/${template.slug}`)}
@@ -49,12 +49,12 @@ const SingleFeatured: React.FC<IProps> = ({ item }) => {
               >
                 <ImageWithFallback
                   fallback="https://placehold.co/400/png?text=Error"
-                  className="rounded object-cover w-full h-full"
+                  className="object-cover w-full h-full"
                   src={template.cover}
                   alt="image"
                 />
               </div>
-              <span className="bg-gray-100 text-gray-900 break-all text-sm font-bold w-full border-t border-gray-300">
+              <span className="bg-gray-100 text-gray-900 break-all text-sm font-bold w-full dark:bg-gray-800 dark:text-gray-200 ">
                 {template.name}
               </span>
             </div>

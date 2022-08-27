@@ -6,15 +6,26 @@ import MobileSidebar from "./MobileSidebar/MobileSidebar"
 import { supabase } from "../../../utils/client"
 import { BiLogInCircle } from "react-icons/bi"
 import ImageWithFallback from "../../ImageWithFallback/ImageWithFallback"
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md"
+import { useEffect, useState } from "react"
 
 const Navbar = () => {
   const user = supabase.auth.user()
+  const [theme, setTheme] = useState(true)
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (theme) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [theme])
+
   return (
     <>
-      <div className="hidden md:flex justify-between items-center p-2 bg-white text-gray-900 h-14 shadow-100 border-b border-gray-100 xl:h-16 lg:px-10 xl:px-16">
+      <div className="hidden md:flex justify-between items-center p-2 bg-white text-gray-900 h-14 shadow-100 border-b border-gray-100 xl:h-16 lg:px-10 xl:px-16 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-900 ">
         <div className="flex justify-center items-center lg:space-x-4">
           <Link to="/">
             <ImageWithFallback
@@ -26,20 +37,22 @@ const Navbar = () => {
           </Link>
           <SearchBox />
         </div>
-        <div className="flex justify-center items-center space-x-1 lg:space-x-4">
+        <div className="flex justify-center items-center gap-2 lg:gap-5">
           <NavbarModal />
-          <Link
-            to="/categories"
-            className=" cursor-pointer text-sm text-gray-900 hover:text-indigo-700 duration-200 xl:text-[.9rem]"
-          >
-            Categories
+          <Link to="/categories">
+            <span className=" cursor-pointer text-sm text-gray-900 hover:text-indigo-700 duration-200 xl:text-[.9rem] dark:text-gray-100 dark:hover:text-indigo-400">
+              Categories
+            </span>
           </Link>
           <Link
             to="/recent-tiers"
-            className=" cursor-pointer text-sm hover:text-indigo-700 duration-200 xl:text-[.9rem]"
+            className=" cursor-pointer text-sm hover:text-indigo-700 duration-200 xl:text-[.9rem] dark:hover:text-indigo-400"
           >
             New Tier Lists
           </Link>
+          <button onClick={() => setTheme((prev) => !prev)}>
+            {theme ? <MdOutlineDarkMode /> : <MdOutlineLightMode />}
+          </button>
           {user ? (
             <button
               onClick={() => navigate(`/user/${user.id}`)}
@@ -58,7 +71,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => navigate(`/login`)}
-              className="flex justify-center items-center space-x-1 bg-gray-100 text-gray-900 p-1 rounded border border-gray-300/50 text-sm focus:bg-gray-200 xl:text-[.9rem]"
+              className="flex justify-center items-center space-x-1 bg-gray-100 text-gray-900 p-1 rounded border border-gray-300/50 hover:text-indigo-700 duration-200 text-sm focus:bg-gray-200 xl:text-[.9rem] dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:hover:text-indigo-400"
             >
               <BiLogInCircle />
               <span>SignIn</span>
@@ -66,9 +79,12 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      <div className="flex md:hidden justify-between items-center p-2 bg-white text-gray-900 h-14 w-full shadow-100 border-b border-gray-100">
+      <div className="flex md:hidden justify-between items-center p-2 bg-white text-gray-900 h-14 w-full shadow-100 border-b border-gray-100 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
         <MobileSidebar />
         <div className="flex justify-center items-center space-x-2">
+          <button onClick={() => setTheme((prev) => !prev)}>
+            {theme ? <MdOutlineDarkMode /> : <MdOutlineLightMode />}
+          </button>
           {user ? (
             <button
               onClick={() => navigate(`/user/${user.id}`)}
@@ -87,7 +103,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => navigate(`/login`)}
-              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 text-gray-900 p-1 rounded border border-gray-300/50 focus:bg-gray-200"
+              className="flex justify-center items-center text-sm space-x-1 bg-gray-100 text-gray-900 p-1 rounded border border-gray-300/50 focus:bg-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:hover:text-indigo-400"
             >
               <BiLogInCircle />
               <span>SignIn</span>

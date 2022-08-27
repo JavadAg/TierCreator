@@ -30,7 +30,7 @@ const SearchBox = () => {
             handleSearch(e.target.value)
           }
           type="search"
-          className={` form-control placeholder:italic placeholder:text-slate-400 block w-full text-sm py-1.5  my-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 pl-9 pr-3 focus:bg-white focus:border-indigo-600 focus:outline-none xl:w-72`}
+          className={` form-control placeholder:italic placeholder:text-slate-400 block w-full text-sm py-1.5  my-2 font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 pl-9 pr-3 focus:bg-white focus:border-indigo-600 focus:outline-none xl:w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 `}
           placeholder="Type a template name"
         />
       </label>

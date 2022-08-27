@@ -38,11 +38,11 @@ const FeaturedTemplates = () => {
               key={item.id}
               className="flex justify-start items-center flex-col w-full space-y-1 max-w-[1200px] "
             >
-              <span className="font-bold text-gray-900 ">
+              <span className="font-bold text-gray-900 dark:text-gray-200">
                 Featured{" "}
                 <span
                   onClick={() => navigate(`/${item.slug}`)}
-                  className="text-indigo-800 cursor-pointer"
+                  className="text-indigo-800 cursor-pointer dark:text-indigo-400"
                 >
                   {item.name}{" "}
                 </span>

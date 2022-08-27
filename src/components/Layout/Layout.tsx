@@ -1,9 +1,13 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import BreadCrumb from "./BreadCrumb/BreadCrumb"
 import Footer from "./Footer/Footer"
 import Navbar from "./Navbar/Navbar"
 
-const Layout = ({ children }: any) => {
+interface IProps {
+  children: ReactNode
+}
+
+const Layout: React.FC<IProps> = ({ children }) => {
   return (
     <>
       <div>

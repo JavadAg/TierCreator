@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { createContext, useEffect, useState } from "react"
 import {
   BrowserRouter as Router,
   Navigate,
@@ -15,7 +15,6 @@ import { supabase } from "./utils/client"
 import { User } from "@supabase/supabase-js"
 import TierPage from "./pages/TierPage"
 import CreateTier from "./pages/CreateTier"
-import TierListRanking from "./pages/CommunityRanking"
 import Layout from "./components/Layout/Layout"
 import RecentTiers from "./pages/RecentTiers"
 import UserPage from "./pages/UserPage"
@@ -31,6 +30,8 @@ const queryClient = new QueryClient({
 
 function App() {
   const [user, setUser] = useState<User | null>()
+
+  const [theme, setTheme] = useState(true)
 
   useEffect(() => {
     const session = supabase.auth.session()
@@ -51,7 +52,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Layout>
-          <div className="w-full mt-2 px-2 font-Inter min-h-[80vh] sm:px-10 md:px-24 lg:px-40 xl:px-56 2xl:px-72">
+          <div
+            className={`w-full pt-2 px-2 font-Inter min-h-[80vh] sm:px-10 md:px-24 lg:px-40 xl:px-56 2xl:px-72 dark:bg-gray-900`}
+          >
             <Routes>
               <Route path="/" element={<Navigate replace to="/home" />} />
 

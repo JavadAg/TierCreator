@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
-    <footer className="text-center lg:text-left text-sm bg-gray-100 text-gray-800 mt-2">
-      <div className="flex justify-center items-center lg:justify-between p-6 border-b border-gray-300">
+    <footer className="text-center lg:text-left text-sm bg-gray-100 text-gray-800 pt-2 dark:bg-gray-800 dark:text-gray-100">
+      <div className="flex justify-center items-center lg:justify-between p-6 border-b border-gray-300 dark:border-gray-700">
         <div className="mr-12 hidden lg:block">
           <span>Get connected with us on social networks:</span>
         </div>
@@ -9,7 +9,7 @@ const Footer = () => {
           <a
             target="blank"
             href="https://www.linkedin.com/in/javad-aghebati-8b6954236/"
-            className="mr-6 text-gray-600"
+            className="mr-6 text-gray-600 dark:text-gray-200"
           >
             <svg
               aria-hidden="true"
@@ -30,7 +30,7 @@ const Footer = () => {
           <a
             target="blank"
             href="https://github.com/JavadAg"
-            className="text-gray-600"
+            className="text-gray-600 dark:text-gray-100"
           >
             <svg
               aria-hidden="true"
@@ -57,17 +57,17 @@ const Footer = () => {
             Explore
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               New Tier Lists
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               New Alignment Charts
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Community Rankings
             </a>
           </span>
@@ -77,17 +77,17 @@ const Footer = () => {
             Create
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Create an Alignment Chart
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Create a Tournament Bracket
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Bulk Overlay Text on Images
             </a>
           </span>
@@ -97,22 +97,22 @@ const Footer = () => {
             Support
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Creation Guide and FAQs
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Guidelines
             </a>
           </span>
           <span className="mb-4">
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               S tier meaning
             </a>
           </span>
           <span>
-            <a href="#!" className="text-gray-600">
+            <a href="#!" className="text-gray-600 dark:text-gray-300">
               Contact Us
             </a>
           </span>

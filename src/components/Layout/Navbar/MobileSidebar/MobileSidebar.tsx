@@ -9,6 +9,7 @@ import {
 } from "react-icons/bi"
 import useLogout from "../../../../hooks/useLogout"
 import { supabase } from "../../../../utils/client"
+import { MdOutlineClose } from "react-icons/md"
 
 const MobileSidebar = () => {
   const signout = useLogout()
@@ -23,7 +24,7 @@ const MobileSidebar = () => {
     <>
       <div className="flex">
         <button
-          className="text-xl focus:bg-gray-200 transition duration-150 ease-in-out p-1 rounded-md bg-gray-100"
+          className="text-xl focus:bg-gray-200 transition duration-150 ease-in-out p-1 rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:hover:text-indigo-400"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasExample"
@@ -33,7 +34,7 @@ const MobileSidebar = () => {
         </button>
 
         <div
-          className="offcanvas offcanvas-start fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 border-none w-56"
+          className="offcanvas offcanvas-start fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 border-none w-56 dark:bg-gray-800 dark:text-gray-100"
           tabIndex={-1}
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
@@ -47,16 +48,18 @@ const MobileSidebar = () => {
             </h5>
             <button
               type="button"
-              className="btn-close box-content w-4 h-4 p-2 -my-5 -mr-2 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+              className="box-content w-4 h-4 p-1 text-gray-800 border-none rounded-none duration-200 right-2 absolute focus:shadow-none focus:outline-none focus:opacity-100 hover:opacity-75 hover:no-underline hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200"
               data-bs-dismiss="offcanvas"
               aria-label="Close"
-            ></button>
+            >
+              <MdOutlineClose />
+            </button>
           </div>
           <div className="offcanvas-body flex-grow overflow-y-auto">
-            <div className="dropdown relative flex justify-center items-center flex-col">
+            <div className="dropdown relative flex justify-center items-center flex-col ">
               <SearchBox />
               <a
-                className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12"
+                className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12 dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 data-bs-toggle="collapse"
@@ -90,7 +93,7 @@ const MobileSidebar = () => {
                   </button>
                 </li>
               </ul>
-              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12">
+              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12 dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900">
                 <BiFolderOpen className="text-lg" />
                 <button
                   onClick={() => navigate("/categories")}
@@ -99,7 +102,7 @@ const MobileSidebar = () => {
                   Categories
                 </button>
               </div>
-              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12">
+              <div className="flex items-center justify-start space-x-2 text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer w-11/12  dark:text-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-900">
                 <BiListUl className="text-lg" />
                 <button
                   onClick={() => navigate("/recent-tiers")}
