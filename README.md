@@ -38,7 +38,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Future Updates
 
-- [ ] Dark mode
+- [x] Dark mode
 - [ ] add Footer links and Video section
 - [ ] Persist user edits in tier page
 
