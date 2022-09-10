@@ -17,6 +17,7 @@ const ImageWithFallback: React.FC<IProps> = ({
 
   return (
     <img
+      loading="lazy"
       className={className}
       src={imgSrc ? imgSrc : fallback}
       onError={onError}
