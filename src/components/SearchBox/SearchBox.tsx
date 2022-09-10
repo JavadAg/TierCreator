@@ -4,7 +4,7 @@ import useSearch from "../../hooks/useSearch"
 import { Template } from "../../types/template.types"
 
 const SearchBox = () => {
-  const [searchTerm, setSearchTerm] = useState<string>()
+  const [searchTerm, setSearchTerm] = useState<string>("")
   const { refetch, data } = useSearch(searchTerm as string)
 
   const handleSearch = (value: string) => {
@@ -37,13 +37,12 @@ const SearchBox = () => {
 
       {data?.length! > 0 && (
         <ul
-          data-bs-dismiss="offcanvas"
+          data-bs-dismiss="modal"
           onClick={() => setSearchTerm("")}
           className="flex absolute bg-white border border-indigo-300 rounded justify-center items-center text-center flex-col z-40 text-sm divide-y divide-gray-700 w-full text-gray-800 dark:text-zinc-200 top-12 font-bold "
         >
           {data!.map((item: Template) => (
             <Link
-              data-bs-dismiss="modal"
               className="w-full py-1 rounded text-gray-900  bg-indigo-100"
               key={item.id}
               to={`/create/${item.slug}`}
