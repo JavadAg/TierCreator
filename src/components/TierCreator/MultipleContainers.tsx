@@ -641,8 +641,6 @@ function SortableItem({
   } = useSortable({
     id
   })
-  const mounted = useMountStatus()
-  const mountedWhileDragging = isDragging && !mounted
 
   return (
     <Item
@@ -664,21 +662,8 @@ function SortableItem({
       })}
       transition={transition}
       transform={transform}
-      fadeIn={mountedWhileDragging}
       listeners={listeners}
       renderItem={renderItem}
     />
   )
-}
-
-function useMountStatus() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsMounted(true), 500)
-
-    return () => clearTimeout(timeout)
-  }, [])
-
-  return isMounted
 }

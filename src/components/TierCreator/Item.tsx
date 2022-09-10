@@ -10,7 +10,6 @@ export interface Props {
   handleProps?: any
   height?: number
   index?: number
-  fadeIn?: boolean
   transform?: Transform | null
   listeners?: DraggableSyntheticListeners
   sorting?: boolean
@@ -22,7 +21,6 @@ export interface Props {
     dragOverlay: boolean
     dragging: boolean
     sorting: boolean
-    fadeIn: boolean
     index: number | undefined
     listeners: DraggableSyntheticListeners
     ref: React.Ref<HTMLElement>
@@ -44,7 +42,6 @@ export const Item = React.memo(
         handleProps,
         height,
         index,
-        fadeIn,
         listeners,
         renderItem,
         sorting,
@@ -63,7 +60,6 @@ export const Item = React.memo(
           dragging: Boolean(dragging),
           sorting: Boolean(sorting),
           index,
-          fadeIn: Boolean(fadeIn),
           listeners,
           ref,
           style,
