@@ -6,8 +6,6 @@ export interface Props {
   dragOverlay?: boolean
   disabled?: boolean
   dragging?: boolean
-  handle?: boolean
-  handleProps?: any
   height?: number
   index?: number
   transform?: Transform | null
@@ -38,8 +36,6 @@ export const Item = React.memo(
         dragOverlay,
         dragging,
         disabled,
-        handle,
-        handleProps,
         height,
         index,
         listeners,
@@ -98,11 +94,9 @@ export const Item = React.memo(
               dragging && "opacity-50"
             } ${dragOverlay && "ring-[2px] ring-indigo-400 outline-none"}`}
             style={style}
-            data-cypress="draggable-item"
-            {...(!handle ? listeners : undefined)}
+            {...listeners}
             {...props}
             alt="templateImage"
-            tabIndex={!handle ? 0 : undefined}
             src={value as string}
           />
         </li>

@@ -114,7 +114,6 @@ type Items = Record<UniqueIdentifier, UniqueIdentifier[]>
 
 interface Props {
   template: Template
-  adjustScale?: boolean
   containerStyle?: React.CSSProperties
   coordinateGetter?: KeyboardCoordinateGetter
   getItemStyles?(args: {
@@ -129,8 +128,6 @@ interface Props {
   wrapperStyle?(args: { index: number }): React.CSSProperties
   itemCount?: number
   items?: Items
-  handle?: boolean
-  renderItem?: any
   strategy?: SortingStrategy
   modifiers?: Modifiers
   scrollable?: boolean
@@ -141,14 +138,11 @@ const PLACEHOLDER_ID = "placeholder"
 
 export function MultipleContainers({
   template,
-  adjustScale = false,
-  handle = false,
   getItemStyles = () => ({}),
   wrapperStyle = () => ({}),
-  modifiers,
-  renderItem,
   vertical = true
 }: Props) {
+  console.log()
   const fieldsRef = useRef<HTMLDivElement>(null)
 
   const [backgroundColor, setBackgroundColor] = useState<string>("#222")
@@ -381,7 +375,6 @@ export function MultipleContainers({
         setActiveId(null)
       }}
       onDragCancel={onDragCancel}
-      modifiers={modifiers}
     >
       <div className={`flex flex-col w-full max-w-[1100px]`}>
         <div
@@ -418,10 +411,8 @@ export function MultipleContainers({
                         id={value.id}
                         value={value.url}
                         index={index}
-                        handle={handle}
                         style={getItemStyles}
                         wrapperStyle={wrapperStyle}
-                        renderItem={renderItem}
                         containerId={containerId}
                         getIndex={getIndex}
                       />
@@ -452,10 +443,8 @@ export function MultipleContainers({
                   id={value.id}
                   value={value.url}
                   index={index}
-                  handle={handle}
                   style={getItemStyles}
                   wrapperStyle={wrapperStyle}
-                  renderItem={renderItem}
                   containerId={"default"}
                   getIndex={getIndex}
                 />
@@ -508,7 +497,7 @@ export function MultipleContainers({
       </div>
 
       {createPortal(
-        <DragOverlay adjustScale={adjustScale} dropAnimation={dropAnimation}>
+        <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
           {activeId
             ? containers.includes(activeId as string)
               ? renderContainerDragOverlay(activeId)
@@ -521,14 +510,14 @@ export function MultipleContainers({
   )
 
   function renderSortableItemDragOverlay(id: UniqueIdentifier) {
-    return <Item value={findItemByActiveId(id)} handle={handle} dragOverlay />
+    return <Item value={findItemByActiveId(id)} dragOverlay />
   }
 
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
       <Container label={containerId as string} shadow>
         {items[containerId].map((item: Image, index: number) => (
-          <Item key={item.id} value={item.url} handle={handle} />
+          <Item key={item.id} value={item.url} />
         ))}
       </Container>
     )
@@ -608,11 +597,9 @@ interface SortableItemProps {
   id: UniqueIdentifier
   value: UniqueIdentifier
   index: number
-  handle: boolean
   disabled?: boolean
   style(args: any): React.CSSProperties
   getIndex(id: UniqueIdentifier): number
-  renderItem(): React.ReactElement
   wrapperStyle({ index }: { index: number }): React.CSSProperties
 }
 
@@ -620,8 +607,6 @@ function SortableItem({
   disabled,
   id,
   index,
-  handle,
-  renderItem,
   value,
   style,
   containerId,
@@ -630,7 +615,6 @@ function SortableItem({
 }: SortableItemProps) {
   const {
     setNodeRef,
-    setActivatorNodeRef,
     listeners,
     isDragging,
     isSorting,
@@ -648,8 +632,6 @@ function SortableItem({
       value={value}
       dragging={isDragging}
       sorting={isSorting}
-      handle={handle}
-      handleProps={handle ? { ref: setActivatorNodeRef } : undefined}
       index={index}
       wrapperStyle={wrapperStyle({ index })}
       style={style({
@@ -663,7 +645,6 @@ function SortableItem({
       transition={transition}
       transform={transform}
       listeners={listeners}
-      renderItem={renderItem}
     />
   )
 }
